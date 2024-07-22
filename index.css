@@ -1,0 +1,116 @@
+* {
+    font-family: "Bodoni Moda SC", serif;
+    font-optical-sizing: auto;
+    font-weight: weight;
+    font-style: normal;
+}
+
+.nav-para {
+    color: white;
+    font-size: 40px;
+    position: relative;
+    top: 50px;
+    right: 250px;
+}
+
+.nav-img {
+    position: relative;
+    top: 2px;
+    right: 450px;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+}
+
+.nav-link {
+    position: relative;
+    top: 50px;
+    right: 50px;
+    color: white;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.headbar {
+    position: sticky;
+    background-color: black;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.story {
+    background-color: whitesmoke;
+    margin: 50px;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.story p {
+    font-size: 20px;
+    text-align: left;
+    margin: 20px;
+    font-family: 'Times New Roman', Times, serif
+}
+
+.story img {
+    float: left;
+    margin-right: 20px;
+    height: 175px;
+    width: 175px;
+    border-radius: 50%;
+    border: 2px solid black;
+}
+
+.hot-items {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.hot-items p {
+    font-size: 20px;
+}
+
+.hot-items img {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.container2 {
+    position: relative;
+    top: 50px;
+    background-color: black;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    height: 200px;
+    width: 100%;
+}
+
+.container2 p {
+    font-size: 20px;
+}
+
+ul a img {
+    position: relative;
+    top: 50px;
+    right: 50px;
+    margin: 5px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.nav-para1 {
+    position: relative;
+    top: 50px;
+    right: 250px;
+    font-size: 40px;
+}

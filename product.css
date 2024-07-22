@@ -1,0 +1,98 @@
+* {
+    font-family: "Bodoni Moda SC", serif;
+    font-optical-sizing: auto;
+    font-weight: weight;
+    font-style: normal;
+}
+
+.nav-para {
+    color: white;
+    font-size: 40px;
+    position: relative;
+    top: 50px;
+    right: 250px;
+}
+
+.nav-img {
+    position: relative;
+    top: 2px;
+    right: 450px;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+}
+
+.nav-link {
+    position: relative;
+    top: 50px;
+    right: 50px;
+    color: white;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.headbar {
+    position: sticky;
+    background-color: black;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.Our-Menu {
+    background-color: whitesmoke;
+    margin: 50px;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.Our-Menu p {
+    font-size: 20px;
+    text-align: left;
+    margin: 20px;
+    font-family: 'Times New Roman', Times, serif
+}
+
+.Our-Menu img {
+    height: 150px;
+    width: 150px;
+    float: left;
+    margin-right: 20px;
+}
+
+.Our-Menu h2 {
+    font-size: 30px;
+    text-align: center;
+    margin: 20px;
+    font-family: 'Times New Roman', Times, serif
+}
+
+.container2 {
+    position: absolute;
+    top: 1200px;
+    background-color: black;
+    color: white;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;
+    height: 150px;
+    width: 100%;
+}
+
+.container2 img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 2px solid black;
+    margin: 20px;
+}
+
+.nav-item {
+    position: relative;
+    top: 50px;
+    right: 50px;
+    color: white;
+}

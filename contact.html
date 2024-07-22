@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>The Midnight Brew</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="favicon.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda+SC:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="contact.css">
+</head>
+<header class="headbar">
+    <ul class="nav justify-content-end nav-underline">
+        <img class="nav-img" src="logo.jpeg" alt="Coffee">
+        <p class="nav-para">The Midnight Brew</p>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="index.html" target="\">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="product.html" target="_blank">Menu</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="contact.html" target="">Contact</a>
+        </li>
+    </ul>
+</header>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="center">
+                <h1>Contact Us</h1>
+                <p>Feel free to reach out to us for any queries or feedback. We are always here to help you.</p>
+                <div class="form-group">
+                    <label for="orderType">Select Order Type</label>
+                    <select id="orderType" name="orderType" required>
+                        <option value="takeaway">Take Away</option>
+                        <option value="dinein">Dine In</option>
+                    </select>
+                </div>
+                <div class="form">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact">Contact</label>
+                    <input type="text" id="contact" name="contact" placeholder="Enter your contact number" required>
+                </div>
+                <div class="select-order">
+                    <label for="order">Order</label>
+                    <select class="form-select" id="order" name="order">
+                        <option selected>Choose...</option>
+                        <option value="coffee">Coffee</option>
+                        <option value="tea">Tea</option>
+                        <option value="snacks">Snacks</option>
+                        <option value="others">Others</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+</body>
+<footer>
+    <div class="container2">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="product.html" target="_blank">Gallery</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="contact.html" target="_blank">Contact</a>
+            </li>
+        </ul>
+        <ul class="nav justify-content-center">
+            <p class="nav-para1">Contact Us</p>
+            <a href="https://www.facebook.com/" target="_blank"><img src="facebook.png" alt="Facebook"></a>
+            <a href="https://www.instagram.com/" target="_blank"><img src="instagram.webp" alt="Instagram"></a>
+            <a href="https://www.youtube.com/" target="_blank"><img src="youtube.png" alt="Twitter"></a>
+        </ul>
+    </div>
+</footer>
+
+</html>
