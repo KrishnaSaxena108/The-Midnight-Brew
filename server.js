@@ -1,6 +1,6 @@
-// ============================================
 // IMPORTS & DEPENDENCIES
-// ============================================
+
+
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
@@ -12,11 +12,9 @@ const app = express();
 // Define port
 const PORT = process.env.PORT || 3000;
 
-// ============================================
-// MIDDLEWARE CONFIGURATION
-// ============================================
+// Middle-Ware Configuration
 
-// 1. MORGAN LOGGER - Advanced HTTP request logging
+// 1. Morgan Loader - Advanced HTTP request logging
 // Create logs directory if it doesn't exist
 const logsDir = path.join(__dirname, 'logs');
 if (!fs.existsSync(logsDir)) {
@@ -26,7 +24,7 @@ if (!fs.existsSync(logsDir)) {
 // Create a write stream for logging to file
 const accessLogStream = fs.createWriteStream(
     path.join(logsDir, 'access.log'),
-    { flags: 'a' }  // append mode
+    { flags: 'a' }  
 );
 
 // Use morgan for logging
@@ -125,7 +123,7 @@ app.use((req, res, next) => {
     console.log(`   Request ID: ${req.requestId}`);
     console.log(`   IP:        ${req.ip || req.connection.remoteAddress}`);
     console.log(`   User-Agent: ${req.get('User-Agent') || 'Not specified'}`);
-    if (Object.keys(req.body).length > 0) {
+    if (req.body && Object.keys(req.body).length > 0) {
         console.log(`   Body:      ${JSON.stringify(req.body)}`);
     }
     console.log(`${'='.repeat(60)}\n`);
