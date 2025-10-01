@@ -832,10 +832,10 @@ html {
 }
 
 .social-link:hover {
-    color: var(--text-white);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-medium);
-    background: var(--accent-color);
+    color: #ffffff;
+    transform: translateY(-6px) rotate(8deg);
+    box-shadow: 0 10px 25px rgba(210, 105, 30, 0.36);
+    border-color: #D2691E;
 }
 
 /* ===== ENHANCED FOOTER ===== */
@@ -878,17 +878,68 @@ html {
     font-family: var(--font-heading);
 }
 
+.footer-link:focus-visible {
+    outline: 3px solid rgba(210,105,30,0.25);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+.footer-link:focus {
+    outline: none;
+}
+
 .footer-link {
     color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
-    transition: all 0.3s ease;
-    display: flex;
+    transition: transform 0.28s cubic-bezier(.4,0,.2,1), color 0.28s;
+    display: inline-flex;
     align-items: center;
+    padding: 5px 0;
+    position: relative;
+    font-size: 1rem;
+
+    /* performance hint */
+    will-change: transform, color;
 }
 
 .footer-link:hover {
-    color: var(--accent-color);
-    transform: translateX(5px);
+    color: #D2691E;
+    transform: translateX(6px);
+    text-shadow: 0 0 8px rgba(210, 105, 30, 0.22);
+}
+.footer-link i {
+    transition: transform 0.28s ease, color 0.28s ease;
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+    transform-origin: center;
+}
+.footer-link:hover i {
+    transform: scale(1.15) rotate(12deg);
+    color: #DEB887;
+}
+.footer-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0.75rem; /* not a large fixed 30px */
+    right: 0.25rem;
+    width: 0;
+    height: 2px;
+    background-color: #D2691E;
+    transition: width 0.28s ease;
+}
+.footer-link:hover::after {
+    width: calc(100% - 1rem);
+}
+.footer-link,
+.social-link {
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0,0,0,0.08); /* keep subtle mobile feedback */
+}
+.footer-logo:hover {
+    transform: rotate(12deg) scale(1.04);
+    box-shadow: 0 0 20px rgba(210, 105, 30, 0.45);
 }
 
 .footer-social h5 {
@@ -1050,11 +1101,18 @@ html {
 
 /* ===== ACCESSIBILITY ===== */
 @media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+    .footer-link,
+    .footer-link i,
+    .social-link,
+    .footer-logo,
+    .contact-info p,
+    .contact-info i,
+    .fa-heart {
+        transition: none !important;
+        animation: none !important;
     }
+    .footer-link:hover,
+    .social-link:hover { transform: none !important; }
 }
 
 /* Focus styles for better accessibility */
