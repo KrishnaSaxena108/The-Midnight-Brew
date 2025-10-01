@@ -1,0 +1,27 @@
+{
+  "name": "the-midnight-brew",
+  "version": "1.0.0",
+  "description": "**A cozy late-night café website where coffee meets creativity**",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iAwaisK/The-Midnight-Brew.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/iAwaisK/The-Midnight-Brew/issues"
+  },
+  "homepage": "https://github.com/iAwaisK/The-Midnight-Brew#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "morgan": "^1.10.1"
+  }
+}
