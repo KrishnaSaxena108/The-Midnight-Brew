@@ -33,7 +33,7 @@ This website serves as a digital storefront and online presence for The Midnight
 
 - **Responsive Design** - Seamlessly adapts to all devices (desktop, tablet, and mobile)
 - **Modern UI/UX** - Clean, intuitive interface with smooth navigation
-- **Dark Theme** - Elegant dark mode perfect for late-night browsing
+- **Dark/Light Mode Toggle** - Switch between elegant dark and light themes with theme persistence
 - **Smooth Animations** - Subtle transitions and effects for enhanced user engagement
 - **Accessibility** - Built with accessibility standards in mind
 
@@ -152,7 +152,6 @@ Upcoming features and improvements:
 - [ ] **Blog Section** - Coffee tips, recipes, and café stories
 - [ ] **Live Chat Support** - Real-time customer service
 - [ ] **Multi-language Support** - Reach international visitors
-- [ ] **Dark/Light Mode Toggle** - User preference for theme
 - [ ] **Events Booking** - Reserve spots for special events
 - [ ] **Gift Cards** - Digital gift card purchasing
 - [ ] **Mobile App** - Native iOS and Android apps

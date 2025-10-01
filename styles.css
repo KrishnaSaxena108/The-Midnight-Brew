@@ -13,16 +13,16 @@
     --dark-color: #2C1810;
     --light-color: #F5F5DC;
     
-    /* Background Colors */
+    /* Background Colors - Dark Theme */
     --bg-primary: #1a1a1a;
     --bg-secondary: #2d2d2d;
-    --bg-card: #ffffff;
+    --bg-card: #2a2a2a;
     --bg-gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     --gradient: linear-gradient(135deg, #2C1810 0%, #8B4513 100%);
     
-    /* Text Colors */
-    --text-primary: #333333;
-    --text-secondary: #666666;
+    /* Text Colors - Dark Theme */
+    --text-primary: #f5f5f5;
+    --text-secondary: #cccccc;
     --text-light: #999999;
     --text-white: #ffffff;
     --white: #FFFFFF;
@@ -43,6 +43,131 @@
     --container-padding: 0 20px;
 }
 
+/* ===== LIGHT THEME ===== */
+.light-theme {
+    /* Background Colors - Light Theme */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-card: #ffffff;
+    
+    /* Text Colors - Light Theme */
+    --text-primary: #1a0f0a;
+    --text-secondary: #4a4a4a;
+    --text-light: #666666;
+}
+
+/* Light Theme Section Overrides */
+.light-theme .hero-section {
+    background: linear-gradient(135deg, #f8f4f0 0%, #e8dfd6 50%, #f8f4f0 100%);
+    color: var(--text-primary);
+}
+
+.light-theme .hero-title,
+.light-theme .contact-hero h1,
+.light-theme .menu-hero h1 {
+    color: var(--text-primary);
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.light-theme .hero-subtitle {
+    color: var(--primary-dark);
+}
+
+.light-theme .contact-hero,
+.light-theme .menu-hero {
+    background: linear-gradient(135deg, #f8f4f0 0%, #e8dfd6 100%);
+    color: var(--text-primary);
+}
+
+.light-theme .story-section {
+    background-color: var(--bg-secondary);
+}
+
+.light-theme .story-card {
+    background-color: var(--bg-card);
+}
+
+.light-theme .section-title {
+    color: var(--text-primary);
+}
+
+.light-theme .story-text {
+    color: var(--text-secondary);
+}
+
+.light-theme .hot-items-section {
+    background: linear-gradient(135deg, #f8f4f0 0%, #e8dfd6 100%);
+}
+
+.light-theme .hot-items-section .text-white {
+    color: var(--text-primary) !important;
+}
+
+.light-theme .hot-items-section .text-white-50 {
+    color: var(--text-secondary) !important;
+}
+
+.light-theme .hot-item-content h4 {
+    color: var(--text-primary);
+}
+
+.light-theme .contact-section {
+    background-color: var(--bg-secondary);
+}
+
+.light-theme .menu-section {
+    background-color: var(--bg-secondary);
+}
+
+.light-theme .card {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.light-theme .card-title {
+    color: var(--text-primary);
+}
+
+.light-theme .card-text {
+    color: var(--text-secondary);
+}
+
+.light-theme .hot-item-card,
+.light-theme .menu-item-card,
+.light-theme .contact-form-card,
+.light-theme .contact-info-card {
+    background-color: #ffffff;
+}
+
+.light-theme .form-control,
+.light-theme .form-select {
+    background-color: #ffffff;
+    color: #1a0f0a;
+    border-color: #dee2e6;
+}
+
+.light-theme .form-control:focus,
+.light-theme .form-select:focus {
+    background-color: #ffffff;
+    color: #1a0f0a;
+}
+
+.light-theme .footer-section {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--dark-color) 100%);
+}
+
+/* Footer text should remain white in both themes since footer is always dark */
+.light-theme .footer-section .text-white,
+.light-theme .footer-section .text-white-50 {
+    color: #ffffff !important;
+    opacity: 1;
+}
+
+.light-theme .footer-section .text-white-50 {
+    opacity: 0.7;
+}
+
 /* ===== GLOBAL STYLES ===== */
 * {
     margin: 0;
@@ -54,8 +179,9 @@ body {
     font-family: var(--font-body);
     color: var(--text-primary);
     line-height: 1.6;
-    background-color: #fafafa;
+    background-color: var(--bg-primary);
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 html {
@@ -253,16 +379,17 @@ html {
 
 /* ===== STORY SECTION ===== */
 .story-section {
-    background-color: var(--light-color);
+    background-color: var(--bg-secondary);
     padding: 80px 0;
 }
 
 .story-card {
-    background: var(--white);
+    background: var(--bg-card);
     border-radius: 20px;
     padding: 40px;
     box-shadow: var(--shadow);
     border: none;
+    transition: all 0.3s ease;
 }
 
 .story-img {
@@ -276,14 +403,14 @@ html {
 .section-title {
     font-family: var(--font-heading);
     font-size: 2.5rem;
-    color: var(--dark-color);
+    color: var(--text-primary);
     margin-bottom: 1.5rem;
 }
 
 .story-text {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 /* ===== HOT ITEMS SECTION ===== */
@@ -363,7 +490,7 @@ html {
 }
 
 .hot-item-content p {
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 1rem;
 }
 
@@ -382,7 +509,7 @@ html {
 
 /* ===== CONTACT SECTION ===== */
 .contact-section {
-    background-color: #fafafa;
+    background-color: var(--bg-secondary);
     min-height: 100vh;
 }
 
@@ -443,14 +570,16 @@ html {
     padding: 12px 16px;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background-color: #fff;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
 }
 
 .form-control:focus,
 .form-select:focus {
     border-color: var(--accent-color);
     box-shadow: 0 0 0 0.25rem rgba(210, 105, 30, 0.15);
-    background-color: #fff;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
 }
 
 .form-control::placeholder {
@@ -516,7 +645,7 @@ html {
 }
 
 .contact-info-item:hover {
-    background-color: #f8f9fa;
+    background-color: var(--bg-secondary);
     transform: translateX(5px);
 }
 
@@ -553,7 +682,7 @@ html {
 
 /* ===== MENU SECTION ===== */
 .menu-section {
-    background-color: #fafafa;
+    background-color: var(--bg-secondary);
     min-height: 100vh;
 }
 
