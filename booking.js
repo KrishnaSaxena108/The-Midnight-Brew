@@ -533,13 +533,56 @@ document.addEventListener('DOMContentLoaded', function() {
                 tag.style.borderColor = '#555555';
             });
             
-            // Headings
-            document.querySelectorAll('.booking-sidebar h4, .booking-sidebar h5, .form-title').forEach(heading => {
+            // Headings - FIXED SECTION
+            document.querySelectorAll('.booking-sidebar h4, .booking-sidebar h5, .form-title, h2, h3, h4, h5, h6').forEach(heading => {
                 heading.style.color = '#DEB887';
             });
             
-            document.querySelectorAll('.form-subtitle, .text-muted').forEach(el => {
+            document.querySelectorAll('.form-subtitle, .text-muted, small, .text-secondary').forEach(el => {
                 el.style.color = '#b0b0b0';
+            });
+            
+            // All paragraph text and general text - ADDED
+            document.querySelectorAll('p, span, div, label').forEach(el => {
+                if (!el.classList.contains('btn') && !el.style.color) {
+                    el.style.color = '#ffffff';
+                }
+            });
+            
+            // Step indicators - ADDED
+            document.querySelectorAll('.step-number, .step-label').forEach(el => {
+                el.style.color = '#ffffff';
+            });
+            
+            // Booking summary specific - ADDED
+            document.querySelectorAll('.booking-details p, .booking-details strong').forEach(el => {
+                el.style.color = '#ffffff';
+            });
+            
+            // Icons - ADDED
+            document.querySelectorAll('.fas, .far, .fab').forEach(icon => {
+                if (!icon.closest('.btn-primary') && !icon.closest('.text-success')) {
+                    icon.style.color = '#DEB887';
+                }
+            });
+            
+            // Sidebar specific styling - ADDED
+            document.querySelectorAll('.booking-sidebar p, .booking-sidebar strong, .booking-sidebar span').forEach(el => {
+                if (!el.classList.contains('text-muted') && !el.classList.contains('small')) {
+                    el.style.color = '#ffffff';
+                }
+            });
+            
+            // Availability indicator text - ADDED
+            document.querySelectorAll('.availability-indicator span').forEach(el => {
+                el.style.color = '#ffffff';
+            });
+            
+            // Contact info and policy sections - ADDED
+            document.querySelectorAll('.bg-light p, .bg-light strong, .bg-light span').forEach(el => {
+                if (!el.classList.contains('small')) {
+                    el.style.color = '#ffffff';
+                }
             });
             
             // bg-light elements
