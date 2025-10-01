@@ -321,6 +321,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const originalText = submitButton.innerHTML;
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
         submitButton.disabled = true;
+
+        showLoadingOverlay();
         
         // Simulate API call
         try {
@@ -334,12 +336,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 resetBookingForm();
                 submitButton.innerHTML = originalText;
                 submitButton.disabled = false;
+                hideLoadingOverlay();
             }, 2000);
             
         } catch (error) {
             showNotification('An error occurred. Please try again.', 'error');
             submitButton.innerHTML = originalText;
             submitButton.disabled = false;
+            hideLoadingOverlay();
         }
     });
 
@@ -535,3 +539,26 @@ const notificationStyles = `
 
 // Add notification styles to head
 document.head.insertAdjacentHTML('beforeend', notificationStyles);
+
+// Loading overlay helpers
+function ensureLoadingOverlay() {
+    let overlay = document.querySelector('.loading-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'loading-overlay';
+        overlay.setAttribute('aria-live', 'polite');
+        overlay.innerHTML = '<div class="loading-spinner" role="status" aria-label="Loading"></div>';
+        document.body.appendChild(overlay);
+    }
+    return overlay;
+}
+
+function showLoadingOverlay() {
+    const overlay = ensureLoadingOverlay();
+    overlay.classList.add('show');
+}
+
+function hideLoadingOverlay() {
+    const overlay = ensureLoadingOverlay();
+    overlay.classList.remove('show');
+}

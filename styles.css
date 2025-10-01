@@ -7,9 +7,9 @@
     --primary-color: #8B4513;
     --primary-dark: #6B3410;
     --primary-light: #A0522D;
-    --secondary-color: #D2691E;
-    --accent-color: #D2691E;
-    --accent-light: #DEB887;
+    --secondary-color: #B65A1A;
+    --accent-color: #C25E1C;
+    --accent-light: #E6BE8A;
     --dark-color: #2C1810;
     --light-color: #F5F5DC;
     
@@ -53,7 +53,7 @@
 body {
     font-family: var(--font-body);
     color: var(--text-primary);
-    line-height: 1.6;
+    line-height: 1.7;
     background-color: #fafafa;
     overflow-x: hidden;
 }
@@ -122,7 +122,7 @@ html {
 
 .navbar-nav .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    color: var(--accent-color) !important;
+    color: #ffffff !important;
     transform: translateY(-2px);
 }
 
@@ -275,7 +275,7 @@ html {
 
 .section-title {
     font-family: var(--font-heading);
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     color: var(--dark-color);
     margin-bottom: 1.5rem;
 }
@@ -370,8 +370,8 @@ html {
 .price {
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--secondary-color);
-    background: var(--accent-color);
+    color: #ffffff;
+    background: #C25E1C;
     color: var(--text-white);
     padding: 8px 16px;
     border-radius: 25px;
@@ -939,6 +939,26 @@ html {
     outline-offset: 2px;
 }
 
+/* ===== BASE TRANSITIONS & TYPOGRAPHY REFINEMENTS ===== */
+a,
+button,
+.btn,
+.nav-link,
+.footer-link,
+.social-link,
+.menu-item-card,
+.hot-item-card {
+    transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    letter-spacing: 0.2px;
+}
+
+p {
+    color: #444444;
+}
+
 /* ===== CUSTOM SCROLLBAR ===== */
 ::-webkit-scrollbar {
     width: 8px;
@@ -960,4 +980,50 @@ html {
 /* ===== ADDITIONAL ENHANCEMENTS ===== */
 .container {
     max-width: 1200px;
+}
+
+/* ===== SKIP LINK ===== */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: #000;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    z-index: 1100;
+}
+
+.skip-link:focus {
+    left: 12px;
+    top: 12px;
+}
+
+/* ===== LOADING OVERLAY ===== */
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(2px);
+}
+
+.loading-overlay.show {
+    display: flex;
+}
+
+.loading-spinner {
+    width: 54px;
+    height: 54px;
+    border: 4px solid rgba(255,255,255,0.25);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
