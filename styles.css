@@ -168,6 +168,56 @@
     opacity: 0.7;
 }
 
+/* ===== LIGHT THEME: BOOKING PAGE VISIBILITY FIXES ===== */
+.light-theme .booking-section {
+    background-color: var(--bg-secondary);
+}
+
+.light-theme .booking-form-card,
+.light-theme .booking-sidebar {
+    background-color: #ffffff;
+    color: var(--text-primary);
+}
+
+.light-theme .booking-form-card .form-subtitle {
+    color: var(--text-secondary);
+}
+
+.light-theme .time-slot {
+    background-color: #ffffff;
+    border-color: #e9ecef;
+    color: var(--text-primary);
+}
+
+.light-theme .time-slot:hover {
+    background-color: var(--accent-light);
+    border-color: var(--accent-color);
+}
+
+.light-theme .time-slot.unavailable {
+    background-color: #f1f3f5;
+    color: #6c757d;
+}
+
+.light-theme .feature-tag {
+    background-color: #ffffff;
+    border-color: #e9ecef;
+    color: var(--text-primary);
+}
+
+.light-theme .feature-tag:hover {
+    background-color: var(--accent-light);
+    border-color: var(--accent-color);
+}
+
+.light-theme .date-picker i {
+    color: var(--primary-color);
+}
+
+.light-theme .availability-indicator {
+    background-color: #edf7ff;
+}
+
 /* ===== GLOBAL STYLES ===== */
 * {
     margin: 0;

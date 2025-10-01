@@ -1,6 +1,9 @@
 // ===== THE MIDNIGHT BREW - BOOKING SYSTEM ===== //
 
 document.addEventListener('DOMContentLoaded', function() {
+    // ===== APPLY THEME ON LOAD ===== //
+    applyCurrentTheme();
+    
     // ===== BOOKING SYSTEM STATE ===== //
     const bookingState = {
         date: null,
@@ -37,6 +40,18 @@ document.addEventListener('DOMContentLoaded', function() {
         step2: document.getElementById('step2'),
         step3: document.getElementById('step3')
     };
+
+    // ===== THEME TOGGLE HANDLER ===== //
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            applyThemeToBookingPage(newTheme);
+        });
+    }
 
     // ===== INITIALIZE DATE CONSTRAINTS ===== //
     function initializeDatePicker() {
@@ -121,6 +136,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 selectedSlot.classList.add('selected');
             }
         }
+        
+        // Reapply theme to new slots
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        applyThemeToBookingPage(currentTheme);
     }
 
     // ===== TABLE PREFERENCES ===== //
@@ -360,15 +379,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== SUCCESS MODAL ===== //
     function showSuccessModal() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const modalBgClass = currentTheme === 'dark' ? 'bg-dark text-white' : 'bg-light';
+        const modalContentClass = currentTheme === 'dark' ? 'bg-dark text-white' : '';
+        
         const modalHTML = `
             <div class="modal fade" id="successModal" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
+                    <div class="modal-content ${modalContentClass}">
                         <div class="modal-body text-center py-5">
                             <i class="fas fa-check-circle text-success mb-3" style="font-size: 4rem;"></i>
                             <h3 class="mb-3">Booking Confirmed!</h3>
                             <p class="mb-4">Thank you for your reservation at The Midnight Brew!</p>
-                            <div class="booking-details bg-light p-3 rounded mb-4">
+                            <div class="booking-details ${modalBgClass} p-3 rounded mb-4">
                                 <p class="mb-2"><strong>Date:</strong> ${elements.summaryDate.textContent}</p>
                                 <p class="mb-2"><strong>Time:</strong> ${elements.summaryTime.textContent}</p>
                                 <p class="mb-0"><strong>Party Size:</strong> ${elements.summaryParty.textContent}</p>
@@ -433,8 +456,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== NOTIFICATION SYSTEM ===== //
     function showNotification(message, type = 'info') {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const bgClass = currentTheme === 'dark' ? 'bg-dark text-white' : 'bg-white';
+        
         const notificationHTML = `
-            <div class="notification notification-${type}">
+            <div class="notification notification-${type} ${bgClass}">
                 <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
                 ${message}
             </div>
@@ -457,6 +483,191 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 4000);
     }
 
+    // ===== THEME APPLICATION ===== //
+    function applyCurrentTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        applyThemeToBookingPage(savedTheme);
+    }
+
+    function applyThemeToBookingPage(theme) {
+        if (theme === 'dark') {
+            // Dark mode styles
+            document.body.style.backgroundColor = '#1a1a1a';
+            document.body.style.color = '#ffffff';
+            
+            const bookingSection = document.querySelector('.booking-section');
+            if (bookingSection) {
+                bookingSection.style.backgroundColor = '#1a1a1a';
+            }
+            
+            // Cards
+            document.querySelectorAll('.booking-form-card, .booking-sidebar').forEach(card => {
+                card.style.backgroundColor = '#2d2d2d';
+                card.style.color = '#ffffff';
+            });
+            
+            // Form controls
+            document.querySelectorAll('.form-control, .form-select, textarea').forEach(input => {
+                input.style.backgroundColor = '#3a3a3a';
+                input.style.color = '#ffffff';
+                input.style.borderColor = '#555555';
+            });
+            
+            // Labels
+            document.querySelectorAll('.form-label').forEach(label => {
+                label.style.color = '#ffffff';
+            });
+            
+            // Time slots
+            document.querySelectorAll('.time-slot:not(.selected):not(.unavailable)').forEach(slot => {
+                slot.style.backgroundColor = '#3a3a3a';
+                slot.style.color = '#ffffff';
+                slot.style.borderColor = '#555555';
+            });
+            
+            // Feature tags
+            document.querySelectorAll('.feature-tag:not(.selected)').forEach(tag => {
+                tag.style.backgroundColor = '#3a3a3a';
+                tag.style.color = '#ffffff';
+                tag.style.borderColor = '#555555';
+            });
+            
+            // Headings - FIXED SECTION
+            document.querySelectorAll('.booking-sidebar h4, .booking-sidebar h5, .form-title, h2, h3, h4, h5, h6').forEach(heading => {
+                heading.style.color = '#DEB887';
+            });
+            
+            document.querySelectorAll('.form-subtitle, .text-muted, small, .text-secondary').forEach(el => {
+                el.style.color = '#b0b0b0';
+            });
+            
+            // All paragraph text and general text - ADDED
+            document.querySelectorAll('p, span, div, label').forEach(el => {
+                if (!el.classList.contains('btn') && !el.style.color) {
+                    el.style.color = '#ffffff';
+                }
+            });
+            
+            // Step indicators - ADDED
+            document.querySelectorAll('.step-number, .step-label').forEach(el => {
+                el.style.color = '#ffffff';
+            });
+            
+            // Booking summary specific - ADDED
+            document.querySelectorAll('.booking-details p, .booking-details strong').forEach(el => {
+                el.style.color = '#ffffff';
+            });
+            
+            // Icons - ADDED
+            document.querySelectorAll('.fas, .far, .fab').forEach(icon => {
+                if (!icon.closest('.btn-primary') && !icon.closest('.text-success')) {
+                    icon.style.color = '#DEB887';
+                }
+            });
+            
+            // Sidebar specific styling - ADDED
+            document.querySelectorAll('.booking-sidebar p, .booking-sidebar strong, .booking-sidebar span').forEach(el => {
+                if (!el.classList.contains('text-muted') && !el.classList.contains('small')) {
+                    el.style.color = '#ffffff';
+                }
+            });
+            
+            // Availability indicator text - ADDED
+            document.querySelectorAll('.availability-indicator span').forEach(el => {
+                el.style.color = '#ffffff';
+            });
+            
+            // Contact info and policy sections - ADDED
+            document.querySelectorAll('.bg-light p, .bg-light strong, .bg-light span').forEach(el => {
+                if (!el.classList.contains('small')) {
+                    el.style.color = '#ffffff';
+                }
+            });
+            
+            // bg-light elements
+            document.querySelectorAll('.bg-light').forEach(el => {
+                el.style.backgroundColor = '#2d2d2d';
+                el.style.color = '#ffffff';
+            });
+            
+            // Availability indicator
+            const availIndicator = document.querySelector('.availability-indicator');
+            if (availIndicator) {
+                availIndicator.style.backgroundColor = '#2d2d2d';
+                availIndicator.style.color = '#ffffff';
+            }
+            
+        } else {
+            // Light mode styles
+            document.body.style.backgroundColor = '#fafafa';
+            document.body.style.color = '#333333';
+            
+            const bookingSection = document.querySelector('.booking-section');
+            if (bookingSection) {
+                bookingSection.style.backgroundColor = '#fafafa';
+            }
+            
+            // Cards
+            document.querySelectorAll('.booking-form-card, .booking-sidebar').forEach(card => {
+                card.style.backgroundColor = '#ffffff';
+                card.style.color = '#333333';
+            });
+            
+            // Form controls
+            document.querySelectorAll('.form-control, .form-select, textarea').forEach(input => {
+                input.style.backgroundColor = '#ffffff';
+                input.style.color = '#333333';
+                input.style.borderColor = '#dee2e6';
+            });
+            
+            // Labels
+            document.querySelectorAll('.form-label').forEach(label => {
+                label.style.color = '#333333';
+            });
+            
+            // Time slots
+            document.querySelectorAll('.time-slot:not(.selected):not(.unavailable)').forEach(slot => {
+                slot.style.backgroundColor = '#f8f9fa';
+                slot.style.color = '#333333';
+                slot.style.borderColor = '#e9ecef';
+            });
+            
+            // Feature tags
+            document.querySelectorAll('.feature-tag:not(.selected)').forEach(tag => {
+                tag.style.backgroundColor = '#f8f9fa';
+                tag.style.color = '#333333';
+                tag.style.borderColor = '#e9ecef';
+            });
+            
+            // Headings
+            document.querySelectorAll('.booking-sidebar h4, .booking-sidebar h5, .form-title').forEach(heading => {
+                heading.style.color = '#8B4513';
+            });
+            
+            document.querySelectorAll('.form-subtitle').forEach(el => {
+                el.style.color = '#666666';
+            });
+            
+            document.querySelectorAll('.text-muted').forEach(el => {
+                el.style.color = '#6c757d';
+            });
+            
+            // bg-light elements
+            document.querySelectorAll('.bg-light').forEach(el => {
+                el.style.backgroundColor = '';
+                el.style.color = '';
+            });
+            
+            // Availability indicator
+            const availIndicator = document.querySelector('.availability-indicator');
+            if (availIndicator) {
+                availIndicator.style.backgroundColor = '#f0f8ff';
+                availIndicator.style.color = '#333333';
+            }
+        }
+    }
+
     // ===== INITIALIZE EVERYTHING ===== //
     function init() {
         initializeDatePicker();
@@ -477,7 +688,6 @@ const notificationStyles = `
     position: fixed;
     top: 100px;
     right: -400px;
-    background: white;
     padding: 15px 20px;
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
