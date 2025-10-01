@@ -90,12 +90,130 @@ All you need is a modern web browser! The website is built with pure HTML, CSS, 
 
 ## 🛠️ Built With
 
+### Frontend
 - **HTML5** - Semantic markup and structure
 - **CSS3** - Modern styling with Flexbox and Grid
 - **JavaScript (Vanilla)** - Interactive functionality without frameworks
 - **Font Awesome** - Icon library
 - **Google Fonts** - Typography
 - **CSS Variables** - Easy theme customization
+
+### Backend
+- **Node.js** - JavaScript runtime environment
+- **Express.js v5.1.0** - Fast, unopinionated web framework
+- **Morgan** - HTTP request logger middleware
+- **RESTful API** - API architecture for data communication
+
+---
+
+## 🖥️ Backend Server
+
+The Midnight Brew includes a fully functional Express.js backend server with RESTful API endpoints.
+
+### Quick Start
+
+1. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Start the Server**
+   ```bash
+   npm start
+   # or
+   node server.js
+   ```
+
+3. **Server Running**
+   ```
+   Server: http://localhost:3000
+   API Docs: See BACKEND_INTEGRATION_GUIDE.md
+   ```
+
+### Available Routes
+
+#### 📄 Frontend Pages (6 Routes)
+- `GET /` or `/home` - Homepage
+- `GET /menu` - Menu page
+- `GET /booking` - Booking page
+- `GET /contact` - Contact page
+- `GET /about` - About page
+
+#### 🔌 API Endpoints (10 Routes)
+- `GET /api/info` - Café information
+- `GET /api/menu` - Complete menu (12 items)
+- `GET /api/menu/:category` - Menu by category
+- `GET /api/booking/timeslots` - Available time slots
+- `GET /api/featured` - Featured items
+- `GET /api/specials` - Daily specials
+- `GET /api/status` - Server status
+- `GET /api/health` - Health check
+- `GET /api/hours` - Operating hours (text)
+- `GET /api/welcome` - Welcome message (text)
+
+### Features
+
+✅ **10-Layer Middleware Stack**
+- Morgan HTTP logger (file + console)
+- JSON body parser (10MB limit)
+- CORS headers
+- Security headers (XSS, clickjacking protection)
+- Request tracking with unique IDs
+- Response time monitoring
+- Custom detailed logging
+- Static file serving
+- Comprehensive error handling
+
+✅ **Error Handling**
+- Enhanced 404 handler with structured responses
+- Global error handler with detailed logging
+- Error type detection (ValidationError, SyntaxError, etc.)
+- Stack traces in development mode only
+
+✅ **Process Management**
+- Graceful shutdown on SIGTERM/SIGINT
+- Uncaught exception handler
+- Unhandled rejection handler
+
+✅ **Monitoring & Logging**
+- HTTP access logs in `logs/access.log`
+- Detailed console logging
+- Request/response timing
+- Server status endpoint
+
+### API Examples
+
+**Get Menu**
+```bash
+curl http://localhost:3000/api/menu
+```
+
+**Get Menu by Category**
+```bash
+curl http://localhost:3000/api/menu/pastries
+```
+
+**Check Server Status**
+```bash
+curl http://localhost:3000/api/status
+```
+
+**Frontend Integration**
+```javascript
+// Fetch menu items
+fetch('/api/menu')
+  .then(res => res.json())
+  .then(data => {
+    console.log(data.data.items);
+  });
+```
+
+### Documentation
+
+For complete backend documentation, see:
+- **[BACKEND_INTEGRATION_GUIDE.md](BACKEND_INTEGRATION_GUIDE.md)** - Complete routes & integration guide
+- **[MIDDLEWARE_ERROR_HANDLING_GUIDE.md](MIDDLEWARE_ERROR_HANDLING_GUIDE.md)** - Middleware documentation
+- **[QUICK_REFERENCE_MIDDLEWARE.md](QUICK_REFERENCE_MIDDLEWARE.md)** - Quick command reference
 
 ---
 
