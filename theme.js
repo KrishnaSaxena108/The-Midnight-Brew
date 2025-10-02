@@ -50,3 +50,46 @@ document.addEventListener("DOMContentLoaded", () => {
     }, appearOptions);
     faders.forEach(fader => appearOnScroll.observe(fader));
 });
+
+function animateCounter(el, duration, startTime) {
+  const target = parseFloat(el.getAttribute('data-target'));
+
+  function update(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    let value = target * progress;
+
+    if (el.id === 'satisfactionRate') {
+      el.textContent = Math.floor(value) + '%';
+    } else if (el.id === 'averageRating') {
+      el.textContent = value.toFixed(1);
+    } else {
+      el.textContent = Math.floor(value);
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      // This ensures that it ends exactly at target
+      if (el.id === 'satisfactionRate') el.textContent = target + '%';
+      else if (el.id === 'averageRating') el.textContent = target.toFixed(1);
+      else el.textContent = target;
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+function isInViewport(el) {
+  const rect = el.getBoundingClientRect();
+  return rect.top <= window.innerHeight && rect.bottom >= 0;
+}
+
+let animated = false;
+window.addEventListener('scroll', () => {
+  if (!animated && isInViewport(document.querySelector('.review-stats'))) {
+    animated = true;
+    const duration = 800; // 0.8 seconds
+    document.querySelectorAll('.review-stats h3').forEach(el => animateCounter(el, duration));
+  }
+});
