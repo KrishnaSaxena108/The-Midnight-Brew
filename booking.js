@@ -1,3 +1,4 @@
+jwt-auth
 // ===== THE MIDNIGHT BREW - BOOKING SYSTEM ===== //
 
 // ===== GLOBAL STATE & ELEMENTS (DEFINED BEFORE DOMContentLoaded) ===== //
@@ -52,6 +53,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // ===== INITIALIZE ELEMENTS OBJECT ===== //
     elements = {
+
+document.addEventListener('DOMContentLoaded', function() {
+    applyCurrentTheme();
+    
+    const bookingState = {
+        date: null, time: null, partySize: null, preferences: [], occasion: null,
+        firstName: '', lastName: '', email: '', phone: '', requests: ''
+    };
+
+    const elements = {
+       main
         form: document.getElementById('bookingForm'),
         dateInput: document.getElementById('bookingDate'),
         partySizeSelect: document.getElementById('partySize'),
@@ -73,12 +85,9 @@ document.addEventListener('DOMContentLoaded', function() {
         step3: document.getElementById('step3')
     };
 
-    // ===== THEME TOGGLE HANDLER ===== //
-    // Theme toggle is handled by theme.js - we just need to listen for changes
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
         themeToggle.addEventListener('click', function() {
-            // Small delay to let theme.js update the data-theme attribute
             setTimeout(() => {
                 const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
                 applyThemeToBookingPage(currentTheme);
@@ -86,7 +95,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ===== INITIALIZE DATE CONSTRAINTS ===== //
     function initializeDatePicker() {
         console.log('📅 Initializing date picker...');
         const dateInput = document.getElementById('bookingDate');
@@ -98,12 +106,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const today = new Date();
         const maxDate = new Date();
-        maxDate.setMonth(maxDate.getMonth() + 3); // Allow booking up to 3 months ahead
+        maxDate.setMonth(maxDate.getMonth() + 3);
         
         dateInput.min = today.toISOString().split('T')[0];
         dateInput.max = maxDate.toISOString().split('T')[0];
         
-        // Set default to tomorrow
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
         dateInput.value = tomorrow.toISOString().split('T')[0];
@@ -115,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateSummary();
     }
 
-    // ===== TIME SLOT MANAGEMENT ===== //
     function initializeTimeSlots() {
         console.log('🕐 Initializing time slots...');
         // Re-query time slots to ensure they're visible
@@ -135,28 +141,27 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleTimeSlotClick(e) {
         console.log('🖱️ Time slot clicked!', e.currentTarget.textContent.trim());
         const slot = e.currentTarget;
-        
-        // Don't select if unavailable
         if (slot.classList.contains('unavailable')) {
             console.log('   ⛔ Slot unavailable');
             showNotification('This time slot is not available', 'error');
             return;
         }
+<jwt-auth
         
         console.log('   ✅ Selecting time slot');
         // Remove previous selection
+ main
         elements.timeSlots.forEach(s => s.classList.remove('selected'));
-        
-        // Add selection to clicked slot
         slot.classList.add('selected');
         bookingState.time = slot.dataset.time;
+jwt-auth
         console.log('   📅 Time set to:', bookingState.time);
         
         // Update step indicator
+
+main
         updateStepIndicator(2);
         updateSummary();
-        
-        // Smooth scroll to contact info if on mobile
         if (window.innerWidth < 768) {
             setTimeout(() => {
                 elements.firstNameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -164,7 +169,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ===== SIMULATE TIME SLOT AVAILABILITY ===== //
     function updateTimeSlotAvailability() {
         const selectedDate = new Date(elements.dateInput.value);
         const dayOfWeek = selectedDate.getDay();
@@ -172,20 +176,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         elements.timeSlots.forEach(slot => {
             const time = parseInt(slot.dataset.time.split(':')[0]);
-            
-            // Reset classes
             slot.classList.remove('unavailable', 'selected');
-            
-            // Simulate some slots being unavailable
             if (isWeekend && (time === 12 || time === 13 || time === 19)) {
                 slot.classList.add('unavailable');
             } else if (!isWeekend && Math.random() > 0.85) {
-                // Random 15% unavailability on weekdays
                 slot.classList.add('unavailable');
             }
         });
         
-        // Clear time selection if previously selected time is now unavailable
         if (bookingState.time) {
             const selectedSlot = document.querySelector(`[data-time="${bookingState.time}"]`);
             if (selectedSlot && selectedSlot.classList.contains('unavailable')) {
@@ -196,12 +194,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Reapply theme to new slots
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
         applyThemeToBookingPage(currentTheme);
     }
 
-    // ===== TABLE PREFERENCES ===== //
     function initializePreferences() {
         console.log('💝 Initializing table preferences...');
         // Re-query feature tags to ensure they're visible
@@ -223,10 +219,11 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('🖱️ Preference clicked!', e.currentTarget.dataset.feature);
         const tag = e.currentTarget;
         const feature = tag.dataset.feature;
-        
         tag.classList.toggle('selected');
+ jwt-auth
         console.log('   Toggle result:', tag.classList.contains('selected') ? 'SELECTED' : 'DESELECTED');
         
+ main
         if (tag.classList.contains('selected')) {
             if (!bookingState.preferences.includes(feature)) {
                 bookingState.preferences.push(feature);
@@ -239,14 +236,10 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('   Current preferences:', bookingState.preferences);
     }
 
-    // ===== STEP INDICATOR ===== //
     function updateStepIndicator(currentStep) {
-        // Reset all steps
         [elements.step1, elements.step2, elements.step3].forEach(step => {
             step.classList.remove('active', 'completed');
         });
-        
-        // Mark completed and active steps
         if (currentStep >= 1) {
             elements.step1.classList.add(currentStep === 1 ? 'active' : 'completed');
         }
@@ -259,25 +252,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ===== BOOKING SUMMARY ===== //
     function updateSummary() {
         const hasBasicInfo = bookingState.date && bookingState.partySize;
-        
         if (!hasBasicInfo) {
             elements.bookingSummary.style.display = 'none';
             return;
         }
-        
         elements.bookingSummary.style.display = 'block';
         
-        // Format date
         if (bookingState.date) {
             const date = new Date(bookingState.date + 'T00:00:00');
             const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
             elements.summaryDate.textContent = date.toLocaleDateString('en-US', options);
         }
         
-        // Format time
         if (bookingState.time) {
             const [hours, minutes] = bookingState.time.split(':');
             const hour = parseInt(hours);
@@ -288,31 +276,20 @@ document.addEventListener('DOMContentLoaded', function() {
             elements.summaryTime.textContent = '-';
         }
         
-        // Party size
         elements.summaryParty.textContent = bookingState.partySize ? 
             `${bookingState.partySize} ${bookingState.partySize === '1' ? 'Guest' : 'Guests'}` : '-';
         
-        // Name
         const fullName = `${bookingState.firstName} ${bookingState.lastName}`.trim();
         elements.summaryName.textContent = fullName || '-';
     }
 
-    // ===== FORM VALIDATION ===== //
-    function validateStep1() {
-        return bookingState.date && bookingState.partySize;
-    }
+    function validateStep1() { return bookingState.date && bookingState.partySize; }
+    function validateStep2() { return bookingState.time; }
+    function validateStep3() { return bookingState.firstName && bookingState.lastName && bookingState.email && bookingState.phone; }
+    function validateEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+    function validatePhone(phone) { return /^[\d\s\-\+\(\)]+$/.test(phone) && phone.replace(/\D/g, '').length >= 10; }
 
-    function validateStep2() {
-        return bookingState.time;
-    }
-
-    function validateStep3() {
-        return bookingState.firstName && 
-               bookingState.lastName && 
-               bookingState.email && 
-               bookingState.phone;
-    }
-
+jwt-auth
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
@@ -356,6 +333,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             elements.partySizeSelect = partySizeSelect;
+
+    elements.dateInput.addEventListener('change', function() {
+        bookingState.date = this.value;
+        updateTimeSlotAvailability();
+        updateSummary();
+        updateStepIndicator(1);
+    });
+
+    elements.partySizeSelect.addEventListener('change', function() {
+        bookingState.partySize = this.value;
+        updateSummary();
+        if (this.value === '8') {
+            showNotification('For parties of 8 or more, please call us at +1 (555) 123-4567', 'info');
+ main
         }
 
         if (firstNameInput) {
@@ -402,6 +393,7 @@ document.addEventListener('DOMContentLoaded', function() {
             elements.phoneInput = phoneInput;
         }
 
+ jwt-auth
         if (occasionSelect) {
             occasionSelect.addEventListener('change', function() {
                 bookingState.occasion = this.value;
@@ -446,33 +438,26 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification('Please select a date and party size', 'error');
             return;
         }
+
+    elements.occasionSelect.addEventListener('change', function() { bookingState.occasion = this.value; });
+    elements.requestsTextarea.addEventListener('input', function() { bookingState.requests = this.value; });
+
+    elements.form.addEventListener('submit', async function(e) {
+        e.preventDefault();
         
-        if (!validateStep2()) {
-            showNotification('Please select a time slot', 'error');
-            return;
-        }
+        if (!validateStep1()) { showNotification('Please select a date and party size', 'error'); return; }
+        if (!validateStep2()) { showNotification('Please select a time slot', 'error'); return; }
+        if (!validateStep3()) { showNotification('Please fill in all required contact information', 'error'); return; }
+        if (!validateEmail(bookingState.email)) { showNotification('Please enter a valid email address', 'error'); return; }
+        if (!validatePhone(bookingState.phone)) { showNotification('Please enter a valid phone number', 'error'); return; }
+ main
         
-        if (!validateStep3()) {
-            showNotification('Please fill in all required contact information', 'error');
-            return;
-        }
-        
-        if (!validateEmail(bookingState.email)) {
-            showNotification('Please enter a valid email address', 'error');
-            return;
-        }
-        
-        if (!validatePhone(bookingState.phone)) {
-            showNotification('Please enter a valid phone number', 'error');
-            return;
-        }
-        
-        // Show loading state
         const submitButton = this.querySelector('button[type="submit"]');
         const originalText = submitButton.innerHTML;
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
         submitButton.disabled = true;
         
+ jwt-auth
         // Prepare booking data
         const bookingData = {
             date: bookingState.date,
@@ -499,15 +484,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
             
             // Success!
+
+        try {
+            await simulateBookingSubmission();
+ main
             showSuccessModal();
-            
-            // Reset form after delay
             setTimeout(() => {
                 resetBookingForm();
                 submitButton.innerHTML = originalText;
                 submitButton.disabled = false;
             }, 2000);
-            
         } catch (error) {
             console.error('Booking error:', error);
             showNotification(error.message || 'An error occurred. Please try again.', 'error');
@@ -520,6 +506,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('✅ Form submission set up');
     }
 
+jwt-auth
     // ===== AUTHENTICATION CHECK ===== //
     function checkAuthenticationStatus() {
         const authGate = document.getElementById('authGate');
@@ -567,9 +554,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         }
+
+    function simulateBookingSubmission() {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (Math.random() > 0.05) { resolve(); } else { reject(new Error('Booking failed')); }
+            }, 1500);
+        });
+ main
     }
 
-    // ===== SUCCESS MODAL ===== //
     function showSuccessModal() {
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
         const modalBgClass = currentTheme === 'dark' ? 'bg-dark text-white' : 'bg-light';
@@ -598,114 +592,63 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
         
-        // Remove any existing modal
         const existingModal = document.getElementById('successModal');
         if (existingModal) existingModal.remove();
-        
-        // Add modal to body
         document.body.insertAdjacentHTML('beforeend', modalHTML);
-        
-        // Show modal
         const modal = new bootstrap.Modal(document.getElementById('successModal'));
         modal.show();
-        
-        // Remove modal from DOM after hidden
-        document.getElementById('successModal').addEventListener('hidden.bs.modal', function() {
-            this.remove();
-        });
+        document.getElementById('successModal').addEventListener('hidden.bs.modal', function() { this.remove(); });
     }
 
-    // ===== RESET FORM ===== //
     function resetBookingForm() {
-        // Reset state
-        bookingState.date = null;
-        bookingState.time = null;
-        bookingState.partySize = null;
-        bookingState.preferences = [];
-        bookingState.occasion = null;
-        bookingState.firstName = '';
-        bookingState.lastName = '';
-        bookingState.email = '';
-        bookingState.phone = '';
-        bookingState.requests = '';
-        
-        // Reset form
+        Object.keys(bookingState).forEach(key => {
+            if (Array.isArray(bookingState[key])) bookingState[key] = [];
+            else bookingState[key] = null;
+        });
+        bookingState.firstName = ''; bookingState.lastName = ''; bookingState.email = ''; bookingState.phone = ''; bookingState.requests = '';
         elements.form.reset();
-        
-        // Reset UI elements
         elements.timeSlots.forEach(slot => slot.classList.remove('selected'));
         elements.featureTags.forEach(tag => tag.classList.remove('selected'));
-        
-        // Reset step indicator
         updateStepIndicator(1);
-        
-        // Hide summary
         elements.bookingSummary.style.display = 'none';
-        
-        // Re-initialize date
         initializeDatePicker();
     }
 
-    // ===== NOTIFICATION SYSTEM ===== //
     function showNotification(message, type = 'info') {
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
         const bgClass = currentTheme === 'dark' ? 'bg-dark text-white' : 'bg-white';
-        
         const notificationHTML = `
             <div class="notification notification-${type} ${bgClass}">
                 <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
                 ${message}
             </div>
         `;
-        
-        // Remove any existing notifications
         document.querySelectorAll('.notification').forEach(n => n.remove());
-        
-        // Add notification to body
         document.body.insertAdjacentHTML('beforeend', notificationHTML);
-        
-        // Animate in
         const notification = document.querySelector('.notification');
         setTimeout(() => notification.classList.add('show'), 10);
-        
-        // Remove after 4 seconds
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => notification.remove(), 300);
         }, 4000);
     }
 
-    // ===== THEME APPLICATION ===== //
     function applyCurrentTheme() {
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
-        
-        // Update body class for consistency
         document.body.className = document.body.className.replace(/light-theme|dark-theme/g, '');
-        if (savedTheme === 'light') {
-            document.body.classList.add('light-theme');
-        }
-        
+        if (savedTheme === 'light') { document.body.classList.add('light-theme'); }
         applyThemeToBookingPage(savedTheme);
     }
 
     function applyThemeToBookingPage(theme) {
-        // The theme switching is now handled by CSS custom properties
-        // We just need to ensure the data-theme attribute is set correctly
         document.documentElement.setAttribute('data-theme', theme);
-        
-        // Update the body theme class for consistency with other pages
         document.body.className = document.body.className.replace(/light-theme|dark-theme/g, '');
-        if (theme === 'light') {
-            document.body.classList.add('light-theme');
-        }
-        
-        // Apply theme to notification backgrounds
-        const currentTheme = theme;
+        if (theme === 'light') { document.body.classList.add('light-theme'); }
         const notifications = document.querySelectorAll('.notification');
         notifications.forEach(notification => {
             notification.className = notification.className.replace(/bg-dark|bg-light/g, '');
-            if (currentTheme === 'dark') {
+            if (theme === 'dark') {
                 notification.classList.add('bg-dark', 'text-white');
             } else {
                 notification.classList.add('bg-white');
@@ -713,7 +656,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ===== INITIALIZE EVERYTHING ===== //
     function init() {
         console.log('🎯 Initializing booking system...');
         
@@ -738,8 +680,13 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('✅ Booking system fully initialized!');
     }
 
+jwt-auth
     // Note: init() is now called inside checkAuthenticationStatus() 
     // after the form is visible (for authenticated users only)
     
     // For unauthenticated users, init() won't run (form is hidden anyway)
 });
+
+    init();
+});
+main
