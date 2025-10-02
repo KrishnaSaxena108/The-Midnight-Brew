@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Test - HTTP-Only Cookies</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .success {
+            background: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: white;
+        }
+        .error {
+            background: #ef4444;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: white;
+        }
+        .info {
+            background: #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: white;
+        }
+        pre {
+            background: #1e293b;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+        .result {
+            margin-top: 10px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .badge.http-only {
+            background: #10b981;
+            color: white;
+        }
+        .badge.fallback {
+            background: #f59e0b;
+            color: white;
+        }
+        .cookie-info {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .cookie-info strong {
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <!-- Load Auth Utility -->
+    <script src="auth.js"></script>
+
+    <div class="container">
+        <h1>🔐 JWT Authentication Test Suite</h1>
+        <p>Test the dual-mode authentication (HTTP-Only Cookie + localStorage)</p>
+
+        <!-- Cookie Information -->
+        <div class="cookie-info">
+            <strong>⚠️ Important:</strong> HTTP-Only cookies cannot be accessed via <code>document.cookie</code> for security.
+            You can view them in DevTools → Application → Cookies → localhost:3000
+        </div>
+
+        <!-- Test 1: Registration -->
+        <div class="test-section">
+            <h2>Test 1: User Registration</h2>
+            <button onclick="testRegister()">Register Test User</button>
+            <div id="register-result" class="result"></div>
+        </div>
+
+        <!-- Test 2: Login -->
+        <div class="test-section">
+            <h2>Test 2: Login with HTTP-Only Cookie <span class="badge http-only">HTTP-ONLY</span></h2>
+            <button onclick="testLogin()">Login Test User</button>
+            <div id="login-result" class="result"></div>
+        </div>
+
+        <!-- Test 3: Check Storage -->
+        <div class="test-section">
+            <h2>Test 3: Check Token Storage</h2>
+            <button onclick="checkStorage()">Check Storage</button>
+            <div id="storage-result" class="result"></div>
+        </div>
+
+        <!-- Test 4: Dashboard Request -->
+        <div class="test-section">
+            <h2>Test 4: Protected Dashboard Request <span class="badge http-only">USES COOKIE</span></h2>
+            <button onclick="testDashboard()">Access Dashboard</button>
+            <div id="dashboard-result" class="result"></div>
+        </div>
+
+        <!-- Test 5: Manual Fetch without Auth Utility -->
+        <div class="test-section">
+            <h2>Test 5: Manual Request (Without Authorization Header) <span class="badge http-only">COOKIE ONLY</span></h2>
+            <p>This proves the HTTP-only cookie is automatically sent!</p>
+            <button onclick="testManualFetch()">Test Manual Fetch</button>
+            <div id="manual-result" class="result"></div>
+        </div>
+
+        <!-- Test 6: Remove localStorage -->
+        <div class="test-section">
+            <h2>Test 6: Test Cookie Fallback <span class="badge fallback">FALLBACK TEST</span></h2>
+            <p>Remove localStorage and test if cookie still works</p>
+            <button onclick="testCookieFallback()">Test Cookie Alone</button>
+            <div id="fallback-result" class="result"></div>
+        </div>
+
+        <!-- Test 7: Logout -->
+        <div class="test-section">
+            <h2>Test 7: Logout (Clear Cookie + Storage)</h2>
+            <button onclick="testLogout()">Logout</button>
+            <div id="logout-result" class="result"></div>
+        </div>
+
+        <!-- Test 8: Try Access After Logout -->
+        <div class="test-section">
+            <h2>Test 8: Verify Logout</h2>
+            <button onclick="testAfterLogout()">Try Dashboard After Logout</button>
+            <div id="after-logout-result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const testEmail = 'cookie-test@example.com';
+        const testPassword = 'Test123!@#';
+        const testName = 'Cookie Test User';
+
+        // Test 1: Register
+        async function testRegister() {
+            const resultDiv = document.getElementById('register-result');
+            resultDiv.innerHTML = '<div class="info">⏳ Registering user...</div>';
+            
+            try {
+                const { response, data } = await Auth.register(testEmail, testPassword, testName);
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Registration successful!
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ❌ Registration failed: ${data.message}
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Test 2: Login
+        async function testLogin() {
+            const resultDiv = document.getElementById('login-result');
+            resultDiv.innerHTML = '<div class="info">⏳ Logging in...</div>';
+            
+            try {
+                const { response, data } = await Auth.login(testEmail, testPassword, true);
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Login successful!
+                            <p><strong>🍪 HTTP-Only Cookie Set:</strong> Check DevTools → Application → Cookies → localhost:3000</p>
+                            <p><strong>💾 Token also stored in localStorage</strong> (fallback)</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ❌ Login failed: ${data.message}
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Test 3: Check Storage
+        function checkStorage() {
+            const resultDiv = document.getElementById('storage-result');
+            
+            const token = Auth.getToken();
+            const user = Auth.getUser();
+            const isAuth = Auth.isAuthenticated();
+            
+            // Try to access cookie via document.cookie (will fail for HTTP-only)
+            const documentCookies = document.cookie;
+            const hasVisibleCookie = documentCookies.includes('authToken');
+            
+            resultDiv.innerHTML = `
+                <div class="success">
+                    <h3>Storage Status:</h3>
+                    <p><strong>✅ Token in localStorage:</strong> ${token ? 'YES (First ' + token.substring(0, 20) + '...)' : 'NO'}</p>
+                    <p><strong>✅ User data:</strong> ${user ? JSON.stringify(user) : 'NO'}</p>
+                    <p><strong>✅ Is Authenticated:</strong> ${isAuth ? 'YES' : 'NO'}</p>
+                    <hr>
+                    <p><strong>🍪 Cookie visible via document.cookie:</strong> ${hasVisibleCookie ? '❌ YES (NOT HttpOnly!)' : '✅ NO (HttpOnly works!)'}</p>
+                    <p><strong>📝 document.cookie content:</strong> ${documentCookies || '(empty)'}</p>
+                    <div class="info" style="margin-top: 10px;">
+                        ℹ️ The HTTP-Only cookie is set but invisible to JavaScript. Check DevTools → Application → Cookies.
+                    </div>
+                </div>
+            `;
+        }
+
+        // Test 4: Dashboard
+        async function testDashboard() {
+            const resultDiv = document.getElementById('dashboard-result');
+            resultDiv.innerHTML = '<div class="info">⏳ Accessing dashboard...</div>';
+            
+            try {
+                const response = await Auth.authGet('/dashboard');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Dashboard access successful!
+                            <p><strong>🍪 Cookie automatically sent by browser</strong></p>
+                            <p><strong>🔑 Fallback Authorization header also sent</strong></p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ❌ Dashboard access failed
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Test 5: Manual Fetch (No Authorization Header)
+        async function testManualFetch() {
+            const resultDiv = document.getElementById('manual-result');
+            resultDiv.innerHTML = '<div class="info">⏳ Making request WITHOUT Authorization header...</div>';
+            
+            try {
+                // Manual fetch WITHOUT Authorization header - only cookie
+                const response = await fetch('http://localhost:3000/dashboard', {
+                    method: 'GET',
+                    credentials: 'include' // This sends the cookie
+                    // NO Authorization header!
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ✅ SUCCESS! Request worked with COOKIE ONLY!
+                            <p><strong>🎉 This proves HTTP-Only cookie authentication is working!</strong></p>
+                            <p>No Authorization header was sent - only the cookie.</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ❌ Failed: ${data.message}
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Test 6: Cookie Fallback
+        async function testCookieFallback() {
+            const resultDiv = document.getElementById('fallback-result');
+            
+            // Remove localStorage token temporarily
+            const savedToken = localStorage.getItem('authToken');
+            localStorage.removeItem('authToken');
+            
+            resultDiv.innerHTML = '<div class="info">⏳ Removed localStorage token, testing cookie alone...</div>';
+            
+            try {
+                // Manual fetch - cookie should still work
+                const response = await fetch('http://localhost:3000/dashboard', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                // Restore token
+                if (savedToken) {
+                    localStorage.setItem('authToken', savedToken);
+                }
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Cookie fallback works perfectly!
+                            <p><strong>🍪 HTTP-Only cookie alone is sufficient for authentication</strong></p>
+                            <p>localStorage token removed, cookie still authenticated the request.</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                            <div class="info" style="margin-top: 10px;">
+                                ✅ localStorage token has been restored
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ❌ Failed: ${data.message}
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                // Restore token on error
+                if (savedToken) {
+                    localStorage.setItem('authToken', savedToken);
+                }
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Test 7: Logout
+        async function testLogout() {
+            const resultDiv = document.getElementById('logout-result');
+            resultDiv.innerHTML = '<div class="info">⏳ Logging out...</div>';
+            
+            try {
+                await Auth.logout();
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        ✅ Logout successful!
+                        <p><strong>🍪 HTTP-Only cookie cleared on server</strong></p>
+                        <p><strong>💾 localStorage cleared on client</strong></p>
+                        <p><strong>📝 Check DevTools → Cookies (should be gone)</strong></p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Test 8: After Logout
+        async function testAfterLogout() {
+            const resultDiv = document.getElementById('after-logout-result');
+            resultDiv.innerHTML = '<div class="info">⏳ Trying to access dashboard...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/dashboard', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (response.status === 401) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Logout verified! Got expected 401 Unauthorized
+                            <p><strong>🔒 Both cookie and localStorage were successfully cleared</strong></p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            ❌ Unexpected response: ${response.status}
+                            <p>Expected 401 Unauthorized</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Auto-check storage on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (Auth.isAuthenticated()) {
+                    document.body.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    const banner = document.createElement('div');
+                    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#10b981;color:white;padding:15px;text-align:center;font-weight:bold;z-index:1000;';
+                    banner.textContent = '✅ Already authenticated! Cookie + localStorage detected.';
+                    document.body.prepend(banner);
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth.js Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #f5f5f5;
+        }
+        .test-box {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #d4a574;
+        }
+        .success { border-left-color: #4caf50; }
+        .error { border-left-color: #f44336; }
+        button {
+            background: #d4a574;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #c89666; }
+        code {
+            background: #000;
+            padding: 2px 8px;
+            border-radius: 3px;
+            color: #4caf50;
+        }
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Auth.js Diagnostic Test</h1>
+    
+    <div class="test-box">
+        <h2>1. Check if Auth.js is loaded</h2>
+        <p id="auth-check">Testing...</p>
+    </div>
+
+    <div class="test-box">
+        <h2>2. Test Functions</h2>
+        <button onclick="testLogin()">Test Login Function</button>
+        <button onclick="testRegister()">Test Register Function</button>
+        <button onclick="checkAllFunctions()">Check All Functions</button>
+        <div id="results"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>3. Working Credentials</h2>
+        <p>Email: <code>awaiskhan@gmail.com</code></p>
+        <p>Password: <code>nZQhaH9CpmWkyS8</code></p>
+        <button onclick="autoLogin()">Auto Login with These Credentials</button>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Test 1: Check if Auth is loaded
+        setTimeout(() => {
+            const authCheck = document.getElementById('auth-check');
+            if (typeof window.Auth !== 'undefined') {
+                authCheck.innerHTML = '✅ <strong>SUCCESS!</strong> window.Auth is loaded correctly';
+                authCheck.parentElement.classList.add('success');
+            } else {
+                authCheck.innerHTML = '❌ <strong>FAILED!</strong> window.Auth is not defined';
+                authCheck.parentElement.classList.add('error');
+            }
+        }, 100);
+
+        function testLogin() {
+            const results = document.getElementById('results');
+            if (typeof Auth.login === 'function') {
+                results.innerHTML = '<p>✅ Auth.login() function exists and is ready to use!</p>';
+            } else {
+                results.innerHTML = '<p>❌ Auth.login() function not found!</p>';
+            }
+        }
+
+        function testRegister() {
+            const results = document.getElementById('results');
+            if (typeof Auth.register === 'function') {
+                results.innerHTML = '<p>✅ Auth.register() function exists and is ready to use!</p>';
+            } else {
+                results.innerHTML = '<p>❌ Auth.register() function not found!</p>';
+            }
+        }
+
+        function checkAllFunctions() {
+            const results = document.getElementById('results');
+            const functions = [
+                'getToken', 'setToken', 'clearToken', 'isAuthenticated',
+                'login', 'register', 'logout', 'authFetch', 'requireAuth'
+            ];
+            
+            let html = '<h3>Available Functions:</h3><ul>';
+            functions.forEach(fn => {
+                const exists = typeof Auth[fn] === 'function';
+                html += `<li>${exists ? '✅' : '❌'} Auth.${fn}()</li>`;
+            });
+            html += '</ul>';
+            results.innerHTML = html;
+        }
+
+        async function autoLogin() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>⏳ Attempting login...</p>';
+            
+            try {
+                const { response, data } = await Auth.login(
+                    'awaiskhan@gmail.com',
+                    'nZQhaH9CpmWkyS8',
+                    false
+                );
+                
+                if (response.ok && data.success) {
+                    results.innerHTML = `
+                        <p>✅ <strong>LOGIN SUCCESSFUL!</strong></p>
+                        <p>Token received: <code>${data.token.substring(0, 30)}...</code></p>
+                        <p>User: ${data.user.name} (${data.user.email})</p>
+                        <p><a href="dashboard.html" style="color: #d4a574;">Go to Dashboard →</a></p>
+                    `;
+                } else {
+                    results.innerHTML = `<p>❌ Login failed: ${data.message}</p>`;
+                }
+            } catch (error) {
+                results.innerHTML = `<p>❌ Error: ${error.message}</p>`;
+                console.error('Login error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

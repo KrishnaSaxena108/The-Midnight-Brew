@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Click Test - Diagnostic Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .test-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .test-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .status-box {
+            background: white;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        
+        .status-box.error {
+            border-left-color: #e74c3c;
+            background: #fee;
+        }
+        
+        .status-box.success {
+            border-left-color: #27ae60;
+            background: #efe;
+        }
+        
+        .status-box.warning {
+            border-left-color: #f39c12;
+            background: #fffbe6;
+        }
+        
+        .time-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .time-slot {
+            padding: 12px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .time-slot:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .time-slot.selected {
+            background: #ffd700;
+            border-color: #ffc700;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .feature-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .feature-tag {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .feature-tag:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .feature-tag.selected {
+            border-color: #ffd700;
+            background: #fff9e6;
+            font-weight: bold;
+        }
+        
+        .log-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        
+        .log-time {
+            color: #858585;
+        }
+        
+        .log-success {
+            color: #4ec9b0;
+        }
+        
+        .log-error {
+            color: #f48771;
+        }
+        
+        .log-warning {
+            color: #dcdcaa;
+        }
+        
+        .log-info {
+            color: #9cdcfe;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 10px;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button.clear {
+            background: #95a5a6;
+        }
+        
+        button.clear:hover {
+            background: #7f8c8d;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Booking Click Test - Diagnostic Page</h1>
+        <p class="subtitle">This page tests if time slots and preferences are clickable</p>
+        
+        <!-- Auth Status -->
+        <div class="test-section">
+            <h2>🔐 Authentication Status</h2>
+            <div id="authStatus" class="status-box">Checking...</div>
+        </div>
+        
+        <!-- Test Time Slots -->
+        <div class="test-section">
+            <h2>🕐 Time Slot Test (Click to Select)</h2>
+            <p style="color: #666; margin-bottom: 10px;">Expected: Gold background when clicked, only one selected at a time</p>
+            <div class="time-slots-grid">
+                <div class="time-slot" data-time="06:00">6:00 AM</div>
+                <div class="time-slot" data-time="07:00">7:00 AM</div>
+                <div class="time-slot" data-time="08:00">8:00 AM</div>
+                <div class="time-slot" data-time="09:00">9:00 AM</div>
+                <div class="time-slot" data-time="10:00">10:00 AM</div>
+                <div class="time-slot" data-time="11:00">11:00 AM</div>
+                <div class="time-slot" data-time="12:00">12:00 PM</div>
+                <div class="time-slot" data-time="13:00">1:00 PM</div>
+                <div class="time-slot" data-time="14:00">2:00 PM</div>
+                <div class="time-slot" data-time="15:00">3:00 PM</div>
+            </div>
+        </div>
+        
+        <!-- Test Preferences -->
+        <div class="test-section">
+            <h2>💝 Table Preference Test (Click to Toggle)</h2>
+            <p style="color: #666; margin-bottom: 10px;">Expected: Gold border when selected, multiple selections allowed</p>
+            <div class="feature-tags">
+                <div class="feature-tag" data-feature="window">🪟 Window Seat</div>
+                <div class="feature-tag" data-feature="quiet">🤫 Quiet Area</div>
+                <div class="feature-tag" data-feature="corner">🎯 Corner Table</div>
+                <div class="feature-tag" data-feature="outdoor">🌳 Outdoor</div>
+                <div class="feature-tag" data-feature="accessible">♿ Accessible</div>
+            </div>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="test-section">
+            <h2>📊 Click Statistics</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Time Slot Clicks</div>
+                    <div class="stat-value" id="timeSlotClicks">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Preference Clicks</div>
+                    <div class="stat-value" id="preferenceClicks">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Current Time</div>
+                    <div class="stat-value" id="currentTime" style="font-size: 18px;">None</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Selected Preferences</div>
+                    <div class="stat-value" id="preferenceCount" style="font-size: 18px;">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Console Log -->
+        <div class="test-section">
+            <h2>📝 Event Log</h2>
+            <button onclick="testBookingPage()">🔗 Open Real Booking Page</button>
+            <button onclick="clearLog()" class="clear">🗑️ Clear Log</button>
+            <div class="log-output" id="logOutput">
+                <div class="log-entry log-info">
+                    <span class="log-time">[00:00:00]</span> <span class="log-info">Waiting for user interaction...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // State
+        let timeSlotClickCount = 0;
+        let preferenceClickCount = 0;
+        let selectedTime = null;
+        let selectedPreferences = [];
+        
+        // Logging
+        function log(message, type = 'info') {
+            const logOutput = document.getElementById('logOutput');
+            const time = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.innerHTML = `<span class="log-time">[${time}]</span> <span class="log-${type}">${message}</span>`;
+            logOutput.appendChild(entry);
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+        
+        function clearLog() {
+            document.getElementById('logOutput').innerHTML = '';
+            log('Log cleared', 'info');
+        }
+        
+        function updateStats() {
+            document.getElementById('timeSlotClicks').textContent = timeSlotClickCount;
+            document.getElementById('preferenceClicks').textContent = preferenceClickCount;
+            document.getElementById('currentTime').textContent = selectedTime || 'None';
+            document.getElementById('preferenceCount').textContent = selectedPreferences.length;
+        }
+        
+        // Check Authentication
+        function checkAuth() {
+            const authStatusBox = document.getElementById('authStatus');
+            
+            if (typeof Auth === 'undefined') {
+                authStatusBox.className = 'status-box error';
+                authStatusBox.innerHTML = '❌ <strong>ERROR:</strong> auth.js not loaded properly';
+                log('❌ Auth object not found - auth.js may not be loaded', 'error');
+                return;
+            }
+            
+            if (Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                authStatusBox.className = 'status-box success';
+                authStatusBox.innerHTML = `
+                    ✅ <strong>Authenticated</strong><br>
+                    User: ${user.name || 'Unknown'}<br>
+                    Email: ${user.email || 'Unknown'}
+                `;
+                log(`✅ User authenticated: ${user.email}`, 'success');
+            } else {
+                authStatusBox.className = 'status-box warning';
+                authStatusBox.innerHTML = `
+                    ⚠️ <strong>Not Authenticated</strong><br>
+                    You can still test clicks on this page, but the real booking page requires login.
+                `;
+                log('⚠️ User not authenticated - clicks will work here but not on real booking page', 'warning');
+            }
+        }
+        
+        // Initialize Time Slots
+        function initializeTimeSlots() {
+            log('🕐 Initializing time slots...', 'info');
+            const timeSlots = document.querySelectorAll('.time-slot');
+            log(`   Found ${timeSlots.length} time slot elements`, 'info');
+            
+            if (timeSlots.length === 0) {
+                log('❌ ERROR: No time slots found!', 'error');
+                return;
+            }
+            
+            timeSlots.forEach((slot, index) => {
+                log(`   Attaching click handler to slot ${index + 1}: ${slot.textContent.trim()}`, 'info');
+                slot.addEventListener('click', handleTimeSlotClick);
+            });
+            
+            log('✅ Time slots initialized successfully', 'success');
+        }
+        
+        // Handle Time Slot Click
+        function handleTimeSlotClick(e) {
+            const slot = e.currentTarget;
+            const time = slot.dataset.time;
+            const text = slot.textContent.trim();
+            
+            timeSlotClickCount++;
+            log(`🖱️ Time slot clicked: ${text}`, 'success');
+            
+            // Remove previous selection
+            document.querySelectorAll('.time-slot').forEach(s => {
+                s.classList.remove('selected');
+            });
+            
+            // Add selection to clicked slot
+            slot.classList.add('selected');
+            selectedTime = time;
+            
+            log(`   ✅ Time slot selected: ${time}`, 'success');
+            log(`   📅 Previous selections cleared`, 'info');
+            
+            updateStats();
+        }
+        
+        // Initialize Preferences
+        function initializePreferences() {
+            log('💝 Initializing table preferences...', 'info');
+            const featureTags = document.querySelectorAll('.feature-tag');
+            log(`   Found ${featureTags.length} preference elements`, 'info');
+            
+            if (featureTags.length === 0) {
+                log('❌ ERROR: No preference tags found!', 'error');
+                return;
+            }
+            
+            featureTags.forEach((tag, index) => {
+                const feature = tag.dataset.feature;
+                log(`   Attaching click handler to preference ${index + 1}: ${feature}`, 'info');
+                tag.addEventListener('click', handlePreferenceClick);
+            });
+            
+            log('✅ Table preferences initialized successfully', 'success');
+        }
+        
+        // Handle Preference Click
+        function handlePreferenceClick(e) {
+            const tag = e.currentTarget;
+            const feature = tag.dataset.feature;
+            
+            preferenceClickCount++;
+            
+            tag.classList.toggle('selected');
+            const isSelected = tag.classList.contains('selected');
+            
+            log(`🖱️ Preference clicked: ${feature}`, 'success');
+            
+            if (isSelected) {
+                selectedPreferences.push(feature);
+                log(`   ✅ Added to preferences: ${feature}`, 'success');
+            } else {
+                selectedPreferences = selectedPreferences.filter(p => p !== feature);
+                log(`   ❌ Removed from preferences: ${feature}`, 'warning');
+            }
+            
+            log(`   Current preferences: [${selectedPreferences.join(', ')}]`, 'info');
+            
+            updateStats();
+        }
+        
+        // Test Real Booking Page
+        function testBookingPage() {
+            log('🔗 Opening real booking page in new tab...', 'info');
+            window.open('http://localhost:3000/booking.html', '_blank');
+        }
+        
+        // Initialize on Load
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🎯 Diagnostic page loaded', 'success');
+            log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'info');
+            
+            checkAuth();
+            
+            setTimeout(() => {
+                initializeTimeSlots();
+                initializePreferences();
+                log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'info');
+                log('✅ All systems ready - try clicking!', 'success');
+            }, 100);
+        });
+    </script>
+</body>
+</html>

@@ -555,6 +555,26 @@
                             <p class="form-subtitle" style="color: #666; font-style: italic;">Experience the magic of midnight coffee</p>
                         </div>
                         
+                        <!-- Authentication Gate (shown to unauthenticated users) -->
+                        <div id="authGate" style="display: none;">
+                            <div class="text-center py-5">
+                                <i class="fas fa-lock" style="font-size: 4rem; color: var(--booking-primary); margin-bottom: 1.5rem;"></i>
+                                <h3 style="color: var(--booking-text); margin-bottom: 1rem;">Login Required</h3>
+                                <p style="color: var(--booking-text-light); margin-bottom: 2rem;">Please log in to make a reservation at The Midnight Brew</p>
+                                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                                    <a href="/login.html" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                                    </a>
+                                    <a href="/register.html" class="btn btn-outline-primary btn-lg">
+                                        <i class="fas fa-user-plus me-2"></i>Create Account
+                                    </a>
+                                </div>
+                                <p class="mt-4" style="color: var(--booking-text-muted); font-size: 0.9rem;">
+                                    <i class="fas fa-info-circle me-1"></i>Already have an account? <a href="/login.html" style="color: var(--booking-primary);">Login here</a>
+                                </p>
+                            </div>
+                        </div>
+
                         <form class="booking-form" id="bookingForm">
                             <!-- Date & Party Size -->
                             <div class="row g-3 mb-4">
@@ -716,6 +736,21 @@
                 <!-- Booking Sidebar -->
                 <div class="col-lg-4">
                     <div class="booking-sidebar">
+                        <!-- User Status (shown to authenticated users) -->
+                        <div class="mb-4 p-3 rounded" id="userStatus" style="display: none; background: linear-gradient(135deg, var(--booking-primary) 0%, var(--booking-primary-dark) 100%); color: white;">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h5 class="mb-1" style="font-family: 'Playfair Display', serif;">
+                                        <i class="fas fa-user-circle me-2"></i><span id="userName">User</span>
+                                    </h5>
+                                    <p class="mb-0 small" style="opacity: 0.9;" id="userEmail">user@example.com</p>
+                                </div>
+                                <button onclick="Auth.logout()" class="btn btn-sm btn-light" title="Logout">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+
                         <!-- Opening Hours -->
                         <div class="mb-4">
                             <h4 style="font-family: 'Playfair Display', serif; color: #8B4513;">
@@ -882,8 +917,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="theme.js"></script>
     
-    <!-- Booking JavaScript -->
+    <!-- Authentication Module (must load before booking.js) -->
+    <script src="auth.js"></script>
     
+    <!-- Booking JavaScript -->
     <script src="booking.js"></script>
 </body>
 </html>    

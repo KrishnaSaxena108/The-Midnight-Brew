@@ -5,6 +5,10 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const fs = require('fs');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 // Initialize express app instance
 const app = express();
@@ -12,9 +16,27 @@ const app = express();
 // Define port
 const PORT = process.env.PORT || 3000;
 
+// JWT Secret Key (In production, use environment variable)
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+
+// In-memory user database (temporary storage)
+const users = [];
+
+// In-memory bookings database (temporary storage)
+const bookings = [];
+
 // Middle-Ware Configuration
 
-// 1. Morgan Loader - Advanced HTTP request logging
+// 0. CORS Middleware - Enable with credentials support
+app.use(cors({
+    origin: 'http://localhost:3000', // Allow frontend origin
+    credentials: true // Allow cookies to be sent
+}));
+
+// 1. Cookie Parser - Parse cookies from requests
+app.use(cookieParser());
+
+// 2. Morgan Loader - Advanced HTTP request logging
 // Create logs directory if it doesn't exist
 const logsDir = path.join(__dirname, 'logs');
 if (!fs.existsSync(logsDir)) {
@@ -113,7 +135,45 @@ app.use((req, res, next) => {
 app.use(express.static(__dirname));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// 8. CUSTOM REQUEST LOGGER (in addition to morgan)
+// 8. JWT AUTHENTICATION MIDDLEWARE
+/**
+ * Middleware to verify JWT tokens
+ * Checks HTTP-only cookie first, then Authorization header
+ * Verifies token and attaches user info to request
+ */
+const authenticateToken = (req, res, next) => {
+    // Try to get token from HTTP-only cookie first (preferred)
+    let token = req.cookies.authToken;
+    
+    // Fallback to Authorization header if cookie not present
+    if (!token) {
+        const authHeader = req.headers['authorization'];
+        token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+    }
+    
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            error: 'Unauthorized',
+            message: 'Access token is required. Please login first.'
+        });
+    }
+    
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) {
+            return res.status(403).json({
+                success: false,
+                error: 'Forbidden',
+                message: 'Invalid or expired token. Please login again.'
+            });
+        }
+        
+        req.user = user; // Attach user info to request
+        next();
+    });
+};
+
+// 9. CUSTOM REQUEST LOGGER (in addition to morgan)
 app.use((req, res, next) => {
     console.log(`\n${'='.repeat(60)}`);
     console.log(`📍 Incoming Request`);
@@ -129,6 +189,181 @@ app.use((req, res, next) => {
     console.log(`${'='.repeat(60)}\n`);
     
     next();
+});
+
+// ============================================
+// AUTHENTICATION ROUTES
+// ============================================
+
+/**
+ * Route: User Registration (/register)
+ * Method: POST
+ * Handler: Register new user with email and password
+ */
+app.post('/register', async (req, res) => {
+    console.log('📍 Auth Route Hit: POST /register');
+    
+    try {
+        const { email, password, name } = req.body;
+        
+        // Validation
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                error: 'Validation Error',
+                message: 'Email and password are required'
+            });
+        }
+        
+        // Check if user already exists
+        const existingUser = users.find(u => u.email === email);
+        if (existingUser) {
+            return res.status(409).json({
+                success: false,
+                error: 'Conflict',
+                message: 'User with this email already exists'
+            });
+        }
+        
+        // Hash password with bcrypt (10 salt rounds)
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        // Create new user
+        const newUser = {
+            id: users.length + 1,
+            email,
+            name: name || email.split('@')[0],
+            password: hashedPassword,
+            createdAt: new Date().toISOString()
+        };
+        
+        users.push(newUser);
+        
+        console.log(`✅ User registered successfully: ${email}`);
+        
+        res.status(201).json({
+            success: true,
+            message: 'User registered successfully',
+            user: {
+                id: newUser.id,
+                email: newUser.email,
+                name: newUser.name
+            }
+        });
+        
+    } catch (error) {
+        console.error('Registration error:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Internal Server Error',
+            message: 'Failed to register user'
+        });
+    }
+});
+
+/**
+ * Route: User Login (/login)
+ * Method: POST
+ * Handler: Authenticate user and return JWT token
+ */
+app.post('/login', async (req, res) => {
+    console.log('📍 Auth Route Hit: POST /login');
+    
+    try {
+        const { email, password } = req.body;
+        
+        // Validation
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                error: 'Validation Error',
+                message: 'Email and password are required'
+            });
+        }
+        
+        // Find user
+        const user = users.find(u => u.email === email);
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                error: 'Authentication Failed',
+                message: 'Invalid email or password'
+            });
+        }
+        
+        // Verify password with bcrypt
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                success: false,
+                error: 'Authentication Failed',
+                message: 'Invalid email or password'
+            });
+        }
+        
+        // Generate JWT token (valid for 1 hour)
+        const token = jwt.sign(
+            { 
+                id: user.id, 
+                email: user.email,
+                name: user.name 
+            },
+            JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+        
+        // Set HTTP-only cookie (secure in production)
+        res.cookie('authToken', token, {
+            httpOnly: true,     // Prevents JavaScript access (XSS protection)
+            secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+            sameSite: 'strict', // CSRF protection
+            maxAge: 3600000     // 1 hour (matches JWT expiry)
+        });
+        
+        console.log(`✅ User logged in successfully: ${email} (JWT set in HTTP-only cookie)`);
+        
+        res.json({
+            success: true,
+            message: 'Login successful',
+            token, // Still send token for localStorage fallback
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name
+            }
+        });
+        
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Internal Server Error',
+            message: 'Failed to login'
+        });
+    }
+});
+
+/**
+ * Route: User Logout (/logout)
+ * Method: POST
+ * Handler: Clear authentication cookie
+ */
+app.post('/logout', (req, res) => {
+    console.log('📍 Auth Route Hit: POST /logout');
+    
+    // Clear the HTTP-only cookie
+    res.clearCookie('authToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+    });
+    
+    console.log('✅ User logged out successfully (cookie cleared)');
+    
+    res.json({
+        success: true,
+        message: 'Logged out successfully'
+    });
 });
 
 // ============================================
@@ -192,6 +427,40 @@ app.get('/booking', (req, res) => {
             console.error('Error serving booking page:', err);
             res.status(500).send('Error loading booking page');
         }
+    });
+});
+
+/**
+ * Route: Dashboard Page (/dashboard)
+ * Method: GET
+ * Handler: Protected dashboard - requires JWT authentication
+ * Returns: User info + user-specific bookings
+ */
+app.get('/dashboard', authenticateToken, (req, res) => {
+    console.log(`📍 Protected Route Hit: Dashboard (/dashboard) - User: ${req.user.email}`);
+    
+    // Get user's bookings (filter by user ID)
+    const userBookings = bookings.filter(booking => booking.userId === req.user.id);
+    
+    // Separate into upcoming and past bookings
+    const now = new Date();
+    const upcomingBookings = userBookings.filter(b => new Date(b.date) >= now);
+    const pastBookings = userBookings.filter(b => new Date(b.date) < now);
+    
+    // Sort: upcoming by date ascending, past by date descending
+    upcomingBookings.sort((a, b) => new Date(a.date) - new Date(b.date));
+    pastBookings.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    res.json({
+        success: true,
+        message: 'Welcome to your dashboard',
+        user: req.user,
+        bookings: {
+            total: userBookings.length,
+            upcoming: upcomingBookings,
+            past: pastBookings.slice(0, 5) // Return last 5 past bookings
+        },
+        timestamp: new Date().toISOString()
     });
 });
 
@@ -540,6 +809,61 @@ app.get('/api/menu/:category', (req, res) => {
             success: false,
             message: `No items found in category: ${category}`,
             availableCategories: ['pastries', 'beverages', 'sandwiches', 'soups']
+        });
+    }
+});
+
+/**
+ * Route: Submit Booking (/api/booking)
+ * Method: POST
+ * Handler: Protected route to submit table booking - requires JWT authentication
+ */
+app.post('/api/booking', authenticateToken, (req, res) => {
+    console.log(`📍 Protected API Route Hit: POST /api/booking - User: ${req.user.email}`);
+    
+    try {
+        const { date, time, guests, specialRequests } = req.body;
+        
+        // Validation
+        if (!date || !time || !guests) {
+            return res.status(400).json({
+                success: false,
+                error: 'Validation Error',
+                message: 'Date, time, and number of guests are required'
+            });
+        }
+        
+        // Create booking object
+        const booking = {
+            id: Date.now(),
+            userId: req.user.id,
+            userEmail: req.user.email,
+            userName: req.user.name,
+            date,
+            time,
+            guests: parseInt(guests),
+            specialRequests: specialRequests || '',
+            status: 'pending',
+            createdAt: new Date().toISOString()
+        };
+        
+        // Save booking to in-memory database
+        bookings.push(booking);
+        
+        console.log(`✅ Booking created:`, booking);
+        
+        res.status(201).json({
+            success: true,
+            message: 'Booking submitted successfully',
+            data: booking
+        });
+        
+    } catch (error) {
+        console.error('Booking error:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Internal Server Error',
+            message: 'Failed to submit booking'
         });
     }
 });
@@ -943,6 +1267,11 @@ server = app.listen(PORT, () => {
     console.log(`   ✅ Custom Request Logger`);
     console.log(`   ✅ Static File Serving`);
     console.log(`   ✅ Error Handler (404 + Global)`);
+    console.log(`   ✅ JWT Authentication Middleware`);
+    
+    console.log('\n🔐 AUTHENTICATION ROUTES:');
+    console.log(`   POST /register              → User Registration`);
+    console.log(`   POST /login                 → User Login (Returns JWT)`);
     
     console.log('\n📄 FRONTEND PAGE ROUTES (app.get):');
     console.log(`   GET  /           → Homepage (index.html)`);
@@ -951,6 +1280,10 @@ server = app.listen(PORT, () => {
     console.log(`   GET  /booking    → Booking Page (booking.html)`);
     console.log(`   GET  /contact    → Contact Page (contact.html)`);
     console.log(`   GET  /about      → About Page (Generated HTML)`);
+    
+    console.log('\n🔒 PROTECTED ROUTES (Require JWT):');
+    console.log(`   GET  /dashboard             → User Dashboard (Protected)`);
+    console.log(`   POST /api/booking           → Submit Booking (Protected)`);
     
     console.log('\n🔌 API DATA ROUTES - JSON (res.json):');
     console.log(`   GET  /api/info              → Café Information`);
@@ -971,6 +1304,7 @@ server = app.listen(PORT, () => {
     console.log(`   JSON:    http://localhost:${PORT}/api/menu`);
     console.log(`   Filter:  http://localhost:${PORT}/api/menu/pastries`);
     console.log(`   Text:    curl http://localhost:${PORT}/api/welcome`);
+    console.log(`   Auth:    curl -X POST http://localhost:${PORT}/register -H "Content-Type: application/json" -d "{\\"email\\":\\"user@test.com\\",\\"password\\":\\"pass123\\"}"`);
     
     console.log('\n📊 MONITORING:');
     console.log(`   Logs:    tail -f logs/access.log`);

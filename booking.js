@@ -1,25 +1,57 @@
 // ===== THE MIDNIGHT BREW - BOOKING SYSTEM ===== //
 
+// ===== GLOBAL STATE & ELEMENTS (DEFINED BEFORE DOMContentLoaded) ===== //
+let bookingState = {
+    date: null,
+    time: null,
+    partySize: null,
+    preferences: [],
+    occasion: null,
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    requests: ''
+};
+
+let elements = {
+    form: null,
+    dateInput: null,
+    partySizeSelect: null,
+    timeSlots: null,
+    featureTags: null,
+    firstNameInput: null,
+    lastNameInput: null,
+    emailInput: null,
+    phoneInput: null,
+    occasionSelect: null,
+    requestsTextarea: null,
+    bookingSummary: null,
+    summaryDate: null,
+    summaryTime: null,
+    summaryParty: null,
+    summaryName: null,
+    step1: null,
+    step2: null,
+    step3: null
+};
+
 document.addEventListener('DOMContentLoaded', function() {
+    // ===== CHECK AUTHENTICATION ===== //
+    checkAuthenticationStatus();
+    
+    // ===== START TOKEN EXPIRY MONITORING ===== //
+    // Only start monitoring if user is authenticated
+    if (Auth.isAuthenticated()) {
+        Auth.checkTokenOnLoad(); // Check immediately
+        Auth.startTokenExpiryMonitor(true); // Start periodic checks
+    }
+    
     // ===== APPLY THEME ON LOAD ===== //
     applyCurrentTheme();
     
-    // ===== BOOKING SYSTEM STATE ===== //
-    const bookingState = {
-        date: null,
-        time: null,
-        partySize: null,
-        preferences: [],
-        occasion: null,
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        requests: ''
-    };
-
-    // ===== DOM ELEMENTS ===== //
-    const elements = {
+    // ===== INITIALIZE ELEMENTS OBJECT ===== //
+    elements = {
         form: document.getElementById('bookingForm'),
         dateInput: document.getElementById('bookingDate'),
         partySizeSelect: document.getElementById('partySize'),
@@ -56,43 +88,69 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== INITIALIZE DATE CONSTRAINTS ===== //
     function initializeDatePicker() {
+        console.log('📅 Initializing date picker...');
+        const dateInput = document.getElementById('bookingDate');
+        
+        if (!dateInput) {
+            console.error('❌ Date input not found!');
+            return;
+        }
+        
         const today = new Date();
         const maxDate = new Date();
         maxDate.setMonth(maxDate.getMonth() + 3); // Allow booking up to 3 months ahead
         
-        elements.dateInput.min = today.toISOString().split('T')[0];
-        elements.dateInput.max = maxDate.toISOString().split('T')[0];
+        dateInput.min = today.toISOString().split('T')[0];
+        dateInput.max = maxDate.toISOString().split('T')[0];
         
         // Set default to tomorrow
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
-        elements.dateInput.value = tomorrow.toISOString().split('T')[0];
+        dateInput.value = tomorrow.toISOString().split('T')[0];
         bookingState.date = tomorrow.toISOString().split('T')[0];
+        
+        // Update elements reference
+        elements.dateInput = dateInput;
+        console.log('✅ Date picker initialized');
         updateSummary();
     }
 
     // ===== TIME SLOT MANAGEMENT ===== //
     function initializeTimeSlots() {
-        elements.timeSlots.forEach(slot => {
+        console.log('🕐 Initializing time slots...');
+        // Re-query time slots to ensure they're visible
+        const timeSlots = document.querySelectorAll('.time-slot');
+        console.log(`   Found ${timeSlots.length} time slot elements`);
+        
+        timeSlots.forEach((slot, index) => {
+            console.log(`   Attaching click handler to slot ${index + 1}: ${slot.textContent.trim()}`);
             slot.addEventListener('click', handleTimeSlotClick);
         });
+        
+        // Update elements reference
+        elements.timeSlots = timeSlots;
+        console.log('✅ Time slots initialized');
     }
 
     function handleTimeSlotClick(e) {
+        console.log('🖱️ Time slot clicked!', e.currentTarget.textContent.trim());
         const slot = e.currentTarget;
         
         // Don't select if unavailable
         if (slot.classList.contains('unavailable')) {
+            console.log('   ⛔ Slot unavailable');
             showNotification('This time slot is not available', 'error');
             return;
         }
         
+        console.log('   ✅ Selecting time slot');
         // Remove previous selection
         elements.timeSlots.forEach(s => s.classList.remove('selected'));
         
         // Add selection to clicked slot
         slot.classList.add('selected');
         bookingState.time = slot.dataset.time;
+        console.log('   📅 Time set to:', bookingState.time);
         
         // Update step indicator
         updateStepIndicator(2);
@@ -145,24 +203,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== TABLE PREFERENCES ===== //
     function initializePreferences() {
-        elements.featureTags.forEach(tag => {
+        console.log('💝 Initializing table preferences...');
+        // Re-query feature tags to ensure they're visible
+        const featureTags = document.querySelectorAll('.feature-tag');
+        console.log(`   Found ${featureTags.length} preference elements`);
+        
+        featureTags.forEach((tag, index) => {
+            const feature = tag.dataset.feature;
+            console.log(`   Attaching click handler to preference ${index + 1}: ${feature}`);
             tag.addEventListener('click', handlePreferenceClick);
         });
+        
+        // Update elements reference
+        elements.featureTags = featureTags;
+        console.log('✅ Table preferences initialized');
     }
 
     function handlePreferenceClick(e) {
+        console.log('🖱️ Preference clicked!', e.currentTarget.dataset.feature);
         const tag = e.currentTarget;
         const feature = tag.dataset.feature;
         
         tag.classList.toggle('selected');
+        console.log('   Toggle result:', tag.classList.contains('selected') ? 'SELECTED' : 'DESELECTED');
         
         if (tag.classList.contains('selected')) {
             if (!bookingState.preferences.includes(feature)) {
                 bookingState.preferences.push(feature);
+                console.log('   ✅ Added to preferences:', feature);
             }
         } else {
             bookingState.preferences = bookingState.preferences.filter(p => p !== feature);
+            console.log('   ❌ Removed from preferences:', feature);
         }
+        console.log('   Current preferences:', bookingState.preferences);
     }
 
     // ===== STEP INDICATOR ===== //
@@ -249,66 +323,123 @@ document.addEventListener('DOMContentLoaded', function() {
         return re.test(phone) && phone.replace(/\D/g, '').length >= 10;
     }
 
-    // ===== EVENT LISTENERS ===== //
-    elements.dateInput.addEventListener('change', function() {
-        bookingState.date = this.value;
-        updateTimeSlotAvailability();
-        updateSummary();
-        updateStepIndicator(1);
-    });
-
-    elements.partySizeSelect.addEventListener('change', function() {
-        bookingState.partySize = this.value;
-        updateSummary();
+    // ===== EVENT LISTENERS SETUP ===== //
+    function setupEventListeners() {
+        console.log('📡 Setting up event listeners...');
         
-        if (this.value === '8') {
-            showNotification('For parties of 8 or more, please call us at +1 (555) 123-4567', 'info');
+        const dateInput = document.getElementById('bookingDate');
+        const partySizeSelect = document.getElementById('partySize');
+        const firstNameInput = document.getElementById('firstName');
+        const lastNameInput = document.getElementById('lastName');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const occasionSelect = document.getElementById('occasion');
+        const requestsTextarea = document.getElementById('requests');
+        
+        if (dateInput) {
+            dateInput.addEventListener('change', function() {
+                bookingState.date = this.value;
+                updateTimeSlotAvailability();
+                updateSummary();
+                updateStepIndicator(1);
+            });
+            elements.dateInput = dateInput;
         }
-    });
 
-    elements.firstNameInput.addEventListener('input', function() {
-        bookingState.firstName = this.value;
-        updateSummary();
-        if (validateStep3()) updateStepIndicator(3);
-    });
-
-    elements.lastNameInput.addEventListener('input', function() {
-        bookingState.lastName = this.value;
-        updateSummary();
-        if (validateStep3()) updateStepIndicator(3);
-    });
-
-    elements.emailInput.addEventListener('blur', function() {
-        if (this.value && !validateEmail(this.value)) {
-            this.classList.add('is-invalid');
-            showNotification('Please enter a valid email address', 'error');
-        } else {
-            this.classList.remove('is-invalid');
-            bookingState.email = this.value;
+        if (partySizeSelect) {
+            partySizeSelect.addEventListener('change', function() {
+                bookingState.partySize = this.value;
+                updateSummary();
+                
+                if (this.value === '8') {
+                    showNotification('For parties of 8 or more, please call us at +1 (555) 123-4567', 'info');
+                }
+            });
+            elements.partySizeSelect = partySizeSelect;
         }
-    });
 
-    elements.phoneInput.addEventListener('blur', function() {
-        if (this.value && !validatePhone(this.value)) {
-            this.classList.add('is-invalid');
-            showNotification('Please enter a valid phone number', 'error');
-        } else {
-            this.classList.remove('is-invalid');
-            bookingState.phone = this.value;
+        if (firstNameInput) {
+            firstNameInput.addEventListener('input', function() {
+                bookingState.firstName = this.value;
+                updateSummary();
+                if (validateStep3()) updateStepIndicator(3);
+            });
+            elements.firstNameInput = firstNameInput;
         }
-    });
 
-    elements.occasionSelect.addEventListener('change', function() {
-        bookingState.occasion = this.value;
-    });
+        if (lastNameInput) {
+            lastNameInput.addEventListener('input', function() {
+                bookingState.lastName = this.value;
+                updateSummary();
+                if (validateStep3()) updateStepIndicator(3);
+            });
+            elements.lastNameInput = lastNameInput;
+        }
 
-    elements.requestsTextarea.addEventListener('input', function() {
-        bookingState.requests = this.value;
-    });
+        if (emailInput) {
+            emailInput.addEventListener('blur', function() {
+                if (this.value && !validateEmail(this.value)) {
+                    this.classList.add('is-invalid');
+                    showNotification('Please enter a valid email address', 'error');
+                } else {
+                    this.classList.remove('is-invalid');
+                    bookingState.email = this.value;
+                }
+            });
+            elements.emailInput = emailInput;
+        }
 
-    // ===== FORM SUBMISSION ===== //
-    elements.form.addEventListener('submit', async function(e) {
+        if (phoneInput) {
+            phoneInput.addEventListener('blur', function() {
+                if (this.value && !validatePhone(this.value)) {
+                    this.classList.add('is-invalid');
+                    showNotification('Please enter a valid phone number', 'error');
+                } else {
+                    this.classList.remove('is-invalid');
+                    bookingState.phone = this.value;
+                }
+            });
+            elements.phoneInput = phoneInput;
+        }
+
+        if (occasionSelect) {
+            occasionSelect.addEventListener('change', function() {
+                bookingState.occasion = this.value;
+            });
+            elements.occasionSelect = occasionSelect;
+        }
+
+        if (requestsTextarea) {
+            requestsTextarea.addEventListener('input', function() {
+                bookingState.requests = this.value;
+            });
+            elements.requestsTextarea = requestsTextarea;
+        }
+        
+        console.log('✅ Event listeners set up');
+    }
+
+    // ===== FORM SUBMISSION SETUP ===== //
+    function setupFormSubmission() {
+        console.log('📤 Setting up form submission...');
+        const form = document.getElementById('bookingForm');
+        
+        if (!form) {
+            console.error('❌ Booking form not found!');
+            return;
+        }
+        
+        form.addEventListener('submit', async function(e) {
         e.preventDefault();
+        
+        // Double-check authentication before submission
+        if (!Auth.isAuthenticated()) {
+            showNotification('You must be logged in to make a booking', 'error');
+            setTimeout(() => {
+                window.location.href = '/login.html';
+            }, 1500);
+            return;
+        }
         
         // Validate all steps
         if (!validateStep1()) {
@@ -342,9 +473,30 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
         submitButton.disabled = true;
         
-        // Simulate API call
+        // Prepare booking data
+        const bookingData = {
+            date: bookingState.date,
+            time: bookingState.time,
+            partySize: parseInt(bookingState.partySize),
+            firstName: bookingState.firstName,
+            lastName: bookingState.lastName,
+            email: bookingState.email,
+            phone: bookingState.phone,
+            occasion: bookingState.occasion || 'General Dining',
+            preferences: bookingState.preferences,
+            specialRequests: bookingState.requests
+        };
+        
+        // Submit booking with JWT authentication
         try {
-            await simulateBookingSubmission();
+            const response = await Auth.authPost('/api/booking', bookingData);
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Booking failed');
+            }
+            
+            const result = await response.json();
             
             // Success!
             showSuccessModal();
@@ -357,25 +509,64 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 2000);
             
         } catch (error) {
-            showNotification('An error occurred. Please try again.', 'error');
+            console.error('Booking error:', error);
+            showNotification(error.message || 'An error occurred. Please try again.', 'error');
             submitButton.innerHTML = originalText;
             submitButton.disabled = false;
         }
-    });
-
-    // ===== SIMULATE BOOKING SUBMISSION ===== //
-    function simulateBookingSubmission() {
-        return new Promise((resolve, reject) => {
-            // Simulate network delay
-            setTimeout(() => {
-                // 95% success rate
-                if (Math.random() > 0.05) {
-                    resolve();
-                } else {
-                    reject(new Error('Booking failed'));
-                }
-            }, 1500);
         });
+        
+        elements.form = form;
+        console.log('✅ Form submission set up');
+    }
+
+    // ===== AUTHENTICATION CHECK ===== //
+    function checkAuthenticationStatus() {
+        const authGate = document.getElementById('authGate');
+        const bookingForm = document.getElementById('bookingForm');
+        const stepIndicators = document.getElementById('stepIndicators');
+        const userStatus = document.getElementById('userStatus');
+        const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+        
+        if (!Auth.isAuthenticated()) {
+            // User is not logged in - show auth gate, hide form
+            if (authGate) authGate.style.display = 'block';
+            if (bookingForm) bookingForm.style.display = 'none';
+            if (stepIndicators) stepIndicators.style.display = 'none';
+            if (userStatus) userStatus.style.display = 'none';
+        } else {
+            // User is logged in - hide auth gate, show form
+            if (authGate) authGate.style.display = 'none';
+            if (bookingForm) bookingForm.style.display = 'block';
+            if (stepIndicators) stepIndicators.style.display = 'flex';
+            if (userStatus) userStatus.style.display = 'block';
+            
+            // Initialize booking system AFTER form is visible
+            setTimeout(() => {
+                init();
+            }, 100);
+            
+            // Display user information
+            const user = Auth.getUser();
+            if (user && userName && userEmail) {
+                userName.textContent = user.name || 'User';
+                userEmail.textContent = user.email || '';
+                
+                // Pre-fill form with user data
+                if (elements.firstNameInput && user.name) {
+                    const nameParts = user.name.split(' ');
+                    elements.firstNameInput.value = nameParts[0] || '';
+                    if (elements.lastNameInput) {
+                        elements.lastNameInput.value = nameParts.slice(1).join(' ') || '';
+                    }
+                }
+                if (elements.emailInput && user.email) {
+                    elements.emailInput.value = user.email;
+                    bookingState.email = user.email;
+                }
+            }
+        }
     }
 
     // ===== SUCCESS MODAL ===== //
@@ -524,13 +715,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== INITIALIZE EVERYTHING ===== //
     function init() {
+        console.log('🎯 Initializing booking system...');
+        
+        // Set up all event listeners first
+        setupEventListeners();
+        setupFormSubmission();
+        
+        // Initialize components
         initializeDatePicker();
         initializeTimeSlots();
         initializePreferences();
+        
+        // Debug: Check if elements were found
+        const timeSlots = document.querySelectorAll('.time-slot');
+        const featureTags = document.querySelectorAll('.feature-tag');
+        console.log(`✅ Found ${timeSlots.length} time slots`);
+        console.log(`✅ Found ${featureTags.length} feature tags`);
+        
         updateTimeSlotAvailability();
         updateStepIndicator(1);
+        
+        console.log('✅ Booking system fully initialized!');
     }
 
-    // Start the booking system
-    init();
+    // Note: init() is now called inside checkAuthenticationStatus() 
+    // after the form is visible (for authenticated users only)
+    
+    // For unauthenticated users, init() won't run (form is hidden anyway)
 });

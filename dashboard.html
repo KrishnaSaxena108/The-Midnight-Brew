@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - The Midnight Brew</title>
+    <link rel="icon" type="image/png" href="public/favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 100%);
+            min-height: 100vh;
+            color: #f5f5f5;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #d4a574;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .navbar-brand img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .navbar-brand h2 {
+            color: #d4a574;
+            font-size: 20px;
+        }
+
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #d4a574;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .btn-logout {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #d4a574 0%, #b8935f 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            transition: transform 0.2s;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-section h1 {
+            font-size: 36px;
+            color: #d4a574;
+            margin-bottom: 10px;
+        }
+
+        .welcome-section p {
+            color: #ccc;
+            font-size: 18px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            border-color: #d4a574;
+            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.2);
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            color: #d4a574;
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #d4a574 0%, #b8935f 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: transform 0.2s;
+            border: none;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+        }
+
+        .card-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .user-details {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .user-details h3 {
+            color: #d4a574;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .detail-value {
+            color: #f5f5f5;
+            font-weight: 600;
+        }
+
+        /* Booking Section Styles */
+        .bookings-section {
+            margin-top: 40px;
+        }
+
+        .bookings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .bookings-header h3 {
+            color: #d4a574;
+            font-size: 24px;
+        }
+
+        .bookings-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tab-button {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            color: #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Georgia', serif;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #d4a574 0%, #b8935f 100%);
+            border-color: #d4a574;
+            color: white;
+        }
+
+        .bookings-list {
+            display: none;
+        }
+
+        .bookings-list.active {
+            display: block;
+        }
+
+        .booking-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(212, 165, 116, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .booking-card:hover {
+            border-color: #d4a574;
+            transform: translateX(5px);
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .booking-date {
+            font-size: 18px;
+            font-weight: 600;
+            color: #d4a574;
+        }
+
+        .booking-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-confirmed {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+
+        .status-completed {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+
+        .booking-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .booking-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .empty-bookings {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-bookings-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        /* Quick Booking Form */
+        .quick-booking {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .quick-booking h3 {
+            color: #d4a574;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .quick-booking-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            border-radius: 8px;
+            color: #f5f5f5;
+            font-family: 'Georgia', serif;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .btn-quick-book {
+            grid-column: 1 / -1;
+            padding: 15px;
+            background: linear-gradient(135deg, #d4a574 0%, #b8935f 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn-quick-book:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-quick-book:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .booking-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .booking-message.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+
+        .booking-message.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .welcome-section h1 {
+                font-size: 28px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bookings-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .booking-details {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-booking-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <img src="public/logo.jpeg" alt="The Midnight Brew">
+            <h2>The Midnight Brew</h2>
+        </div>
+        <div class="navbar-user">
+            <div class="user-info">
+                <div class="user-name" id="userName">User</div>
+                <div class="user-email" id="userEmail">user@example.com</div>
+            </div>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h1>☕ Welcome to Your Dashboard</h1>
+            <p>Manage your bookings and explore our café</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-icon">📅</div>
+                <h3 class="card-title">Make a Booking</h3>
+                <p class="card-description">
+                    Reserve your table at The Midnight Brew. Choose your date, time, and number of guests.
+                </p>
+                <a href="booking.html" class="card-button">Book Now</a>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">📖</div>
+                <h3 class="card-title">View Menu</h3>
+                <p class="card-description">
+                    Explore our delicious menu featuring pastries, beverages, sandwiches, and soups.
+                </p>
+                <a href="menu.html" class="card-button">Browse Menu</a>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">📞</div>
+                <h3 class="card-title">Contact Us</h3>
+                <p class="card-description">
+                    Have questions? Get in touch with us for reservations, events, or general inquiries.
+                </p>
+                <a href="contact.html" class="card-button">Contact</a>
+            </div>
+        </div>
+
+        <div class="user-details">
+            <h3>Account Information</h3>
+            <div class="detail-row">
+                <span class="detail-label">User ID:</span>
+                <span class="detail-value" id="userId">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Name:</span>
+                <span class="detail-value" id="detailName">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Email:</span>
+                <span class="detail-value" id="detailEmail">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Token Expires:</span>
+                <span class="detail-value" id="tokenExpiry">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Total Bookings:</span>
+                <span class="detail-value" id="totalBookings">0</span>
+            </div>
+        </div>
+
+        <!-- Quick Booking Section -->
+        <div class="quick-booking">
+            <h3>🚀 Quick Booking</h3>
+            <form class="quick-booking-form" id="quickBookingForm">
+                <div class="form-group">
+                    <label for="quickDate">Date</label>
+                    <input type="date" id="quickDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="quickTime">Time</label>
+                    <select id="quickTime" required>
+                        <option value="">Select time...</option>
+                        <option value="17:00">5:00 PM</option>
+                        <option value="17:30">5:30 PM</option>
+                        <option value="18:00">6:00 PM</option>
+                        <option value="18:30">6:30 PM</option>
+                        <option value="19:00">7:00 PM</option>
+                        <option value="19:30">7:30 PM</option>
+                        <option value="20:00">8:00 PM</option>
+                        <option value="20:30">8:30 PM</option>
+                        <option value="21:00">9:00 PM</option>
+                        <option value="21:30">9:30 PM</option>
+                        <option value="22:00">10:00 PM</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="quickPartySize">Party Size</label>
+                    <select id="quickPartySize" required>
+                        <option value="">Select size...</option>
+                        <option value="1">1 person</option>
+                        <option value="2">2 people</option>
+                        <option value="3">3 people</option>
+                        <option value="4">4 people</option>
+                        <option value="5">5 people</option>
+                        <option value="6">6 people</option>
+                        <option value="7">7 people</option>
+                        <option value="8">8 people</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-quick-book" id="quickBookBtn">
+                    Book Table Now
+                </button>
+            </form>
+            <div class="booking-message" id="bookingMessage"></div>
+        </div>
+
+        <!-- User Bookings Section -->
+        <div class="bookings-section">
+            <div class="bookings-header">
+                <h3>📋 My Bookings</h3>
+                <div class="bookings-tabs">
+                    <button class="tab-button active" onclick="switchTab('upcoming')">
+                        Upcoming
+                    </button>
+                    <button class="tab-button" onclick="switchTab('past')">
+                        Past
+                    </button>
+                </div>
+            </div>
+
+            <!-- Upcoming Bookings -->
+            <div class="bookings-list active" id="upcomingBookings">
+                <div class="empty-bookings">
+                    <div class="empty-bookings-icon">📅</div>
+                    <p>No upcoming bookings</p>
+                </div>
+            </div>
+
+            <!-- Past Bookings -->
+            <div class="bookings-list" id="pastBookings">
+                <div class="empty-bookings">
+                    <div class="empty-bookings-icon">📜</div>
+                    <p>No past bookings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Auth Utility -->
+    <script src="auth.js"></script>
+    
+    <script>
+        let userData = null;
+        let bookingsData = null;
+
+        // Check authentication on page load
+        window.addEventListener('DOMContentLoaded', async function() {
+            // Check if token is already expired on load
+            if (!Auth.checkTokenOnLoad()) {
+                return; // Will redirect automatically
+            }
+            
+            // Require authentication (will redirect if not logged in)
+            if (!Auth.requireAuth('/login.html')) {
+                return;
+            }
+            
+            // Start token expiry monitor (checks every minute)
+            Auth.startTokenExpiryMonitor(true);
+
+            try {
+                // Use authGet to fetch dashboard data (includes credentials for HTTP-only cookie)
+                const response = await Auth.authGet('/dashboard');
+
+                if (response.ok) {
+                    const data = await response.json();
+                    userData = data.user;
+                    bookingsData = data.bookings;
+                    
+                    // Update UI with user data
+                    document.getElementById('userName').textContent = data.user.name || 'User';
+                    document.getElementById('userEmail').textContent = data.user.email;
+                    document.getElementById('userId').textContent = data.user.id;
+                    document.getElementById('detailName').textContent = data.user.name || 'Not provided';
+                    document.getElementById('detailEmail').textContent = data.user.email;
+                    document.getElementById('totalBookings').textContent = data.bookings.total || 0;
+                    
+                    // Calculate and display token expiry
+                    if (data.user.exp) {
+                        const expiryDate = new Date(data.user.exp * 1000);
+                        const now = new Date();
+                        const minutesLeft = Math.round((expiryDate - now) / 1000 / 60);
+                        document.getElementById('tokenExpiry').textContent = 
+                            minutesLeft > 0 ? `${minutesLeft} minutes` : 'Expired';
+                    }
+
+                    // Display bookings
+                    displayBookings(data.bookings.upcoming, 'upcoming');
+                    displayBookings(data.bookings.past, 'past');
+                }
+                
+            } catch (error) {
+                console.error('Dashboard loading error:', error);
+                // Auth.authGet already handles 401 redirects
+            }
+
+            // Set minimum date for quick booking (today)
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('quickDate').min = today;
+            
+            // Set default date to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('quickDate').value = tomorrow.toISOString().split('T')[0];
+        });
+
+        // Display bookings in the UI
+        function displayBookings(bookings, type) {
+            const container = document.getElementById(type === 'upcoming' ? 'upcomingBookings' : 'pastBookings');
+            
+            if (!bookings || bookings.length === 0) {
+                return; // Keep empty state
+            }
+
+            container.innerHTML = '';
+            
+            bookings.forEach(booking => {
+                const bookingCard = createBookingCard(booking, type);
+                container.appendChild(bookingCard);
+            });
+        }
+
+        // Create booking card HTML
+        function createBookingCard(booking, type) {
+            const card = document.createElement('div');
+            card.className = 'booking-card';
+            
+            const date = new Date(booking.date).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            const statusClass = type === 'upcoming' ? 'status-confirmed' : 'status-completed';
+            const statusText = type === 'upcoming' ? 'Confirmed' : 'Completed';
+            
+            card.innerHTML = `
+                <div class="booking-header">
+                    <div class="booking-date">${date}</div>
+                    <div class="booking-status ${statusClass}">${statusText}</div>
+                </div>
+                <div class="booking-details">
+                    <div class="booking-detail">
+                        <span>⏰</span>
+                        <span>${booking.time}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <span>👥</span>
+                        <span>${booking.partySize} ${booking.partySize === 1 ? 'person' : 'people'}</span>
+                    </div>
+                    ${booking.occasion ? `
+                    <div class="booking-detail">
+                        <span>🎉</span>
+                        <span>${booking.occasion}</span>
+                    </div>
+                    ` : ''}
+                    <div class="booking-detail">
+                        <span>📋</span>
+                        <span>ID: ${booking.id}</span>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Switch between tabs
+        function switchTab(tab) {
+            // Update tab buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if ((tab === 'upcoming' && btn.textContent.trim() === 'Upcoming') ||
+                    (tab === 'past' && btn.textContent.trim() === 'Past')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update tab content
+            document.getElementById('upcomingBookings').classList.remove('active');
+            document.getElementById('pastBookings').classList.remove('active');
+            
+            if (tab === 'upcoming') {
+                document.getElementById('upcomingBookings').classList.add('active');
+            } else {
+                document.getElementById('pastBookings').classList.add('active');
+            }
+        }
+
+        // Handle quick booking form submission
+        document.getElementById('quickBookingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const bookBtn = document.getElementById('quickBookBtn');
+            const messageDiv = document.getElementById('bookingMessage');
+            
+            // Get form values
+            const date = document.getElementById('quickDate').value;
+            const time = document.getElementById('quickTime').value;
+            const partySize = parseInt(document.getElementById('quickPartySize').value);
+            
+            // Disable button and show loading
+            bookBtn.disabled = true;
+            bookBtn.textContent = 'Booking...';
+            messageDiv.style.display = 'none';
+            
+            try {
+                // Send booking request with authentication
+                const response = await Auth.authPost('/api/booking', {
+                    date,
+                    time,
+                    partySize,
+                    firstName: userData.name ? userData.name.split(' ')[0] : 'Guest',
+                    lastName: userData.name ? userData.name.split(' ')[1] || '' : '',
+                    email: userData.email,
+                    phone: '',
+                    occasion: 'General Dining',
+                    preferences: [],
+                    requests: 'Quick booking from dashboard'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    // Success
+                    messageDiv.className = 'booking-message success';
+                    messageDiv.textContent = '✅ Booking confirmed! Your table is reserved.';
+                    messageDiv.style.display = 'block';
+                    
+                    // Reset form
+                    document.getElementById('quickBookingForm').reset();
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    document.getElementById('quickDate').value = tomorrow.toISOString().split('T')[0];
+                    
+                    // Reload dashboard data after 2 seconds
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                    
+                } else {
+                    // Error
+                    messageDiv.className = 'booking-message error';
+                    messageDiv.textContent = `❌ ${data.message || 'Booking failed. Please try again.'}`;
+                    messageDiv.style.display = 'block';
+                }
+                
+            } catch (error) {
+                console.error('Booking error:', error);
+                messageDiv.className = 'booking-message error';
+                messageDiv.textContent = '❌ Unable to connect to server. Please try again.';
+                messageDiv.style.display = 'block';
+            } finally {
+                // Re-enable button
+                bookBtn.disabled = false;
+                bookBtn.textContent = 'Book Table Now';
+            }
+        });
+
+        // Logout function
+        async function logout() {
+            // Show loading state
+            const logoutBtn = document.querySelector('.btn-logout');
+            const originalText = logoutBtn.textContent;
+            logoutBtn.textContent = 'Logging out...';
+            logoutBtn.disabled = true;
+            
+            // Use Auth utility to logout (clears cookies + localStorage + redirects)
+            await Auth.logout('/login.html');
+            
+            // Note: Redirect happens in Auth.logout(), so code below won't execute
+            // But keeping as fallback
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html>
