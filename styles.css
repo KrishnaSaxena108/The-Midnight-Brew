@@ -301,7 +301,35 @@ html {
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.08)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.06)"/><circle cx="40" cy="80" r="1.5" fill="rgba(255,255,255,0.07)"/></svg>');
     z-index: 1;
 }
+.hero-title {
+  display: inline-block;
+  font-size: 2.8rem;
+  font-weight: bold;
+   line-height: 0.6;
+}
 
+.line {
+  display: block;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s forwards;
+ 
+}
+
+.line1 {
+  animation-delay: 0.2s;
+}
+
+.line2 {
+  animation-delay: 0.8s;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .contact-hero::before,
 .menu-hero::before {
     content: '';
