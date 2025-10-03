@@ -1,4 +1,3 @@
-// Load environment variables
 require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
@@ -7,11 +6,11 @@ const crypto = require('crypto');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Generate JWT token with session tracking
+
 const generateToken = async (user, req) => {
     const sessionId = crypto.randomUUID();
     
-    // Create session record in database
+    
     const session = new Session({
         sessionId,
         userId: user.id,
