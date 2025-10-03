@@ -328,7 +328,7 @@ html {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
+}
 }
 .contact-hero::before,
 .menu-hero::before {
