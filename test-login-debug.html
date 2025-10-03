@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Login Connection Debug Test</h1>
+    
+    <!-- Load Auth Utility -->
+    <script src="auth.js"></script>
+    
+    <div class="test-section">
+        <h2>1. Auth.js Loading Test</h2>
+        <div id="authLoadTest"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Server Connection Test</h2>
+        <button onclick="testServerConnection()">Test Server Connection</button>
+        <div id="serverTest"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Login API Test</h2>
+        <p>Test credentials: <code>test@example.com</code> / <code>test123</code></p>
+        <button onclick="testLoginAPI()">Test Login API</button>
+        <div id="loginTest"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Auth.login() Test</h2>
+        <p>Using Auth utility function</p>
+        <button onclick="testAuthLogin()">Test Auth.login()</button>
+        <div id="authLoginTest"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>5. Console Errors</h2>
+        <div id="consoleErrors" style="color: red;"></div>
+    </div>
+
+    <script>
+        // Capture console errors
+        const originalError = console.error;
+        const errors = [];
+        console.error = function(...args) {
+            errors.push(args.join(' '));
+            document.getElementById('consoleErrors').innerHTML = '<pre>' + errors.join('\n') + '</pre>';
+            originalError.apply(console, args);
+        };
+
+        // Test 1: Check if Auth.js is loaded
+        window.addEventListener('DOMContentLoaded', function() {
+            const authLoadDiv = document.getElementById('authLoadTest');
+            
+            if (typeof Auth === 'undefined') {
+                authLoadDiv.innerHTML = '<div class="status error">❌ FAILED: Auth object is not defined. auth.js not loaded properly!</div>';
+            } else {
+                let methods = '';
+                if (typeof Auth.login === 'function') methods += '✅ Auth.login() ';
+                if (typeof Auth.register === 'function') methods += '✅ Auth.register() ';
+                if (typeof Auth.logout === 'function') methods += '✅ Auth.logout() ';
+                if (typeof Auth.isAuthenticated === 'function') methods += '✅ Auth.isAuthenticated() ';
+                if (typeof Auth.getToken === 'function') methods += '✅ Auth.getToken() ';
+                
+                authLoadDiv.innerHTML = `
+                    <div class="status success">✅ SUCCESS: Auth object is loaded!</div>
+                    <div class="status info">Available methods: ${methods}</div>
+                `;
+            }
+        });
+        
+        // Test 2: Server connection
+        async function testServerConnection() {
+            const div = document.getElementById('serverTest');
+            div.innerHTML = '<div class="status info">Testing server connection...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/health');
+                const data = await response.json();
+                
+                div.innerHTML = `
+                    <div class="status success">✅ SUCCESS: Server is reachable!</div>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                div.innerHTML = `
+                    <div class="status error">❌ FAILED: Cannot connect to server!</div>
+                    <pre>Error: ${error.message}</pre>
+                `;
+            }
+        }
+        
+        // Test 3: Login API direct test
+        async function testLoginAPI() {
+            const div = document.getElementById('loginTest');
+            div.innerHTML = '<div class="status info">Testing login API directly...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'test@example.com',
+                        password: 'test123'
+                    }),
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    div.innerHTML = `
+                        <div class="status success">✅ SUCCESS: Login API working!</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    div.innerHTML = `
+                        <div class="status error">❌ FAILED: ${response.status} ${response.statusText}</div>
+                        <div class="status info">This is expected if test account doesn't exist</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                div.innerHTML = `
+                    <div class="status error">❌ FAILED: Network error!</div>
+                    <pre>Error: ${error.message}\nStack: ${error.stack}</pre>
+                `;
+            }
+        }
+        
+        // Test 4: Auth.login() test
+        async function testAuthLogin() {
+            const div = document.getElementById('authLoginTest');
+            div.innerHTML = '<div class="status info">Testing Auth.login() function...</div>';
+            
+            try {
+                if (typeof Auth === 'undefined') {
+                    div.innerHTML = '<div class="status error">❌ FAILED: Auth is not defined!</div>';
+                    return;
+                }
+                
+                if (typeof Auth.login !== 'function') {
+                    div.innerHTML = '<div class="status error">❌ FAILED: Auth.login is not a function!</div>';
+                    return;
+                }
+                
+                const result = await Auth.login('test@example.com', 'test123', false);
+                
+                div.innerHTML = `
+                    <div class="status success">✅ Auth.login() executed (check result)</div>
+                    <pre>${JSON.stringify(result, null, 2)}</pre>
+                `;
+            } catch (error) {
+                div.innerHTML = `
+                    <div class="status error">❌ FAILED: Auth.login() threw an error!</div>
+                    <pre>Error: ${error.message}\n\nStack: ${error.stack}</pre>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

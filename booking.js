@@ -152,6 +152,12 @@ document.addEventListener('DOMContentLoaded', function() {
         bookingState.time = slot.dataset.time;
         console.log('   📅 Time set to:', bookingState.time);
         
+        // Update hidden input for form validation
+        const selectedTimeInput = document.getElementById('selectedTime');
+        if (selectedTimeInput) {
+            selectedTimeInput.value = slot.dataset.time;
+        }
+        
         // Update step indicator
         updateStepIndicator(2);
         updateSummary();
@@ -377,26 +383,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (emailInput) {
+            // Update state on input
+            emailInput.addEventListener('input', function() {
+                bookingState.email = this.value;
+            });
+            // Validate on blur
             emailInput.addEventListener('blur', function() {
                 if (this.value && !validateEmail(this.value)) {
                     this.classList.add('is-invalid');
                     showNotification('Please enter a valid email address', 'error');
                 } else {
                     this.classList.remove('is-invalid');
-                    bookingState.email = this.value;
                 }
             });
             elements.emailInput = emailInput;
         }
 
         if (phoneInput) {
+            // Update state on input
+            phoneInput.addEventListener('input', function() {
+                bookingState.phone = this.value;
+            });
+            // Validate on blur
             phoneInput.addEventListener('blur', function() {
                 if (this.value && !validatePhone(this.value)) {
                     this.classList.add('is-invalid');
                     showNotification('Please enter a valid phone number', 'error');
                 } else {
                     this.classList.remove('is-invalid');
-                    bookingState.phone = this.value;
                 }
             });
             elements.phoneInput = phoneInput;
@@ -477,7 +491,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const bookingData = {
             date: bookingState.date,
             time: bookingState.time,
-            partySize: parseInt(bookingState.partySize),
+            guests: parseInt(bookingState.partySize), // Server expects 'guests' not 'partySize'
             firstName: bookingState.firstName,
             lastName: bookingState.lastName,
             email: bookingState.email,
@@ -486,6 +500,9 @@ document.addEventListener('DOMContentLoaded', function() {
             preferences: bookingState.preferences,
             specialRequests: bookingState.requests
         };
+        
+        // Debug log to verify data before sending
+        console.log('📤 Sending booking data:', bookingData);
         
         // Submit booking with JWT authentication
         try {

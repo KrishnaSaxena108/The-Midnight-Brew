@@ -575,7 +575,7 @@
                             </div>
                         </div>
 
-                        <form class="booking-form" id="bookingForm">
+                        <form class="booking-form" id="bookingForm" novalidate>
                             <!-- Date & Party Size -->
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
@@ -632,6 +632,8 @@
                                     <div class="time-slot" data-time="22:00">10:00 PM</div>
                                     <div class="time-slot" data-time="23:00">11:00 PM</div>
                                 </div>
+                                <!-- Hidden input to store selected time -->
+                                <input type="hidden" id="selectedTime" name="selectedTime" required>
                             </div>
 
                             <!-- Table Preferences -->

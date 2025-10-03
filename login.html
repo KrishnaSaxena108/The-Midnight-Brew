@@ -538,8 +538,17 @@
             loginBtn.innerHTML = 'Logging in... <span class="spinner"></span>';
             
             try {
+                console.log('🔐 Attempting login with:', { email, rememberMe });
+                console.log('📍 API Base URL:', window.location.origin);
+                
                 // Use Auth utility for login
                 const { response, data } = await Auth.login(email, password, rememberMe);
+                
+                console.log('📥 Login response received:', { 
+                    ok: response.ok, 
+                    status: response.status,
+                    success: data.success 
+                });
                 
                 if (response.ok && data.success) {
                     // Show success message
@@ -552,14 +561,28 @@
                     
                 } else {
                     // Show error message
+                    console.error('❌ Login failed:', data);
                     showAlert(data.message || 'Login failed. Please try again.');
                     loginBtn.disabled = false;
                     loginBtn.textContent = 'Login';
                 }
                 
             } catch (error) {
-                console.error('Login error:', error);
-                showAlert('Unable to connect to server. Please try again later.');
+                console.error('🚨 Login error (catch block):', error);
+                console.error('Error name:', error.name);
+                console.error('Error message:', error.message);
+                console.error('Error stack:', error.stack);
+                
+                // More specific error messages
+                let errorMessage = 'Unable to connect to server. Please try again later.';
+                
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    errorMessage = 'Network error: Cannot reach server. Please check if the server is running.';
+                } else if (error.message) {
+                    errorMessage = `Error: ${error.message}`;
+                }
+                
+                showAlert(errorMessage);
                 loginBtn.disabled = false;
                 loginBtn.textContent = 'Login';
             }
