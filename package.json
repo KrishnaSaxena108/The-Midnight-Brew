@@ -21,7 +21,14 @@
   },
   "homepage": "https://github.com/iAwaisK/The-Midnight-Brew#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-mongo": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.0",
     "morgan": "^1.10.1"
   }
 }

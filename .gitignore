@@ -32,3 +32,6 @@ dist/
 build/
 *.tmp
 *.temp
+
+# environment-specific files
+.env

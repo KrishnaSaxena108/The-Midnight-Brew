@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Contact - The Midnight Brew</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Get in touch with The Midnight Brew - premium coffee shop. Contact us for orders, feedback, or inquiries.">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda+SC:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="public/favicon.png">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Enhanced Navigation Header -->
+    <header class="headbar">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <!-- Brand Logo and Name -->
+                <div class="navbar-brand d-flex align-items-center">
+                    <img class="nav-img me-3" src="public/logo.jpeg" alt="The Midnight Brew Logo">
+                    <h1 class="nav-para mb-0">The Midnight Brew</h1>
+                </div>
+                
+                <!-- Navbar Toggle for Mobile -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Navigation Menu -->
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/"><i class="fas fa-home me-2"></i>Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/menu"><i class="fas fa-utensils me-2"></i>Menu</a>
+                        </li>
+                        <li class="nav-item" id="bookingNavItem">
+                            <a class="nav-link" href="/booking"><i class="fas fa-calendar-check me-2"></i>Book</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/contact"><i class="fas fa-envelope me-2"></i>Contact</a>
+                        </li>
+                        <!-- Authentication Navigation -->
+                        <li class="nav-item" id="dashboardNavItem" style="display: none;">
+                            <a class="nav-link" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+                        </li>
+                        <li class="nav-item" id="loginNavItem">
+                            <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
+                        </li>
+                        <li class="nav-item" id="registerNavItem">
+                            <a class="nav-link" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a>
+                        </li>
+                        <li class="nav-item" id="logoutNavItem" style="display: none;">
+                            <button class="nav-link btn" id="logoutBtn" style="border: none; background: none;">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" class="btn btn-outline-light ms-3" aria-label="Toggle theme">
+                  <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contact Hero Section -->
+    <section class="contact-hero">
+        <div class="container">
+            <div class="text-center">
+                <h1 class="hero-title">Get in <span class="brand-accent">Touch</span></h1>
+                <p class="hero-subtitle">We'd love to hear from you</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <main class="contact-section py-5">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Contact Form -->
+                <div class="col-lg-8">
+                    <div class="contact-form-card">
+                        <div class="form-header text-center mb-4">
+                            <i class="fas fa-paper-plane form-icon"></i>
+                            <h2 class="form-title">Send us a Message</h2>
+                            <p class="form-subtitle">Fill out the form below and we'll get back to you soon</p>
+                        </div>
+                        
+                        <form class="contact-form">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name" class="form-label">
+                                            <i class="fas fa-user me-2"></i>Full Name
+                                        </label>
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email" class="form-label">
+                                            <i class="fas fa-envelope me-2"></i>Email Address
+                                        </label>
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="phone" class="form-label">
+                                            <i class="fas fa-phone me-2"></i>Phone Number
+                                        </label>
+                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="orderType" class="form-label">
+                                            <i class="fas fa-shopping-bag me-2"></i>Order Type
+                                        </label>
+                                        <select class="form-select" id="orderType" name="orderType" required>
+                                            <option value="">Choose order type...</option>
+                                            <option value="takeaway">Take Away</option>
+                                            <option value="dinein">Dine In</option>
+                                            <option value="delivery">Home Delivery</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="order" class="form-label">
+                                            <i class="fas fa-coffee me-2"></i>Your Order
+                                        </label>
+                                        <select class="form-select" id="order" name="order">
+                                            <option value="">What would you like to order...</option>
+                                            <option value="coffee">Coffee & Espresso</option>
+                                            <option value="pastries">Pastries & Desserts</option>
+                                            <option value="sandwiches">Sandwiches</option>
+                                            <option value="soups">Soups</option>
+                                            <option value="beverages">Cold Beverages</option>
+                                            <option value="custom">Custom Order</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="message" class="form-label">
+                                            <i class="fas fa-comment-dots me-2"></i>Message
+                                        </label>
+                                        <textarea class="form-control" id="message" name="message" rows="4" placeholder="Tell us more about your order or inquiry..."></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-paper-plane me-2"></i>Send Message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="col-lg-4">
+                    <div class="contact-info-card">
+                        <div class="info-header text-center mb-4">
+                            <i class="fas fa-map-marker-alt info-icon"></i>
+                            <h3 class="info-title">Visit Us</h3>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <div class="info-icon-wrapper">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="info-content">
+                                <h5>Address</h5>
+                                <p>123 Coffee Street<br>Downtown District<br>City, State 12345</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <div class="info-icon-wrapper">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="info-content">
+                                <h5>Phone</h5>
+                                <p>+1 (555) 123-4567</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <div class="info-icon-wrapper">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="info-content">
+                                <h5>Email</h5>
+                                <p>hello@midnightbrew.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <div class="info-icon-wrapper">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="info-content">
+                                <h5>Hours</h5>
+                                <p>Mon - Fri: 6:00 AM - 11:00 PM<br>
+                                   Sat - Sun: 7:00 AM - 12:00 AM</p>
+                            </div>
+                        </div>
+                        
+                        <div class="social-section text-center mt-4">
+                            <h5 class="mb-3">Follow Us</h5>
+                            <div class="social-links">
+                                <a href="https://www.facebook.com/" class="social-link">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="https://www.instagram.com/" class="social-link">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="https://www.youtube.com/" class="social-link">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                                <a href="https://twitter.com/" class="social-link">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="theme.js"></script>
+    
+    <!-- Enhanced Footer -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Brand Info -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand">
+                        <img src="public/logo.jpeg" alt="The Midnight Brew" class="footer-logo mb-3">
+                        <h5 class="text-white">The Midnight Brew</h5>
+                        <p class="text-white-50">Where coffee meets moonlight, creating magical moments for night owls and coffee lovers.</p>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-links">
+                        <h5 class="text-white mb-3">Quick Links</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="/" class="footer-link">
+                                    <i class="fas fa-home me-2"></i>Home
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/menu" class="footer-link">
+                                    <i class="fas fa-utensils me-2"></i>Menu
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/contact" class="footer-link">
+                                    <i class="fas fa-envelope me-2"></i>Contact
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/booking" class="footer-link">
+                                    <i class="fas fa-calendar-check me-2"></i>Book a Table
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Social Media -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="footer-social">
+                        <h5 class="text-white mb-3">Connect With Us</h5>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/" class="social-link" title="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://www.instagram.com/" class="social-link" title="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://www.youtube.com/" class="social-link" title="YouTube">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                            <a href="https://twitter.com/" class="social-link" title="Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                        <div class="contact-info mt-3">
+                            <p class="text-white-50 mb-1">
+                                <i class="fas fa-phone me-2"></i>+1 (555) 123-4567
+                            </p>
+                            <p class="text-white-50 mb-1">
+                                <i class="fas fa-envelope me-2"></i>hello@midnightbrew.com
+                            </p>
+                            <p class="text-white-50">
+                                <i class="fas fa-map-marker-alt me-2"></i>123 Coffee Street, City, State 12345
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Bottom -->
+            <hr class="border-secondary my-4">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-white-50 mb-0">&copy; 2025 The Midnight Brew. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-white-50 mb-0">Made with <i class="fas fa-heart text-danger"></i> for coffee lovers</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Universal Authentication Navigation -->
+    <script src="js/auth-nav.js"></script>
+</body>
+
+</html>

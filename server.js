@@ -1,7 +1,24 @@
+// Load environment variables first
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const fs = require('fs');
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcryptjs');
+const connectDB = require('./config/database');
+const User = require('./models/User');
+const Booking = require('./models/Booking');
+const Session = require('./models/Session');
+const { 
+    generateToken, 
+    authenticateToken, 
+    optionalAuth, 
+    invalidateSession, 
+    invalidateAllUserSessions, 
+    cleanupExpiredSessions 
+} = require('./auth/middleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +33,7 @@ app.use(morgan('dev'));
 // Middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(cookieParser());
 
 // CORS
 app.use((req, res, next) => {
@@ -41,28 +59,352 @@ app.use((req, res, next) => {
     next();
 });
 
-// Response time tracking
+// Response time tracking (for monitoring only)
 app.use((req, res, next) => {
     const start = Date.now();
     res.on('finish', () => {
-        console.log(`${req.method} ${req.url} - ${Date.now() - start}ms`);
+        // Response time logging removed for production
     });
     next();
 });
 
 // Static files
-app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.get('/styles.css', (req, res) => res.sendFile(path.join(__dirname, 'styles.css')));
-app.get('/theme.js', (req, res) => res.sendFile(path.join(__dirname, 'theme.js')));
-app.get('/booking.js', (req, res) => res.sendFile(path.join(__dirname, 'booking.js')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Frontend routes
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/home', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'menu.html')));
-app.get('/booking', (req, res) => res.sendFile(path.join(__dirname, 'booking.html')));
-app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'contact.html')));
+// Serve CSS and JS files with proper paths
+app.get('/css/styles.css', (req, res) => res.sendFile(path.join(__dirname, 'public/css/styles.css')));
+app.get('/js/theme.js', (req, res) => res.sendFile(path.join(__dirname, 'public/js/theme.js')));
+app.get('/js/booking.js', (req, res) => res.sendFile(path.join(__dirname, 'public/js/booking.js')));
+app.get('/js/auth-nav.js', (req, res) => res.sendFile(path.join(__dirname, 'public/js/auth-nav.js')));
+
+// Backward compatibility routes (optional)
+app.get('/styles.css', (req, res) => res.redirect('/css/styles.css'));
+app.get('/theme.js', (req, res) => res.redirect('/js/theme.js'));
+app.get('/booking.js', (req, res) => res.redirect('/js/booking.js'));
+app.get('/auth-nav.js', (req, res) => res.redirect('/js/auth-nav.js'));
+
+// Authentication Routes
+// Register endpoint
+app.post('/api/auth/register', async (req, res) => {
+    try {
+        const { email, password, firstName, lastName, phone } = req.body;
+
+        // Validate required fields
+        if (!email || !password || !firstName || !lastName) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide all required fields'
+            });
+        }
+
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: 'User with this email already exists'
+            });
+        }
+
+        // Hash password
+        const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // Create new user
+        const newUser = new User({
+            email,
+            password: hashedPassword,
+            firstName,
+            lastName,
+            phone: phone || ''
+        });
+
+        await newUser.save();
+
+        // Generate JWT token with session
+        const token = await generateToken(newUser, req);
+
+        // Set cookie
+        const cookieMaxAge = (parseInt(process.env.COOKIE_MAX_AGE_HOURS) || 24) * 60 * 60 * 1000;
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: cookieMaxAge
+        });
+
+        res.status(201).json({
+            success: true,
+            message: 'User registered successfully',
+            user: {
+                id: newUser._id,
+                email: newUser.email,
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                phone: newUser.phone
+            },
+            token
+        });
+
+    } catch (error) {
+        console.error('Registration error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+});
+
+// Login endpoint
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Validate required fields
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide email and password'
+            });
+        }
+
+        // Find user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid email or password'
+            });
+        }
+
+        // Check password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid email or password'
+            });
+        }
+
+        // Generate JWT token with session
+        const token = await generateToken(user, req);
+
+        // Set cookie
+        const cookieMaxAge = (parseInt(process.env.COOKIE_MAX_AGE_HOURS) || 24) * 60 * 60 * 1000;
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: cookieMaxAge
+        });
+
+        res.json({
+            success: true,
+            message: 'Login successful',
+            user: {
+                id: user._id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                phone: user.phone
+            },
+            token
+        });
+
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+});
+
+// Logout endpoint
+app.post('/api/auth/logout', authenticateToken, async (req, res) => {
+    try {
+        // Invalidate the current session
+        await invalidateSession(req.user.sessionId);
+        
+        res.clearCookie('token');
+        res.json({
+            success: true,
+            message: 'Logged out successfully'
+        });
+    } catch (error) {
+        console.error('Logout error:', error);
+        res.clearCookie('token');
+        res.json({
+            success: true,
+            message: 'Logged out successfully'
+        });
+    }
+});
+
+// Logout from all devices endpoint
+app.post('/api/auth/logout-all', authenticateToken, async (req, res) => {
+    try {
+        // Invalidate all sessions for the current user
+        await invalidateAllUserSessions(req.user.userId);
+        
+        res.clearCookie('token');
+        res.json({
+            success: true,
+            message: 'Logged out from all devices successfully'
+        });
+    } catch (error) {
+        console.error('Logout all error:', error);
+        res.clearCookie('token');
+        res.json({
+            success: true,
+            message: 'Logged out from all devices successfully'
+        });
+    }
+});
+
+// Get current user endpoint
+app.get('/api/auth/me', authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.userId).select('-password');
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            user: {
+                id: user._id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                phone: user.phone
+            }
+        });
+    } catch (error) {
+        console.error('Get user error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+});
+
+// Protected booking endpoint
+app.post('/api/bookings', authenticateToken, async (req, res) => {
+    try {
+        const { bookingDate, bookingTime, partySize, occasion, preferences, specialRequests } = req.body;
+
+        // Validate required fields
+        if (!bookingDate || !bookingTime || !partySize) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide booking date, time, and party size'
+            });
+        }
+
+        // Create new booking
+        const newBooking = new Booking({
+            userId: req.user.userId,
+            bookingDate,
+            bookingTime,
+            partySize: parseInt(partySize),
+            occasion: occasion || '',
+            preferences: preferences || [],
+            specialRequests: specialRequests || ''
+        });
+
+        await newBooking.save();
+
+        // Populate user details
+        await newBooking.populate('userId', 'firstName lastName email phone');
+
+        res.status(201).json({
+            success: true,
+            message: 'Booking created successfully',
+            booking: newBooking
+        });
+
+    } catch (error) {
+        console.error('Booking creation error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to create booking'
+        });
+    }
+});
+
+// Get user bookings
+app.get('/api/bookings', authenticateToken, async (req, res) => {
+    try {
+        const bookings = await Booking.find({ userId: req.user.userId })
+            .populate('userId', 'firstName lastName email phone')
+            .sort({ createdAt: -1 });
+
+        res.json({
+            success: true,
+            bookings
+        });
+
+    } catch (error) {
+        console.error('Get bookings error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch bookings'
+        });
+    }
+});
+
+// Cancel/Delete booking
+app.delete('/api/bookings/:id', authenticateToken, async (req, res) => {
+    try {
+        const booking = await Booking.findOne({
+            _id: req.params.id,
+            userId: req.user.userId
+        });
+
+        if (!booking) {
+            return res.status(404).json({
+                success: false,
+                message: 'Booking not found'
+            });
+        }
+
+        booking.status = 'cancelled';
+        await booking.save();
+
+        res.json({
+            success: true,
+            message: 'Booking cancelled successfully'
+        });
+
+    } catch (error) {
+        console.error('Cancel booking error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to cancel booking'
+        });
+    }
+});
+
+// Frontend routes - now serving from public folder
+app.get('/', optionalAuth, (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
+app.get('/home', optionalAuth, (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
+app.get('/menu', optionalAuth, (req, res) => res.sendFile(path.join(__dirname, 'public/menu.html')));
+app.get('/contact', optionalAuth, (req, res) => res.sendFile(path.join(__dirname, 'public/contact.html')));
+
+// Protected booking page - requires authentication
+app.get('/booking', authenticateToken, (req, res) => res.sendFile(path.join(__dirname, 'public/booking.html')));
+
+// Login page
+app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public/login.html')));
+
+// Register page
+app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'public/register.html')));
+
+// Dashboard page - requires authentication
+app.get('/dashboard', authenticateToken, (req, res) => res.sendFile(path.join(__dirname, 'public/dashboard.html')));
 
 app.get('/about', (req, res) => {
     const aboutHTML = `<!DOCTYPE html>
@@ -245,9 +587,37 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Start server
-const server = app.listen(PORT, () => {
-    console.log(`🚀 The Midnight Brew Server running at http://localhost:${PORT}`);
-});
+// Initialize MongoDB connection and start server
+const startServer = async () => {
+    try {
+        await connectDB();
+        
+        // Invalidate all existing sessions on server restart
+        await Session.updateMany({}, { isActive: false });
+        
+        // Clean up expired sessions
+        await cleanupExpiredSessions();
+        
+        const server = app.listen(PORT, () => {
+            console.log(`🚀 The Midnight Brew Server running at http://localhost:${PORT}`);
+        });
+        
+        // Graceful shutdown
+        process.on('SIGTERM', () => {
+            console.log('SIGTERM received. Shutting down gracefully...');
+            server.close(() => {
+                console.log('Process terminated');
+            });
+        });
+        
+        return server;
+    } catch (error) {
+        console.error('Failed to start server:', error);
+        process.exit(1);
+    }
+};
 
-module.exports = { app, server };
+// Start the server
+startServer();
+
+module.exports = { app };

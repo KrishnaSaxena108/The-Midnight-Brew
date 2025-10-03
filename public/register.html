@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - The Midnight Brew</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="public/favicon.png">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #8B4513 0%, #6B3410 50%, #2C1810 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            max-width: 600px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .auth-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+        
+        .auth-title {
+            font-family: 'Playfair Display', serif;
+            color: #8B4513;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-subtitle {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #8B4513;
+            box-shadow: 0 0 0 0.25rem rgba(139, 69, 19, 0.15);
+        }
+        
+        .btn-auth {
+            background: linear-gradient(135deg, #8B4513 0%, #6B3410 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            width: 100%;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-auth:hover {
+            background: linear-gradient(135deg, #6B3410 0%, #8B4513 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
+        }
+        
+        .auth-divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e9ecef;
+            z-index: 1;
+        }
+        
+        .auth-divider span {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0 1rem;
+            color: #666;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .auth-link {
+            color: #8B4513;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .auth-link:hover {
+            color: #6B3410;
+            text-decoration: underline;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .password-requirements {
+            font-size: 0.875rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .requirement {
+            margin: 0.25rem 0;
+        }
+
+        .requirement.met {
+            color: #28a745;
+        }
+
+        .requirement.unmet {
+            color: #dc3545;
+        }
+
+        [data-theme="dark"] .auth-card {
+            background: rgba(42, 42, 42, 0.95);
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .auth-title {
+            color: #D2691E;
+        }
+
+        [data-theme="dark"] .auth-subtitle,
+        [data-theme="dark"] .form-label {
+            color: #cccccc;
+        }
+
+        [data-theme="dark"] .form-control {
+            background-color: #3a3a3a;
+            border-color: #555555;
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .form-control:focus {
+            background-color: #3a3a3a;
+            border-color: #D2691E;
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .password-requirements {
+            color: #cccccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="public/logo.jpeg" alt="The Midnight Brew" class="auth-logo">
+                <h1 class="auth-title">Join Us</h1>
+                <p class="auth-subtitle">Create your account to start your coffee journey</p>
+            </div>
+            
+            <div id="alertContainer"></div>
+            
+            <form id="registerForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">
+                                <i class="fas fa-user me-2"></i>First Name
+                            </label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter your first name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">
+                                <i class="fas fa-user me-2"></i>Last Name
+                            </label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter your last name" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        <i class="fas fa-envelope me-2"></i>Email Address
+                    </label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone" class="form-label">
+                        <i class="fas fa-phone me-2"></i>Phone Number (Optional)
+                    </label>
+                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <i class="fas fa-lock me-2"></i>Password
+                    </label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Create a password" required>
+                    <div class="password-requirements">
+                        <div class="requirement unmet" data-requirement="length">
+                            <i class="fas fa-times me-2"></i>At least 8 characters
+                        </div>
+                        <div class="requirement unmet" data-requirement="uppercase">
+                            <i class="fas fa-times me-2"></i>One uppercase letter
+                        </div>
+                        <div class="requirement unmet" data-requirement="lowercase">
+                            <i class="fas fa-times me-2"></i>One lowercase letter
+                        </div>
+                        <div class="requirement unmet" data-requirement="number">
+                            <i class="fas fa-times me-2"></i>One number
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">
+                        <i class="fas fa-lock me-2"></i>Confirm Password
+                    </label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-auth" id="submitBtn" disabled>
+                    <span class="btn-text">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </span>
+                    <span class="btn-spinner d-none">
+                        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                        Creating account...
+                    </span>
+                </button>
+            </form>
+            
+            <div class="auth-divider">
+                <span>Already have an account?</span>
+            </div>
+            
+            <div class="text-center">
+                <a href="/login" class="auth-link">
+                    <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                </a>
+            </div>
+            
+            <div class="text-center mt-3">
+                <a href="/" class="auth-link">
+                    <i class="fas fa-home me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle (floating) -->
+    <button id="theme-toggle" class="btn btn-outline-light position-fixed top-0 end-0 m-3" aria-label="Toggle theme" style="z-index: 1000;">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/theme.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registerForm');
+            const alertContainer = document.getElementById('alertContainer');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Check if user is already logged in
+            checkAuthStatus();
+            
+            // Password validation
+            passwordInput.addEventListener('input', validatePassword);
+            confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+            
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                const data = {
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    password: formData.get('password')
+                };
+                
+                // Validate password confirmation
+                if (data.password !== formData.get('confirmPassword')) {
+                    showAlert('danger', 'Passwords do not match');
+                    return;
+                }
+                
+                // Show loading state
+                setLoadingState(true);
+                clearAlerts();
+                
+                try {
+                    const response = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showAlert('success', result.message);
+                        
+                        // Store token in localStorage as backup
+                        localStorage.setItem('token', result.token);
+                        localStorage.setItem('user', JSON.stringify(result.user));
+                        
+                        // Redirect to dashboard after a short delay
+                        setTimeout(() => {
+                            window.location.href = '/dashboard';
+                        }, 1000);
+                    } else {
+                        showAlert('danger', result.message);
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    showAlert('danger', 'An error occurred. Please try again.');
+                } finally {
+                    setLoadingState(false);
+                }
+            });
+            
+            function validatePassword() {
+                const password = passwordInput.value;
+                const requirements = {
+                    length: password.length >= 8,
+                    uppercase: /[A-Z]/.test(password),
+                    lowercase: /[a-z]/.test(password),
+                    number: /[0-9]/.test(password)
+                };
+                
+                Object.keys(requirements).forEach(req => {
+                    const element = document.querySelector(`[data-requirement="${req}"]`);
+                    const icon = element.querySelector('i');
+                    
+                    if (requirements[req]) {
+                        element.classList.remove('unmet');
+                        element.classList.add('met');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-check');
+                    } else {
+                        element.classList.remove('met');
+                        element.classList.add('unmet');
+                        icon.classList.remove('fa-check');
+                        icon.classList.add('fa-times');
+                    }
+                });
+                
+                checkFormValidity();
+            }
+            
+            function checkPasswordMatch() {
+                checkFormValidity();
+            }
+            
+            function checkFormValidity() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                const requirements = {
+                    length: password.length >= 8,
+                    uppercase: /[A-Z]/.test(password),
+                    lowercase: /[a-z]/.test(password),
+                    number: /[0-9]/.test(password)
+                };
+                
+                const allRequirementsMet = Object.values(requirements).every(req => req);
+                const passwordsMatch = password === confirmPassword && password.length > 0;
+                const formFilled = form.checkValidity();
+                
+                submitBtn.disabled = !(allRequirementsMet && passwordsMatch && formFilled);
+            }
+            
+            function setLoadingState(loading) {
+                const btnText = submitBtn.querySelector('.btn-text');
+                const btnSpinner = submitBtn.querySelector('.btn-spinner');
+                
+                if (loading) {
+                    form.classList.add('loading');
+                    btnText.classList.add('d-none');
+                    btnSpinner.classList.remove('d-none');
+                    submitBtn.disabled = true;
+                } else {
+                    form.classList.remove('loading');
+                    btnText.classList.remove('d-none');
+                    btnSpinner.classList.add('d-none');
+                    checkFormValidity();
+                }
+            }
+            
+            function showAlert(type, message) {
+                const alertHtml = `
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+                alertContainer.innerHTML = alertHtml;
+            }
+            
+            function clearAlerts() {
+                alertContainer.innerHTML = '';
+            }
+            
+            async function checkAuthStatus() {
+                try {
+                    const response = await fetch('/api/auth/me', {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        // User is already logged in, redirect to dashboard
+                        window.location.href = '/dashboard';
+                    }
+                } catch (error) {
+                    // User is not logged in, stay on register page
+                    console.log('User not authenticated');
+                }
+            }
+            
+            // Add event listeners to all form inputs for real-time validation
+            form.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', checkFormValidity);
+            });
+        });
+    </script>
+</body>
+</html>

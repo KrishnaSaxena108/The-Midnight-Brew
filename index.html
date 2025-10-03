@@ -62,11 +62,26 @@
             <li class="nav-item">
               <a class="nav-link" href="/menu"><i class="fas fa-utensils me-2"></i>Menu</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="bookingNavItem">
               <a class="nav-link" href="/booking"><i class="fas fa-calendar-check me-2"></i>Book</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/contact"><i class="fas fa-envelope me-2"></i>Contact</a>
+            </li>
+            <!-- Authentication Navigation -->
+            <li class="nav-item" id="dashboardNavItem" style="display: none;">
+              <a class="nav-link" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+            </li>
+            <li class="nav-item" id="loginNavItem">
+              <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
+            </li>
+            <li class="nav-item" id="registerNavItem">
+              <a class="nav-link" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a>
+            </li>
+            <li class="nav-item" id="logoutNavItem" style="display: none;">
+              <button class="nav-link btn" id="logoutBtn" style="border: none; background: none;">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+              </button>
             </li>
             <button id="theme-toggle" class="btn btn-outline-light ms-3" aria-label="Toggle theme">
               <i class="fas fa-moon"></i>
@@ -840,6 +855,9 @@
       </div>
     </div>
   </footer>
+
+  <!-- Universal Authentication Navigation -->
+  <script src="auth-nav.js"></script>
 
 </body>
 
