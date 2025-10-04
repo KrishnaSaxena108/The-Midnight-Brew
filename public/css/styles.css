@@ -1426,27 +1426,22 @@ html {
 
 /* Rating Input Styles */
 .rating-input {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    gap: 5px;
+  direction: rtl; 
+  font-size: 1.5rem;
+  unicode-bidi: bidi-override; 
 }
-
 .rating-input input[type="radio"] {
-    display: none;
+  display: none;
 }
-
-.rating-input label {
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: #ddd;
-    transition: color 0.2s ease;
+.rating-input label.star {
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s;
 }
-
-.rating-input label:hover,
-.rating-input label:hover~label,
-.rating-input input[type="radio"]:checked~label {
-    color: #ffc107;
+.rating-input input[type="radio"]:checked ~ label.star,
+.rating-input label.star:hover,
+.rating-input label.star:hover ~ label.star {
+  color: #ffc107; /* golden */
 }
 
 /* Light Theme Overrides for Reviews */
