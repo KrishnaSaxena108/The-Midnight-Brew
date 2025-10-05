@@ -321,7 +321,7 @@ Update contact details in `contact.html` and `index.html` footer.
 
 We welcome contributions from developers, designers, and coffee enthusiasts! Whether you want to fix bugs, add new features, improve design, or enhance documentation, we'd love your help.
 
-Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute.
+
 
 ### Ways to Contribute
 
@@ -387,7 +387,7 @@ The website can also be deployed on:
 
 ---
 
-## 👥 Team
+## 👥🤝 Contributing  Team
 
 ### 🔧 Project Maintainer
 
