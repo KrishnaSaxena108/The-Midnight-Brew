@@ -24,7 +24,7 @@
     <a href="#-about-the-project">📖 About</a> •
     <a href="#-features--technology-stack">🚀 Features</a> •
     <a href="#-quick-start-guide">🏁 Quick Start</a> •
-    <a href="#-deployment-options">🚀 Deploy</a> •
+    <a href="#-development-roadmap">🗺️ Roadmap</a> •
     <a href="#-support-the-midnight-brew">💖 Support</a>
   </p>
 </div>
@@ -46,50 +46,136 @@ Where every pixel tells a story of warmth, creativity, and midnight magic
 
 **The Midnight Brew** is more than just a website—it's a carefully crafted digital experience that captures the soul of a cozy late-night café. Built for coffee enthusiasts, night owls, and anyone seeking a warm digital refuge, this project transforms the intimate atmosphere of a midnight café into an immersive web experience.
 
+---
+
+## 🌟 What Makes Us Special
+
 <div align="center">
 
-### 🌟 **What Makes Us Special** 🌟
+<table>
+<tr>
+<td width="33%" align="center">
 
-<details>
-<summary><strong>🎨 Aesthetic Excellence</strong></summary>
+### 🎨
+### **Aesthetic Excellence**
 
-- ✨ Warm, inviting design that feels like home
-- 🌙 Dark/Light themes with seamless transitions  
-- 📱 Responsive across all devices
-- 🎯 Intuitive user interface
+<br>
 
-</details>
+✨ **Warm & Inviting Design**  
+*That feels like home*
 
-<details>
-<summary><strong>🔧 Technical Mastery</strong></summary>
+🌙 **Dark/Light Themes**  
+*With seamless transitions*
 
-- ⚡ Modern web technologies & best practices
-- 🛠️ RESTful API with 10+ endpoints
-- 🔐 Session-based authentication
-- 📊 MongoDB database integration
+📱 **Fully Responsive**  
+*Across all devices*
 
-</details>
+🎯 **Intuitive Interface**  
+*Navigate with ease*
 
-<details>
-<summary><strong>☕ Coffee Culture</strong></summary>
+<br>
 
-- 🏠 Authentic café experience online
-- 📋 Curated menu & specialty offerings
-- 👥 Community-focused features
-- 📖 Rich storytelling experience
+</td>
+<td width="33%" align="center">
 
-</details>
+### 🔧
+### **Technical Mastery**
+
+<br>
+
+⚡ **Modern Technologies**  
+*Built with best practices*
+
+🛠️ **RESTful API**  
+*10+ robust endpoints*
+
+🔐 **Secure Authentication**  
+*Session-based security*
+
+📊 **MongoDB Integration**  
+*Powerful data management*
+
+<br>
+
+</td>
+<td width="33%" align="center">
+
+### ☕
+### **Coffee Culture**
+
+<br>
+
+🏠 **Authentic Experience**  
+*Real café vibes online*
+
+📋 **Curated Menu**  
+*Specialty offerings*
+
+👥 **Community Focus**  
+*Connect with coffee lovers*
+
+📖 **Rich Storytelling**  
+*Every sip has a story*
+
+<br>
+
+</td>
+</tr>
+</table>
 
 </div>
 
-### 🎯 **Our Mission**
+---
 
-Transform the digital café experience by providing:
-- 🏠 **A Digital Home** - Cozy virtual space for coffee lovers
-- 📱 **Seamless Experience** - Intuitive navigation across all devices  
-- 🌙 **Midnight Vibes** - Capturing the magic of late-night café culture
-- 🤝 **Community Hub** - Bringing coffee enthusiasts together online
-- 🚀 **Innovation** - Cutting-edge web technologies with coffee warmth
+## 🎯 Our Mission
+
+<div align="center">
+
+### Transform the digital café experience by providing
+
+<br>
+
+<table>
+<tr>
+<td width="20%" align="center">
+
+🏠
+### **A Digital Home**
+*Cozy virtual space for coffee lovers*
+
+</td>
+<td width="20%" align="center">
+
+📱
+### **Seamless Experience**
+*Intuitive navigation across all devices*
+
+</td>
+<td width="20%" align="center">
+
+🌙
+### **Midnight Vibes**
+*Capturing late-night café magic*
+
+</td>
+<td width="20%" align="center">
+
+🤝
+### **Community Hub**
+*Bringing enthusiasts together*
+
+</td>
+<td width="20%" align="center">
+
+🚀
+### **Innovation**
+*Cutting-edge tech with warmth*
+
+</td>
+</tr>
+</table>
+
+</div>
 
 ---
 
@@ -113,73 +199,182 @@ Transform the digital café experience by providing:
 
 </div>
 
-<div align="center">
+---
 
-### 🎨 **Frontend Excellence**
-</div>
-
-- ✨ **Responsive Design** - Seamless across all devices
-- 🌙 **Dark/Light Mode** - Toggle with theme persistence  
-- 🎭 **Smooth Animations** - Subtle, engaging transitions
-- 🎨 **Modern UI/UX** - Clean, intuitive interface
-- ♿ **Accessibility** - WCAG compliant design
-- 📱 **Mobile-First** - Optimized for mobile experience
+## 🎨 Frontend Excellence
 
 <div align="center">
 
-### ⚙️ **Backend Power**
-</div>
+<table>
+<tr>
+<td width="50%" align="center">
 
-- 🔐 **JWT Authentication** - Secure user sessions
-- 🗃️ **MongoDB Integration** - Robust data management
-- 🛡️ **Security Features** - XSS protection & more
-- 📊 **RESTful API** - 10+ comprehensive endpoints
-- 📝 **Request Logging** - Morgan HTTP logger
-- 🔄 **Session Management** - Real-world session handling
+### ✨ **Design Features**
 
-<div align="center">
+<br>
 
-### 🌟 **Core Features Showcase** 🌟
+🌙 **Dark/Light Mode Toggle**  
+*With theme persistence*
 
-</div>
+🎭 **Smooth Animations**  
+*Subtle, engaging transitions*
 
-<div align="center">
+🎨 **Modern UI/UX**  
+*Clean, intuitive interface*
 
-| ☕ **Café Experience** | 👤 **User Features** | 🛠️ **Technical Excellence** |
-|:----------------------|:---------------------|:---------------------------|
-| 🍽️ Interactive Menu System | 🔐 User Authentication | 📱 Responsive Design |
-| 📍 Location & Hours | 📅 Table Reservations | 🔒 JWT Security |
-| 📸 Atmospheric Gallery | 💾 Session Management | 🗄️ MongoDB Database |
-| 📞 Contact & Support | ❤️ Favorite Items | ⚡ Fast Performance |
-| 🎭 Events Calendar | 📧 Newsletter Signup | � API Integration |
-| ⭐ Customer Reviews | 🌓 Theme Preferences | 🚀 Modern Architecture |
+</td>
+<td width="50%" align="center">
 
-</div>
-� JWT Security<br/>
-📊 RESTful API (10+ endpoints)<br/>
-🛡️ Middleware Stack<br/>
-📝 Request Logging<br/>
-⚡ Error Handling<br/>
-🔄 Real-time Sessions
+### 📱 **Responsive Features**
+
+<br>
+
+📱 **Mobile-First Approach**  
+*Optimized for mobile experience*
+
+♿ **WCAG Compliant**  
+*Accessible design for all*
+
+✨ **Seamless Experience**  
+*Perfect across all devices*
 
 </td>
 </tr>
 </table>
 
+</div>
+
+---
+
+## ⚙️ Backend Power
+
 <div align="center">
 
-### 🎨 **Design Philosophy**
+<table>
+<tr>
+<td width="33%" align="center">
 
-```
-"Where warm aesthetics meet cutting-edge technology"
-```
+### 🔐
+**Security First**
 
-**🎨 Color Palette**
 <br>
-<img src="https://img.shields.io/badge/Primary-8B4513?style=flat-square&logoColor=white" alt="Primary Color" />
-<img src="https://img.shields.io/badge/Secondary-D2691E?style=flat-square&logoColor=white" alt="Secondary Color" />
-<img src="https://img.shields.io/badge/Accent-A0522D?style=flat-square&logoColor=white" alt="Accent Color" />
-<img src="https://img.shields.io/badge/Dark-2C1810?style=flat-square&logoColor=white" alt="Dark Color" />
+
+🔒 JWT Authentication  
+🛡️ XSS Protection  
+🔐 Secure Sessions
+
+</td>
+<td width="33%" align="center">
+
+### 📊
+**Database & API**
+
+<br>
+
+🗃️ MongoDB Integration  
+📊 RESTful API (10+ endpoints)  
+⚡ Fast Performance
+
+</td>
+<td width="33%" align="center">
+
+### 🛠️
+**Developer Tools**
+
+<br>
+
+📝 Request Logging  
+🔄 Session Management  
+⚡ Error Handling
+
+</td>
+</tr>
+</table>
+
+</div>
+
+---
+
+## 🌟 Core Features Showcase
+
+<div align="center">
+
+<table>
+<tr>
+<td width="33%" align="center">
+
+### ☕ **Café Experience**
+
+<br>
+
+🍽️ Interactive Menu System  
+📍 Location & Hours  
+📸 Atmospheric Gallery  
+📞 Contact & Support  
+🎭 Events Calendar  
+⭐ Customer Reviews
+
+</td>
+<td width="33%" align="center">
+
+### 👤 **User Features**
+
+<br>
+
+🔐 User Authentication  
+📅 Table Reservations  
+💾 Session Management  
+❤️ Favorite Items  
+📧 Newsletter Signup  
+🌓 Theme Preferences
+
+</td>
+<td width="33%" align="center">
+
+### 🛠️ **Technical Excellence**
+
+<br>
+
+📱 Responsive Design  
+🔒 JWT Security  
+🗄️ MongoDB Database  
+⚡ Fast Performance  
+🔌 API Integration  
+🚀 Modern Architecture
+
+</td>
+</tr>
+</table>
+
+</div>
+
+---
+
+## 🎨 Design Philosophy
+
+<div align="center">
+
+### *"Where warm aesthetics meet cutting-edge technology"*
+
+<br>
+
+### **🎨 Color Palette**
+
+<br>
+
+<img src="https://img.shields.io/badge/Primary-8B4513?style=for-the-badge&logoColor=white" alt="Primary Color" />
+<img src="https://img.shields.io/badge/Secondary-D2691E?style=for-the-badge&logoColor=white" alt="Secondary Color" />
+<img src="https://img.shields.io/badge/Accent-A0522D?style=for-the-badge&logoColor=white" alt="Accent Color" />
+<img src="https://img.shields.io/badge/Dark-2C1810?style=for-the-badge&logoColor=white" alt="Dark Color" />
+
+<br>
+
+### **🔧 Key Features**
+
+```
+🎯 Vanilla JavaScript • ⚡ Zero Framework Overhead • 📱 Mobile-First Design
+🔐 Secure Authentication • 📊 RESTful API • 🛡️ Security Headers
+```
 
 </div>
 
@@ -193,9 +388,12 @@ Transform the digital café experience by providing:
 
 </div>
 
-<div align="center">
+<br>
 
 ### 🌐 **Frontend Only** (Static Version)
+
+<div align="center">
+
 *Perfect for exploring the design and frontend features!*
 
 </div>
@@ -217,11 +415,16 @@ cd The-Midnight-Brew
 
 </div>
 
+<br>
+
 ---
+
+<br>
+
+### ⚙️ **Full Stack Setup** (With Backend)
 
 <div align="center">
 
-### ⚙️ **Full Stack Setup** (With Backend)
 *Experience the complete café with authentication & database!*
 
 </div>
@@ -248,7 +451,11 @@ npm start
 
 </div>
 
-<div align="center">
+<br>
+
+---
+
+<br>
 
 ### 🌐 **Browser Compatibility**
 
@@ -259,12 +466,12 @@ npm start
 <img src="https://img.shields.io/badge/Safari-A0522D?style=for-the-badge&logo=safari&logoColor=white" alt="Safari" />
 <img src="https://img.shields.io/badge/Edge-2C1810?style=for-the-badge&logo=microsoftedge&logoColor=white" alt="Edge" />
 
+<br><br>
+
 **✅ Responsive Design • ✅ PWA Ready • ✅ Accessibility Compliant**
 
 </div>
 
-</div>
-   
 ---
 
 ## 🛠️ Technology Architecture
@@ -275,40 +482,75 @@ npm start
 
 </div>
 
-<div align="center">
+<br>
 
 ### 🎨 **Frontend Stack**
 
-| Technology | Purpose | Version |
-|:-----------|:--------|:--------|
-| <img src="https://img.shields.io/badge/-HTML5-8B4513?style=flat-square&logo=html5&logoColor=white" alt="HTML5" /> | Structure & Semantics | HTML5 |
-| <img src="https://img.shields.io/badge/-CSS3-D2691E?style=flat-square&logo=css3&logoColor=white" alt="CSS3" /> | Modern Styling | CSS3 |
-| <img src="https://img.shields.io/badge/-JavaScript-A0522D?style=flat-square&logo=javascript&logoColor=white" alt="JavaScript" /> | Interactive Logic | ES6+ |
-| <img src="https://img.shields.io/badge/-Font_Awesome-2C1810?style=flat-square&logo=fontawesome&logoColor=white" alt="Font Awesome" /> | Icon Library | 6.4.0 |
+<div align="center">
+
+<table>
+<tr>
+<th>Technology</th>
+<th>Purpose</th>
+<th>Version</th>
+</tr>
+<tr>
+<td align="center"><img src="https://img.shields.io/badge/-HTML5-8B4513?style=flat-square&logo=html5&logoColor=white" alt="HTML5" /></td>
+<td align="center">Structure & Semantics</td>
+<td align="center">HTML5</td>
+</tr>
+<tr>
+<td align="center"><img src="https://img.shields.io/badge/-CSS3-D2691E?style=flat-square&logo=css3&logoColor=white" alt="CSS3" /></td>
+<td align="center">Modern Styling</td>
+<td align="center">CSS3</td>
+</tr>
+<tr>
+<td align="center"><img src="https://img.shields.io/badge/-JavaScript-A0522D?style=flat-square&logo=javascript&logoColor=white" alt="JavaScript" /></td>
+<td align="center">Interactive Logic</td>
+<td align="center">ES6+</td>
+</tr>
+<tr>
+<td align="center"><img src="https://img.shields.io/badge/-Font_Awesome-2C1810?style=flat-square&logo=fontawesome&logoColor=white" alt="Font Awesome" /></td>
+<td align="center">Icon Library</td>
+<td align="center">6.4.0</td>
+</tr>
+</table>
 
 </div>
 
-<div align="center">
+<br>
 
 ### ⚙️ **Backend Stack**
 
-| Technology | Purpose | Version |
-|:-----------|:--------|:--------|
-| <img src="https://img.shields.io/badge/-Node.js-8B7355?style=flat-square&logo=node.js&logoColor=white" alt="Node.js" /> | Runtime Environment | 18+ |
-| <img src="https://img.shields.io/badge/-Express.js-DEB887?style=flat-square&logo=express&logoColor=black" alt="Express.js" /> | Web Framework | 5.1.0 |
-| <img src="https://img.shields.io/badge/-MongoDB-F5F5DC?style=flat-square&logo=mongodb&logoColor=black" alt="MongoDB" /> | Database | 8.0+ |
-| <img src="https://img.shields.io/badge/-JWT-8B4513?style=flat-square&logo=jsonwebtokens&logoColor=white" alt="JWT" /> | Authentication | Latest |
-
-</div>
-
 <div align="center">
 
-### 🔧 **Key Features**
-
-```
-🎯 Vanilla JavaScript • ⚡ Zero Framework Overhead • 📱 Mobile-First Design
-🔐 Secure Authentication • 📊 RESTful API • 🛡️ Security Headers
-```
+<table>
+<tr>
+<th>Technology</th>
+<th>Purpose</th>
+<th>Version</th>
+</tr>
+<tr>
+<td align="center"><img src="https://img.shields.io/badge/-Node.js-8B7355?style=flat-square&logo=node.js&logoColor=white" alt="Node.js" /></td>
+<td align="center">Runtime Environment</td>
+<td align="center">18+</td>
+</tr>
+<tr>
+<td align="center"><img src="https://img.shields.io/badge/-Express.js-DEB887?style=flat-square&logo=express&logoColor=black" alt="Express.js" /></td>
+<td align="center">Web Framework</td>
+<td align="center">5.1.0</td>
+</tr>
+<tr>
+<td align="center"><img src="https://img.shields.io/badge/-MongoDB-F5F5DC?style=flat-square&logo=mongodb&logoColor=black" alt="MongoDB" /></td>
+<td align="center">Database</td>
+<td align="center">8.0+</td>
+</tr>
+<tr>
+<td align="center"><img src="https://img.shields.io/badge/-JWT-8B4513?style=flat-square&logo=jsonwebtokens&logoColor=white" alt="JWT" /></td>
+<td align="center">Authentication</td>
+<td align="center">Latest</td>
+</tr>
+</table>
 
 </div>
 
@@ -316,20 +558,84 @@ npm start
 
 ## 🤝 Contributing
 
-We welcome contributions from developers, designers, and coffee enthusiasts! Whether you want to fix bugs, add new features, improve design, or enhance documentation, we'd love your help.
+<div align="center">
 
+### We welcome contributions from developers, designers, and coffee enthusiasts!
 
+*Whether you want to fix bugs, add features, improve design, or enhance documentation, we'd love your help.*
 
-### Ways to Contribute
+</div>
 
-- 🐛 Report bugs and issues
-- 💡 Suggest new features or improvements
-- 🎨 Improve design and UI/UX
-- 🔧 Fix bugs and optimize code
-- 📝 Improve documentation
-- 🌍 Add multi-language support
-- ♿ Enhance accessibility features
-- 📱 Improve mobile responsiveness
+<br>
+
+### 💡 Ways to Contribute
+
+<div align="center">
+
+<table>
+<tr>
+<td width="25%" align="center">
+
+🐛  
+**Report Bugs**  
+*Help us squash issues*
+
+</td>
+<td width="25%" align="center">
+
+💡  
+**Suggest Features**  
+*Share your ideas*
+
+</td>
+<td width="25%" align="center">
+
+🎨  
+**Improve Design**  
+*Enhance UI/UX*
+
+</td>
+<td width="25%" align="center">
+
+🔧  
+**Optimize Code**  
+*Make it better*
+
+</td>
+</tr>
+<tr>
+<td width="25%" align="center">
+
+📝  
+**Update Docs**  
+*Improve documentation*
+
+</td>
+<td width="25%" align="center">
+
+🌍  
+**Add Languages**  
+*Multi-language support*
+
+</td>
+<td width="25%" align="center">
+
+♿  
+**Accessibility**  
+*Make it inclusive*
+
+</td>
+<td width="25%" align="center">
+
+📱  
+**Mobile UX**  
+*Better responsiveness*
+
+</td>
+</tr>
+</table>
+
+</div>
 
 ---
 
@@ -343,59 +649,76 @@ We welcome contributions from developers, designers, and coffee enthusiasts! Whe
 
 </div>
 
-<table>
+<br>
+
+<table align="center">
 <tr>
 <td width="33%" align="center">
 
-### 🎯 **Phase 1: Core Enhancement**
+### 🎯 **Phase 1**
+### Core Enhancement
 **Q4 2025**
 
-- [x] ✅ User Authentication 
-- [x] ✅ Session Management
-- [x] ✅ Theme Switching
-- [ ] 🔄 Online Ordering System
-- [ ] 📅 Advanced Reservations  
-- [ ] 💳 Payment Integration
-- [ ] ⭐ Customer Reviews
+<br>
+
+✅ User Authentication  
+✅ Session Management  
+✅ Theme Switching  
+🔄 Online Ordering  
+📅 Advanced Reservations  
+💳 Payment Integration  
+⭐ Customer Reviews
 
 </td>
 <td width="33%" align="center">
 
-### 🌟 **Phase 2: Advanced Features**
+### 🌟 **Phase 2**
+### Advanced Features
 **Q1 2026**
 
-- [ ] 🎁 Loyalty Program
-- [ ] 📝 Blog & Content Hub
-- [ ] 💬 Live Chat Support  
-- [ ] 🌍 Multi-language Support
-- [ ] 📧 Email Automation
-- [ ] 📊 Analytics Dashboard
-- [ ] 🎫 Events Management
+<br>
+
+🎁 Loyalty Program  
+📝 Blog & Content Hub  
+💬 Live Chat Support  
+🌍 Multi-language Support  
+📧 Email Automation  
+📊 Analytics Dashboard  
+🎫 Events Management
 
 </td>
 <td width="33%" align="center">
 
-### 🚀 **Phase 3: Innovation**
+### 🚀 **Phase 3**
+### Innovation
 **Q2 2026**
 
-- [ ] 📱 Progressive Web App
-- [ ] 🤖 AI Chatbot Assistant
-- [ ] 📲 Mobile Apps (iOS/Android)  
-- [ ] 🎵 Ambient Sound Integration
-- [ ] 🔍 Voice Search
-- [ ] 🎨 AR Menu Experience
-- [ ] 🌐 Multi-location Support
+<br>
+
+📱 Progressive Web App  
+🤖 AI Chatbot Assistant  
+📲 Mobile Apps  
+🎵 Ambient Sounds  
+🔍 Voice Search  
+🎨 AR Menu Experience  
+🌐 Multi-location Support
 
 </td>
 </tr>
 </table>
 
+<br>
+
 <div align="center">
 
 ### 🎪 **Community Requested Features**
 
+<br>
+
 [![Feature Requests](https://img.shields.io/github/issues/KrishnaSaxena108/The-Midnight-Brew/enhancement?style=for-the-badge&label=Feature%20Requests&color=D4A574)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
 [![Bug Reports](https://img.shields.io/github/issues/KrishnaSaxena108/The-Midnight-Brew/bug?style=for-the-badge&label=Bug%20Reports&color=E74C3C)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+
+<br>
 
 **💡 Have an idea?** [Submit a feature request!](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=%5BFeature%5D)
 
@@ -405,85 +728,22 @@ We welcome contributions from developers, designers, and coffee enthusiasts! Whe
 
 ## 🎯 Project Status
 
-The Midnight Brew website is currently in **active development**. We're constantly improving the design, adding new features, and optimizing the user experience.
-
----
-
-## 🌐 Deployment Options
-
 <div align="center">
 
-### 🚀 **Deploy Anywhere, Anytime**
-
-*Choose your perfect hosting solution*
-
-</div>
-
-<table>
-<tr>
-<td width="50%" align="center">
-
-### ⚡ **Recommended Platforms**
-
-[![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
-**🏆 Best Overall**
-- ✅ Zero configuration
-- ⚡ Global CDN  
-- 🔄 Auto deployments
-- 💰 Free tier available
-
-[![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://netlify.com)
-**🎯 Great for Static**
-- 🖱️ Drag & drop deploy
-- 🔧 Built-in form handling
-- 🌍 Global edge network
-- 💳 Generous free tier
-
-</td>
-<td width="50%" align="center">
-
-### 🛠️ **Alternative Options**
-
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?style=for-the-badge&logo=github&logoColor=white)](https://pages.github.com)
-**💰 Completely Free**
-- 🏠 Integrated with GitHub
-- 🌐 Custom domains  
-- 📱 Perfect for frontend
-
-[![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)](https://railway.app)
-**🚂 Full-Stack Ready**
-- 🗃️ Database included
-- 📊 Built-in monitoring
-- ⚡ Fast deployments
-
-</td>
-</tr>
-</table>
-
-<div align="center">
-
-### 🔧 **Quick Deploy Commands**
-
-```bash
-# Vercel (Frontend + API)
-npx vercel --prod
-
-# Netlify (Frontend only)  
-npm run build && npx netlify deploy --prod
-
-# GitHub Pages (Frontend only)
-npm run build && git subtree push --prefix dist origin gh-pages
-```
-
-**🎯 One-Click Deploy:** [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/KrishnaSaxena108/The-Midnight-Brew)
+The Midnight Brew website is currently in **active development**.  
+We're constantly improving the design, adding new features, and optimizing the user experience.
 
 </div>
 
 ---
 
-## 👥🤝 Contributing  Team
+## 👥 Contributing Team
+
+<br>
 
 ### 🔧 Project Maintainer
+
+<div align="center">
 
 <table>
   <tr>
@@ -499,9 +759,17 @@ npm run build && git subtree push --prefix dist origin gh-pages
   </tr>
 </table>
 
+</div>
+
+<br>
+
 ### ✨ Contributors
 
-A huge thank you to all the amazing contributors who have helped make The Midnight Brew better! 🙏
+<div align="center">
+
+*A huge thank you to all the amazing contributors who have helped make The Midnight Brew better!* 🙏
+
+<br>
 
 <table>
   <tr>
@@ -573,35 +841,80 @@ A huge thank you to all the amazing contributors who have helped make The Midnig
   </tr>
 </table>
 
+<br>
+
 > **Want to see your name here?** Check out our [Contributing Guide](CONTRIBUTING.md) and start contributing today!
+
+</div>
 
 ---
 
 ## 🙏 Acknowledgments
 
-- Inspired by the warm atmosphere of late-night cafés
-- Coffee culture and the art of brewing the perfect cup
-- The open-source community for tools and inspiration
-- All the coffee lovers who make projects like this meaningful
-- Font Awesome for the beautiful icons
-- Unsplash & Pexels for placeholder images (if used)
+<div align="center">
+
+<br>
+
+🌙 *Inspired by the warm atmosphere of late-night cafés*
+
+☕ *Coffee culture and the art of brewing the perfect cup*
+
+🌍 *The open-source community for tools and inspiration*
+
+❤️ *All the coffee lovers who make projects like this meaningful*
+
+🎨 *Font Awesome for the beautiful icons*
+
+📸 *Unsplash & Pexels for placeholder images*
+
+<br>
+
+</div>
 
 ---
 
 ## 📜 License
 
+<div align="center">
+
 This project is currently **not licensed**. All rights are reserved by the project creator(s).
 
 If you wish to use, modify, or distribute this code, please contact the repository owner for permission.
+
+</div>
 
 ---
 
 ## 📞 Contact
 
-Have questions or suggestions?
+<div align="center">
 
-- **GitHub Issues** - [Report bugs or request features](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues)
-- **GitHub Profile** - [@KrishnaSaxena108](https://github.com/KrishnaSaxena108)
+### Have questions or suggestions?
+
+<br>
+
+<table>
+<tr>
+<td width="50%" align="center">
+
+### 🐛
+**GitHub Issues**
+
+[Report bugs or request features](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues)
+
+</td>
+<td width="50%" align="center">
+
+### 👤
+**GitHub Profile**
+
+[@KrishnaSaxena108](https://github.com/KrishnaSaxena108)
+
+</td>
+</tr>
+</table>
+
+</div>
 
 ---
 
@@ -609,64 +922,209 @@ Have questions or suggestions?
 
 <div align="center">
 
-### ☕ **Love what we're brewing?** ☕
+<br>
 
-*Help us serve the developer community better!*
+# ☕ **Love what we're brewing?** ☕
 
-</div>
+<br>
 
-<div align="center">
+### *Help us serve the developer community better!*
 
-### ⭐ **Show Some Love**
+<br>
+
+---
+
+<br>
+
+## ⭐ Show Some Love
+
+<br>
 
 <p align="center">
   <img src="https://img.shields.io/github/stars/KrishnaSaxena108/The-Midnight-Brew?style=social" alt="GitHub Stars" />
   <img src="https://img.shields.io/github/forks/KrishnaSaxena108/The-Midnight-Brew?style=social" alt="GitHub Forks" />
+  <img src="https://img.shields.io/github/watchers/KrishnaSaxena108/The-Midnight-Brew?style=social" alt="GitHub Watchers" />
 </p>
 
-**⭐ Star this repository** - *It helps others discover our work!*  
-**🍴 Fork & customize** - *Make it your own café!*
+<br>
+
+<table>
+<tr>
+<td width="50%" align="center">
+
+### ⭐
+### **Star This Repository**
+
+<br>
+
+*It helps others discover our work!*
+
+<br>
+
+[![Star](https://img.shields.io/badge/⭐_Star_Now-8B4513?style=for-the-badge)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/stargazers)
+
+</td>
+<td width="50%" align="center">
+
+### 🍴
+### **Fork & Customize**
+
+<br>
+
+*Make it your own café!*
+
+<br>
+
+[![Fork](https://img.shields.io/badge/🍴_Fork_Now-D2691E?style=for-the-badge)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/fork)
+
+</td>
+</tr>
+</table>
+
+<br>
 
 ---
 
-### 🤝 **Get Involved**
+<br>
+
+## 🤝 Get Involved
+
+<br>
 
 <p align="center">
   <img src="https://img.shields.io/github/issues/KrishnaSaxena108/The-Midnight-Brew?style=social" alt="GitHub Issues" />
+  <img src="https://img.shields.io/github/issues-pr/KrishnaSaxena108/The-Midnight-Brew?style=social" alt="GitHub Pull Requests" />
 </p>
 
-**🐛 Report bugs & suggest features** - *Help us improve!*  
-**💬 Join conversations** - *Share ideas & get help!*
+<br>
+
+<table>
+<tr>
+<td width="33%" align="center">
+
+### 🐛
+### **Report Bugs**
+
+<br>
+
+*Help us improve!*
+
+<br>
+
+[Submit Issue](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues/new?labels=bug)
+
+</td>
+<td width="33%" align="center">
+
+### 💡
+### **Suggest Features**
+
+<br>
+
+*Share your ideas!*
+
+<br>
+
+[Request Feature](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues/new?labels=enhancement)
+
+</td>
+<td width="33%" align="center">
+
+### 💬
+### **Join Discussions**
+
+<br>
+
+*Connect with us!*
+
+<br>
+
+[Start Discussion](https://github.com/KrishnaSaxena108/The-Midnight-Brew/discussions)
+
+</td>
+</tr>
+</table>
+
+<br>
 
 ---
 
-### 📢 **Spread the Word**
+<br>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Share%20on-Twitter-8B4513?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter" />
-  <img src="https://img.shields.io/badge/Share%20on-LinkedIn-D2691E?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
-</p>
+## 📢 Spread the Word
 
-**Share with friends and fellow developers!**
+<br>
 
-</div>
+<table>
+<tr>
+<td width="25%" align="center">
+
+[![Twitter](https://img.shields.io/badge/Share_on-Twitter-8B4513?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/intent/tweet?text=Check%20out%20The%20Midnight%20Brew%20-%20A%20beautiful%20café%20website!&url=https://github.com/KrishnaSaxena108/The-Midnight-Brew)
+
+</td>
+<td width="25%" align="center">
+
+[![LinkedIn](https://img.shields.io/badge/Share_on-LinkedIn-D2691E?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/sharing/share-offsite/?url=https://github.com/KrishnaSaxena108/The-Midnight-Brew)
+
+</td>
+<td width="25%" align="center">
+
+[![Facebook](https://img.shields.io/badge/Share_on-Facebook-A0522D?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/sharer/sharer.php?u=https://github.com/KrishnaSaxena108/The-Midnight-Brew)
+
+</td>
+<td width="25%" align="center">
+
+[![Reddit](https://img.shields.io/badge/Share_on-Reddit-2C1810?style=for-the-badge&logo=reddit&logoColor=white)](https://reddit.com/submit?url=https://github.com/KrishnaSaxena108/The-Midnight-Brew&title=The%20Midnight%20Brew%20-%20Beautiful%20Café%20Website)
+
+</td>
+</tr>
+</table>
+
+<br>
+
+*Share with friends and fellow developers!*
+
+<br>
 
 ---
 
-<div align="center">
+<br>
 
-### ✨ **Made with passion by coffee-loving developers** ✨
+## ✨ Made with passion by coffee-loving developers
+
+<br>
 
 ```
 🌙 The Midnight Brew - Where elegant code meets perfect coffee 🌙
 ```
 
+<br>
+
 [![Visitor Count](https://visitor-badge.laobi.icu/badge?page_id=KrishnaSaxena108.The-Midnight-Brew&color=D4A574)](https://github.com/KrishnaSaxena108/The-Midnight-Brew)
-[![Last Commit](https://img.shields.io/github/last-commit/KrishnaSaxena108/The-Midnight-Brew?color=D4A574)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/commits/main)
-[![Code Size](https://img.shields.io/github/languages/code-size/KrishnaSaxena108/The-Midnight-Brew?color=8B7355)](https://github.com/KrishnaSaxena108/The-Midnight-Brew)
+[![Last Commit](https://img.shields.io/github/last-commit/KrishnaSaxena108/The-Midnight-Brew?color=D4A574&style=flat-square)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/commits/main)
+[![Code Size](https://img.shields.io/github/languages/code-size/KrishnaSaxena108/The-Midnight-Brew?color=8B7355&style=flat-square)](https://github.com/KrishnaSaxena108/The-Midnight-Brew)
+[![License](https://img.shields.io/badge/License-All_Rights_Reserved-8B4513?style=flat-square)](https://github.com/KrishnaSaxena108/The-Midnight-Brew)
 
-**[⬆ Back to Top](#-the-midnight-brew-) • [🌟 Star this repo](https://github.com/KrishnaSaxena108/The-Midnight-Brew/stargazers) • [🐛 Report Issues](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues)**
+<br>
 
-*Thank you for visiting The Midnight Brew! Grab a virtual coffee and happy coding! ☕✨*
+---
+
+<br>
+
+### 🎯 Quick Links
+
+<br>
+
+**[⬆ Back to Top](#) • [🌟 Star this repo](https://github.com/KrishnaSaxena108/The-Midnight-Brew/stargazers) • [🍴 Fork](https://github.com/KrishnaSaxena108/The-Midnight-Brew/fork) • [🐛 Report Issues](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues) • [💡 Request Features](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues/new?labels=enhancement)**
+
+<br>
+
+---
+
+<br>
+
+<img src="https://readme-typing-svg.herokuapp.com?font=Playfair+Display&size=25&duration=3000&pause=1000&color=8B4513&center=true&vCenter=true&width=800&lines=Thank+you+for+visiting+The+Midnight+Brew!;Grab+a+virtual+coffee+and+happy+coding!+☕✨;Star+us+if+you+love+what+we're+brewing!+⭐" alt="Typing SVG" />
+
+<br>
 
 </div>
