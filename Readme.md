@@ -1,14 +1,23 @@
+<div align="center">
+
+![The Midnight Brew Banner](https://img.shields.io/badge/☕_The_Midnight_Brew-D4A574?style=for-the-badge&logoColor=white)
+
 # 🌙 The Midnight Brew ☕
 
-**A cozy late-night café website where coffee meets creativity**
+### *A cozy late-night café website where coffee meets creativity*
 
 *Serving warmth, one cup at a time* ☕✨
 
-[View Live Site](https://the-midnight-brew.vercel.app/) • [Features](#features) • [Contributing](#contributing) • [Report Bug](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues)
+[![Live Site](https://img.shields.io/badge/🌐_View_Live_Site-D4A574?style=for-the-badge)](https://the-midnight-brew.vercel.app/)
+[![GitHub Stars](https://img.shields.io/github/stars/KrishnaSaxena108/The-Midnight-Brew?style=for-the-badge&color=D4A574)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/KrishnaSaxena108/The-Midnight-Brew?style=for-the-badge&color=8B7355)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues)
+[![GitHub Forks](https://img.shields.io/github/forks/KrishnaSaxena108/The-Midnight-Brew?style=for-the-badge&color=D4A574)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/network)
 
 **⭐ If you like this project, please give it a star! It helps us grow and improve. ⭐**
 
 ---
+
+</div>
 
 ## 📖 About The Project
 
@@ -29,6 +38,16 @@ This website serves as a digital storefront and online presence for The Midnight
 
 ## ✨ Features
 
+<div align="center">
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+
+</div>
+
 ### 🎨 Design & User Experience
 
 - **Responsive Design** - Seamlessly adapts to all devices (desktop, tablet, and mobile)
@@ -36,6 +55,7 @@ This website serves as a digital storefront and online presence for The Midnight
 - **Dark/Light Mode Toggle** - Switch between elegant dark and light themes with theme persistence
 - **Smooth Animations** - Subtle transitions and effects for enhanced user engagement
 - **Accessibility** - Built with accessibility standards in mind
+- **Cozy Café Theme** - Warm color palette (#D4A574, #8B7355) creating an inviting midnight atmosphere
 
 ### ☕ Core Features
 
@@ -53,6 +73,62 @@ This website serves as a digital storefront and online presence for The Midnight
 - **Newsletter Signup** - Stay updated with special offers and new menu items
 - **Events Calendar** - Information about live music nights, poetry readings, and special events
 - **Customer Reviews** - Testimonials from our beloved patrons
+
+### 🔧 Technical Features
+
+- **RESTful API** - 10 comprehensive API endpoints for data management
+- **10-Layer Middleware Stack** - Robust request processing and error handling
+- **Morgan HTTP Logger** - File and console logging for monitoring
+- **CORS Support** - Cross-Origin Resource Sharing enabled
+- **Security Headers** - XSS and clickjacking protection
+- **Request Tracking** - Unique IDs for every request
+- **Graceful Shutdown** - Proper process management
+- **Error Handling** - Comprehensive error detection and logging
+- **Static File Serving** - Optimized asset delivery
+
+---
+
+## 📁 Directory Structure
+
+```
+The-Midnight-Brew/
+├── 📄 index.html              # Homepage
+├── 📄 menu.html               # Menu page
+├── 📄 booking.html            # Booking page
+├── 📄 contact.html            # Contact page
+├── 📄 about.html              # About page
+├── 📄 server.js               # Express.js backend server
+├── 📄 package.json            # Node.js dependencies
+├── 📄 package-lock.json       # Lock file for dependencies
+├── 📂 css/
+│   ├── style.css              # Main stylesheet
+│   ├── menu.css               # Menu page styles
+│   ├── booking.css            # Booking page styles
+│   ├── contact.css            # Contact page styles
+│   └── about.css              # About page styles
+├── 📂 js/
+│   ├── main.js                # Main JavaScript file
+│   ├── menu.js                # Menu functionality
+│   ├── booking.js             # Booking functionality
+│   └── contact.js             # Contact form handling
+├── 📂 images/                 # Image assets
+├── 📂 assets/                 # Additional assets
+├── 📂 logs/
+│   └── access.log             # HTTP access logs
+├── 📂 node_modules/           # Node.js dependencies (git ignored)
+├── 📄 .gitignore              # Git ignore rules
+├── 📄 README.md               # This file
+├── 📄 CONTRIBUTING.md         # Contribution guidelines
+├── 📄 BACKEND_INTEGRATION_GUIDE.md
+├── 📄 MIDDLEWARE_ERROR_HANDLING_GUIDE.md
+└── 📄 QUICK_REFERENCE_MIDDLEWARE.md
+```
+
+> **Note:** To regenerate this directory structure, you can use the `tree` command in your terminal:
+> ```bash
+> tree -L 2 -I 'node_modules' > structure.txt
+> ```
+> Or use online tools like [tree.nathanfriend.io](https://tree.nathanfriend.io/)
 
 ---
 
@@ -245,7 +321,7 @@ Update contact details in `contact.html` and `index.html` footer.
 
 We welcome contributions from developers, designers, and coffee enthusiasts! Whether you want to fix bugs, add new features, improve design, or enhance documentation, we'd love your help.
 
-Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute.
+
 
 ### Ways to Contribute
 
@@ -311,17 +387,99 @@ The website can also be deployed on:
 
 ---
 
-## 📜 License
+## 👥🤝 Contributing  Team
 
-This project is currently **not licensed**. All rights are reserved by the project creator(s).
+### 🔧 Project Maintainer
 
-If you wish to use, modify, or distribute this code, please contact the repository owner for permission.
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/KrishnaSaxena108">
+        <img src="https://github.com/KrishnaSaxena108.png" width="100px;" alt="Krishna Saxena"/>
+        <br />
+        <sub><b>Krishna Saxena</b></sub>
+      </a>
+      <br />
+      <sub>Creator & Lead Developer</sub>
+    </td>
+  </tr>
+</table>
 
----
+### ✨ Contributors
 
-## 👥 Authors
+A huge thank you to all the amazing contributors who have helped make The Midnight Brew better! 🙏
 
-- **Krishna Saxena** - *Creator & Developer* - [@KrishnaSaxena108](https://github.com/KrishnaSaxena108)
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/shrvtiprasad">
+        <img src="https://github.com/shrvtiprasad.png" width="80px;" alt="shrvtiprasad"/>
+        <br />
+        <sub><b>shrvtiprasad</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Kautuk-Adarsh">
+        <img src="https://github.com/Kautuk-Adarsh.png" width="80px;" alt="Kautuk-Adarsh"/>
+        <br />
+        <sub><b>Kautuk Adarsh</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Haze10-stack">
+        <img src="https://github.com/Haze10-stack.png" width="80px;" alt="Haze10-stack"/>
+        <br />
+        <sub><b>Haze10-stack</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/AAYUSH-SPIDEY-SHARMA">
+        <img src="https://github.com/AAYUSH-SPIDEY-SHARMA.png" width="80px;" alt="AAYUSH-SPIDEY-SHARMA"/>
+        <br />
+        <sub><b>Aayush Sharma</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/ARYPROGRAMMER">
+        <img src="https://github.com/ARYPROGRAMMER.png" width="80px;" alt="ARYPROGRAMMER"/>
+        <br />
+        <sub><b>ARYPROGRAMMER</b></sub>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/akadeepesh">
+        <img src="https://github.com/akadeepesh.png" width="80px;" alt="akadeepesh"/>
+        <br />
+        <sub><b>akadeepesh</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/vatsalgabani64">
+        <img src="https://github.com/vatsalgabani64.png" width="80px;" alt="vatsalgabani64"/>
+        <br />
+        <sub><b>Vatsal Gabani</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Simonmatharesh">
+        <img src="https://github.com/Simonmatharesh.png" width="80px;" alt="Simonmatharesh"/>
+        <br />
+        <sub><b>Simonmatharesh</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/AzabadaudiyaZWS">
+        <img src="https://github.com/AzabadaudiyaZWS.png" width="80px;" alt="AzabadaudiyaZWS"/>
+        <br />
+        <sub><b>AzabadaudiyaZWS</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
+
+> **Want to see your name here?** Check out our [Contributing Guide](CONTRIBUTING.md) and start contributing today!
 
 ---
 
@@ -333,6 +491,14 @@ If you wish to use, modify, or distribute this code, please contact the reposito
 - All the coffee lovers who make projects like this meaningful
 - Font Awesome for the beautiful icons
 - Unsplash & Pexels for placeholder images (if used)
+
+---
+
+## 📜 License
+
+This project is currently **not licensed**. All rights are reserved by the project creator(s).
+
+If you wish to use, modify, or distribute this code, please contact the repository owner for permission.
 
 ---
 
@@ -364,6 +530,8 @@ Love The Midnight Brew website? Here's how you can support us:
 **Made with 💜 and ☕ by passionate developers**
 
 *The Midnight Brew - Where code meets coffee*
+
+![Visitor Count](https://visitor-badge.laobi.icu/badge?page_id=KrishnaSaxena108.The-Midnight-Brew)
 
 [⬆ Back to Top](#-the-midnight-brew-)
 
