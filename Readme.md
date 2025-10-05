@@ -1,19 +1,33 @@
 <div align="center">
 
-![The Midnight Brew Banner](https://img.shields.io/badge/☕_The_Midnight_Brew-D4A574?style=for-the-badge&logoColor=white)
-
-# 🌙 The Midnight Brew ☕
+<img src="https://readme-typing-svg.herokuapp.com?font=Playfair+Display&size=35&duration=3000&pause=1000&color=8B4513&center=true&vCenter=true&width=600&lines=☕+The+Midnight+Brew+☕;Where+Coffee+Meets+Code;Brewing+Digital+Excellence" alt="Typing SVG" />
 
 ### *A cozy late-night café website where coffee meets creativity*
 
-*Serving warmth, one cup at a time* ☕✨
+```
+🌙 Serving warmth, one cup at a time ☕✨
+```
 
-[![Live Site](https://img.shields.io/badge/🌐_View_Live_Site-D4A574?style=for-the-badge)](https://the-midnight-brew.vercel.app/)
-[![GitHub Stars](https://img.shields.io/github/stars/KrishnaSaxena108/The-Midnight-Brew?style=for-the-badge&color=D4A574)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/KrishnaSaxena108/The-Midnight-Brew?style=for-the-badge&color=8B7355)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues)
-[![GitHub Forks](https://img.shields.io/github/forks/KrishnaSaxena108/The-Midnight-Brew?style=for-the-badge&color=D4A574)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/network)
+<p align="center">
+  <img src="https://img.shields.io/badge/🌐_Live_Site-8B4513?style=for-the-badge&logoColor=white" alt="Live Site" />
+  <img src="https://img.shields.io/github/stars/KrishnaSaxena108/The-Midnight-Brew?style=for-the-badge&color=D2691E&logo=github&logoColor=white" alt="GitHub Stars" />
+  <img src="https://img.shields.io/github/forks/KrishnaSaxena108/The-Midnight-Brew?style=for-the-badge&color=A0522D&logo=git&logoColor=white" alt="GitHub Forks" />
+  <img src="https://img.shields.io/github/issues/KrishnaSaxena108/The-Midnight-Brew?style=for-the-badge&color=2C1810&logo=github&logoColor=white" alt="GitHub Issues" />
+</p>
 
-**⭐ If you like this project, please give it a star! It helps us grow and improve. ⭐**
+<p align="center">
+  <strong>⭐ Love our brew? Give us a star and help spread the coffee love! ⭐</strong>
+</p>
+
+<div style="background: linear-gradient(135deg, #2C1810, #8B4513); padding: 10px; border-radius: 8px; margin: 20px 0;">
+  <p align="center">
+    <a href="#-about-the-project">📖 About</a> •
+    <a href="#-features--technology-stack">🚀 Features</a> •
+    <a href="#-quick-start-guide">🏁 Quick Start</a> •
+    <a href="#-deployment-options">🚀 Deploy</a> •
+    <a href="#-support-the-midnight-brew">💖 Support</a>
+  </p>
+</div>
 
 ---
 
@@ -36,11 +50,35 @@ Where every pixel tells a story of warmth, creativity, and midnight magic
 
 ### 🌟 **What Makes Us Special** 🌟
 
-| 🎨 **Aesthetic Excellence** | 🔧 **Technical Mastery** | ☕ **Coffee Culture** |
-|:---------------------------|:-------------------------|:---------------------|
-| Warm, inviting design that feels like home | Modern web technologies & best practices | Authentic café experience online |
-| Dark/Light themes with seamless transitions | RESTful API with 10+ endpoints | Curated menu & specialty offerings |
-| Responsive across all devices | Session-based authentication | Community-focused features |
+<details>
+<summary><strong>🎨 Aesthetic Excellence</strong></summary>
+
+- ✨ Warm, inviting design that feels like home
+- 🌙 Dark/Light themes with seamless transitions  
+- 📱 Responsive across all devices
+- 🎯 Intuitive user interface
+
+</details>
+
+<details>
+<summary><strong>🔧 Technical Mastery</strong></summary>
+
+- ⚡ Modern web technologies & best practices
+- 🛠️ RESTful API with 10+ endpoints
+- 🔐 Session-based authentication
+- 📊 MongoDB database integration
+
+</details>
+
+<details>
+<summary><strong>☕ Coffee Culture</strong></summary>
+
+- 🏠 Authentic café experience online
+- 📋 Curated menu & specialty offerings
+- 👥 Community-focused features
+- 📖 Rich storytelling experience
+
+</details>
 
 </div>
 
@@ -61,20 +99,25 @@ Transform the digital café experience by providing:
 
 ### 🛠️ **Built With Modern Technologies**
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+<p align="center">
+  <img src="https://img.shields.io/badge/HTML5-8B4513?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
+  <img src="https://img.shields.io/badge/CSS3-D2691E?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
+  <img src="https://img.shields.io/badge/JavaScript-A0522D?style=for-the-badge&logo=javascript&logoColor=white" alt="JavaScript" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-2C1810?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Express.js-8B7355?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" />
+  <img src="https://img.shields.io/badge/MongoDB-DEB887?style=for-the-badge&logo=mongodb&logoColor=black" alt="MongoDB" />
+</p>
 
 </div>
 
-<table>
-<tr>
-<td width="50%" valign="top">
+<div align="center">
 
 ### 🎨 **Frontend Excellence**
+</div>
+
 - ✨ **Responsive Design** - Seamless across all devices
 - 🌙 **Dark/Light Mode** - Toggle with theme persistence  
 - 🎭 **Smooth Animations** - Subtle, engaging transitions
@@ -82,10 +125,11 @@ Transform the digital café experience by providing:
 - ♿ **Accessibility** - WCAG compliant design
 - 📱 **Mobile-First** - Optimized for mobile experience
 
-</td>
-<td width="50%" valign="top">
+<div align="center">
 
 ### ⚙️ **Backend Power**
+</div>
+
 - 🔐 **JWT Authentication** - Secure user sessions
 - 🗃️ **MongoDB Integration** - Robust data management
 - 🛡️ **Security Features** - XSS protection & more
@@ -93,43 +137,24 @@ Transform the digital café experience by providing:
 - 📝 **Request Logging** - Morgan HTTP logger
 - 🔄 **Session Management** - Real-world session handling
 
-</td>
-</tr>
-</table>
-
 <div align="center">
 
 ### 🌟 **Core Features Showcase** 🌟
 
 </div>
 
-<table>
-<tr>
-<td width="33%" align="center">
+<div align="center">
 
-### ☕ **Café Experience**
-🍽️ Interactive Menu System<br/>
-📍 Location & Hours<br/>  
-📸 Atmospheric Gallery<br/>
-📞 Contact & Support<br/>
-🎭 Events Calendar<br/>
-⭐ Customer Reviews
+| ☕ **Café Experience** | 👤 **User Features** | 🛠️ **Technical Excellence** |
+|:----------------------|:---------------------|:---------------------------|
+| 🍽️ Interactive Menu System | 🔐 User Authentication | 📱 Responsive Design |
+| 📍 Location & Hours | 📅 Table Reservations | 🔒 JWT Security |
+| 📸 Atmospheric Gallery | 💾 Session Management | 🗄️ MongoDB Database |
+| 📞 Contact & Support | ❤️ Favorite Items | ⚡ Fast Performance |
+| 🎭 Events Calendar | 📧 Newsletter Signup | � API Integration |
+| ⭐ Customer Reviews | 🌓 Theme Preferences | 🚀 Modern Architecture |
 
-</td>
-<td width="33%" align="center">
-
-### 👤 **User Features** 
-🔐 User Authentication<br/>
-📅 Table Reservations<br/>
-💾 Session Management<br/>
-❤️ Favorite Items<br/>
-📧 Newsletter Signup<br/>
-🌓 Theme Preferences
-
-</td>
-<td width="33%" align="center">
-
-### 🛠️ **Technical Excellence**
+</div>
 � JWT Security<br/>
 📊 RESTful API (10+ endpoints)<br/>
 🛡️ Middleware Stack<br/>
@@ -145,9 +170,16 @@ Transform the digital café experience by providing:
 
 ### 🎨 **Design Philosophy**
 
-*"Where warm aesthetics meet cutting-edge technology"*
+```
+"Where warm aesthetics meet cutting-edge technology"
+```
 
-**Color Palette:** Midnight Gold (#D4A574) • Warm Brown (#8B7355) • Deep Night (#1A1A1A)
+**🎨 Color Palette**
+<br>
+<img src="https://img.shields.io/badge/Primary-8B4513?style=flat-square&logoColor=white" alt="Primary Color" />
+<img src="https://img.shields.io/badge/Secondary-D2691E?style=flat-square&logoColor=white" alt="Secondary Color" />
+<img src="https://img.shields.io/badge/Accent-A0522D?style=flat-square&logoColor=white" alt="Accent Color" />
+<img src="https://img.shields.io/badge/Dark-2C1810?style=flat-square&logoColor=white" alt="Dark Color" />
 
 </div>
 
@@ -161,13 +193,12 @@ Transform the digital café experience by providing:
 
 </div>
 
-<table>
-<tr>
-<td width="50%">
+<div align="center">
 
 ### 🌐 **Frontend Only** (Static Version)
+*Perfect for exploring the design and frontend features!*
 
-Perfect for exploring the design and frontend features!
+</div>
 
 ```bash
 # 1. Clone the magic ✨
@@ -180,14 +211,20 @@ cd The-Midnight-Brew
 # Open public/index.html in your browser
 ```
 
+<div align="center">
+
 **Requirements:** Just a modern web browser! 🌐
 
-</td>
-<td width="50%">
+</div>
 
-### ⚙️ **Full Stack** (With Backend)
+---
 
-Experience the complete café with authentication & database!
+<div align="center">
+
+### ⚙️ **Full Stack Setup** (With Backend)
+*Experience the complete café with authentication & database!*
+
+</div>
 
 ```bash
 # 1. Clone & enter 📁
@@ -205,22 +242,26 @@ cp .env.example .env
 npm start
 ```
 
+<div align="center">
+
 **Requirements:** Node.js 16+ & MongoDB 🛠️
 
-</td>
-</tr>
-</table>
+</div>
 
 <div align="center">
 
-### 🌐 **Supported Browsers**
+### 🌐 **Browser Compatibility**
 
-[![Chrome](https://img.shields.io/badge/Chrome-Latest-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://www.google.com/chrome/)
-[![Firefox](https://img.shields.io/badge/Firefox-Latest-FF7139?style=flat-square&logo=firefox&logoColor=white)](https://www.mozilla.org/firefox/)
-[![Safari](https://img.shields.io/badge/Safari-Latest-000000?style=flat-square&logo=safari&logoColor=white)](https://www.apple.com/safari/)
-[![Edge](https://img.shields.io/badge/Edge-Latest-0078D4?style=flat-square&logo=microsoftedge&logoColor=white)](https://www.microsoft.com/edge/)
+<div align="center">
 
-**✅ Fully responsive • ✅ PWA Ready • ✅ Accessibility compliant**
+<img src="https://img.shields.io/badge/Chrome-8B4513?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome" />
+<img src="https://img.shields.io/badge/Firefox-D2691E?style=for-the-badge&logo=firefox&logoColor=white" alt="Firefox" />
+<img src="https://img.shields.io/badge/Safari-A0522D?style=for-the-badge&logo=safari&logoColor=white" alt="Safari" />
+<img src="https://img.shields.io/badge/Edge-2C1810?style=for-the-badge&logo=microsoftedge&logoColor=white" alt="Edge" />
+
+**✅ Responsive Design • ✅ PWA Ready • ✅ Accessibility Compliant**
+
+</div>
 
 </div>
    
@@ -234,223 +275,40 @@ npm start
 
 </div>
 
-<table>
-<tr>
-<td width="50%" align="center">
+<div align="center">
 
 ### 🎨 **Frontend Stack**
 
 | Technology | Purpose | Version |
-|------------|---------|---------|
-| ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?style=flat-square&logo=html5&logoColor=white) | Structure & Semantics | HTML5 |
-| ![CSS3](https://img.shields.io/badge/-CSS3-1572B6?style=flat-square&logo=css3&logoColor=white) | Modern Styling | CSS3 |
-| ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) | Interactive Logic | ES6+ |
-| ![Font Awesome](https://img.shields.io/badge/-Font_Awesome-528DD7?style=flat-square&logo=fontawesome&logoColor=white) | Icon Library | 6.4.0 |
+|:-----------|:--------|:--------|
+| <img src="https://img.shields.io/badge/-HTML5-8B4513?style=flat-square&logo=html5&logoColor=white" alt="HTML5" /> | Structure & Semantics | HTML5 |
+| <img src="https://img.shields.io/badge/-CSS3-D2691E?style=flat-square&logo=css3&logoColor=white" alt="CSS3" /> | Modern Styling | CSS3 |
+| <img src="https://img.shields.io/badge/-JavaScript-A0522D?style=flat-square&logo=javascript&logoColor=white" alt="JavaScript" /> | Interactive Logic | ES6+ |
+| <img src="https://img.shields.io/badge/-Font_Awesome-2C1810?style=flat-square&logo=fontawesome&logoColor=white" alt="Font Awesome" /> | Icon Library | 6.4.0 |
 
-</td>
-<td width="50%" align="center">
+</div>
+
+<div align="center">
 
 ### ⚙️ **Backend Stack**
 
 | Technology | Purpose | Version |
-|------------|---------|---------|
-| ![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white) | Runtime Environment | 18+ |
-| ![Express.js](https://img.shields.io/badge/-Express.js-000000?style=flat-square&logo=express&logoColor=white) | Web Framework | 5.1.0 |
-| ![MongoDB](https://img.shields.io/badge/-MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white) | Database | 8.0+ |
-| ![JWT](https://img.shields.io/badge/-JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white) | Authentication | Latest |
+|:-----------|:--------|:--------|
+| <img src="https://img.shields.io/badge/-Node.js-8B7355?style=flat-square&logo=node.js&logoColor=white" alt="Node.js" /> | Runtime Environment | 18+ |
+| <img src="https://img.shields.io/badge/-Express.js-DEB887?style=flat-square&logo=express&logoColor=black" alt="Express.js" /> | Web Framework | 5.1.0 |
+| <img src="https://img.shields.io/badge/-MongoDB-F5F5DC?style=flat-square&logo=mongodb&logoColor=black" alt="MongoDB" /> | Database | 8.0+ |
+| <img src="https://img.shields.io/badge/-JWT-8B4513?style=flat-square&logo=jsonwebtokens&logoColor=white" alt="JWT" /> | Authentication | Latest |
 
-</td>
-</tr>
-</table>
+</div>
 
 <div align="center">
 
 ### 🔧 **Key Features**
 
-**🎯 Vanilla JavaScript** • **⚡ Zero Framework Overhead** • **📱 Mobile-First Design**<br/>
-**🔐 Secure Authentication** • **📊 RESTful API** • **🛡️ Security Headers**
-
-</div>
-
----
-
-## 🖥️ Backend Server
-
-The Midnight Brew includes a fully functional Express.js backend server with RESTful API endpoints.
-
-### Quick Start
-
-1. **Install Dependencies**
-   ```bash
-   npm install
-   ```
-
-2. **Start the Server**
-   ```bash
-   npm start
-   # or
-   node server.js
-   ```
-
-3. **Server Running**
-   ```
-   Server: http://localhost:3000
-   API Docs: See BACKEND_INTEGRATION_GUIDE.md
-   ```
-
-### Available Routes
-
-#### 📄 Frontend Pages (6 Routes)
-- `GET /` or `/home` - Homepage
-- `GET /menu` - Menu page
-- `GET /booking` - Booking page
-- `GET /contact` - Contact page
-- `GET /about` - About page
-
-#### 🔌 API Endpoints (10 Routes)
-- `GET /api/info` - Café information
-- `GET /api/menu` - Complete menu (12 items)
-- `GET /api/menu/:category` - Menu by category
-- `GET /api/booking/timeslots` - Available time slots
-- `GET /api/featured` - Featured items
-- `GET /api/specials` - Daily specials
-- `GET /api/status` - Server status
-- `GET /api/health` - Health check
-- `GET /api/hours` - Operating hours (text)
-- `GET /api/welcome` - Welcome message (text)
-
-### Features
-
-✅ **10-Layer Middleware Stack**
-- Morgan HTTP logger (file + console)
-- JSON body parser (10MB limit)
-- CORS headers
-- Security headers (XSS, clickjacking protection)
-- Request tracking with unique IDs
-- Response time monitoring
-- Custom detailed logging
-- Static file serving
-- Comprehensive error handling
-
-✅ **Error Handling**
-- Enhanced 404 handler with structured responses
-- Global error handler with detailed logging
-- Error type detection (ValidationError, SyntaxError, etc.)
-- Stack traces in development mode only
-
-✅ **Process Management**
-- Graceful shutdown on SIGTERM/SIGINT
-- Uncaught exception handler
-- Unhandled rejection handler
-
-✅ **Monitoring & Logging**
-- HTTP access logs in `logs/access.log`
-- Detailed console logging
-- Request/response timing
-- Server status endpoint
-
-### API Examples
-
-**Get Menu**
-```bash
-curl http://localhost:3000/api/menu
 ```
-
-**Get Menu by Category**
-```bash
-curl http://localhost:3000/api/menu/pastries
+🎯 Vanilla JavaScript • ⚡ Zero Framework Overhead • 📱 Mobile-First Design
+🔐 Secure Authentication • 📊 RESTful API • 🛡️ Security Headers
 ```
-
-**Check Server Status**
-```bash
-curl http://localhost:3000/api/status
-```
-
-**Frontend Integration**
-```javascript
-// Fetch menu items
-fetch('/api/menu')
-  .then(res => res.json())
-  .then(data => {
-    console.log(data.data.items);
-  });
-```
-
-### Documentation
-
-For complete backend documentation, see:
-- **[BACKEND_INTEGRATION_GUIDE.md](BACKEND_INTEGRATION_GUIDE.md)** - Complete routes & integration guide
-- **[MIDDLEWARE_ERROR_HANDLING_GUIDE.md](MIDDLEWARE_ERROR_HANDLING_GUIDE.md)** - Middleware documentation
-- **[QUICK_REFERENCE_MIDDLEWARE.md](QUICK_REFERENCE_MIDDLEWARE.md)** - Quick command reference
-
----
-
-## 🎨 Customization Made Easy
-
-<div align="center">
-
-### 🎭 **Make It Your Own**
-
-Transform The Midnight Brew into your unique café experience!
-
-</div>
-
-<table>
-<tr>
-<td width="50%">
-
-### 🌈 **Theme Customization**
-
-**Quick Color Changes:**
-```css
-/* Edit public/css/styles.css */
-:root {
-  --primary-color: #d4a574;      /* Your brand color */
-  --secondary-color: #8b7355;    /* Accent color */
-  --dark-bg: #1a1a1a;            /* Background */
-  --text-color: #e0e0e0;         /* Text */
-  --highlight: #f5deb3;          /* Highlights */
-}
-```
-
-**Popular Theme Variations:**
-- 🌊 **Ocean Blue:** `#4A90E2` • `#2E5C8A`
-- 🍃 **Nature Green:** `#27AE60` • `#1E8449` 
-- 🔥 **Warm Orange:** `#E67E22` • `#D35400`
-
-</td>
-<td width="50%">
-
-### 📝 **Content Updates**
-
-**Essential Customizations:**
-
-1. **📍 Location & Contact**
-   - Edit `public/contact.html`
-   - Update footer in all HTML files
-
-2. **☕ Menu Items**  
-   - Modify API endpoints in `server.js`
-   - Update images in `public/images/`
-
-3. **🏠 Café Story**
-   - Customize about section content
-   - Add your café's unique story
-
-4. **🎨 Branding**
-   - Replace `logo.jpeg` with your logo
-   - Update favicon and meta tags
-
-</td>
-</tr>
-</table>
-
-<div align="center">
-
-### 🚀 **Quick Customization Checklist**
-
-✅ Colors & Theme • ✅ Logo & Branding • ✅ Contact Information<br/>
-✅ Menu Items • ✅ Café Story • ✅ Social Media Links
 
 </div>
 
@@ -757,48 +615,41 @@ Have questions or suggestions?
 
 </div>
 
-<table>
-<tr>
-<td width="33%" align="center">
+<div align="center">
 
 ### ⭐ **Show Some Love**
-[![GitHub Stars](https://img.shields.io/github/stars/KrishnaSaxena108/The-Midnight-Brew?style=social)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/stargazers)
 
-**Star this repository**  
-*It helps others discover our work!*
+<p align="center">
+  <img src="https://img.shields.io/github/stars/KrishnaSaxena108/The-Midnight-Brew?style=social" alt="GitHub Stars" />
+  <img src="https://img.shields.io/github/forks/KrishnaSaxena108/The-Midnight-Brew?style=social" alt="GitHub Forks" />
+</p>
 
-[![GitHub Forks](https://img.shields.io/github/forks/KrishnaSaxena108/The-Midnight-Brew?style=social)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/network)
+**⭐ Star this repository** - *It helps others discover our work!*  
+**🍴 Fork & customize** - *Make it your own café!*
 
-**Fork & customize**  
-*Make it your own café!*
-
-</td>
-<td width="33%" align="center">
+---
 
 ### 🤝 **Get Involved**
-[![GitHub Issues](https://img.shields.io/github/issues/KrishnaSaxena108/The-Midnight-Brew?style=social)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues)
 
-**Report bugs & suggest features**  
-*Help us improve!*
+<p align="center">
+  <img src="https://img.shields.io/github/issues/KrishnaSaxena108/The-Midnight-Brew?style=social" alt="GitHub Issues" />
+</p>
 
-[![Discussions](https://img.shields.io/github/discussions/KrishnaSaxena108/The-Midnight-Brew?style=social)](https://github.com/KrishnaSaxena108/The-Midnight-Brew/discussions)
+**🐛 Report bugs & suggest features** - *Help us improve!*  
+**💬 Join conversations** - *Share ideas & get help!*
 
-**Join conversations**  
-*Share ideas & get help!*
-
-</td>
-<td width="33%" align="center">
+---
 
 ### 📢 **Spread the Word**
-**Share with friends:**
 
-[![Twitter](https://img.shields.io/badge/Share%20on-Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/intent/tweet?text=Check%20out%20The%20Midnight%20Brew%20-%20A%20beautiful%20coffee%20shop%20website!%20https://github.com/KrishnaSaxena108/The-Midnight-Brew)
+<p align="center">
+  <img src="https://img.shields.io/badge/Share%20on-Twitter-8B4513?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter" />
+  <img src="https://img.shields.io/badge/Share%20on-LinkedIn-D2691E?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
+</p>
 
-[![LinkedIn](https://img.shields.io/badge/Share%20on-LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/sharing/share-offsite/?url=https://github.com/KrishnaSaxena108/The-Midnight-Brew)
+**Share with friends and fellow developers!**
 
-</td>
-</tr>
-</table>
+</div>
 
 ---
 
