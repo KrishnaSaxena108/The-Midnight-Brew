@@ -20,13 +20,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Favicon -->
-    <link rel="icon" href="public/favicon.png">
-    
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<script src="/public/chatbot.js"></script>
 
 <body>
     <!-- Enhanced Navigation Header -->
@@ -34,13 +30,13 @@
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <!-- Brand Logo and Name -->
-                <a href="/" class="navbar-brand d-flex align-items-center">
-                    <img class="nav-img me-3" src="public/logo.jpeg" alt="The Midnight Brew Logo">
+                <a href="/" class="navbar-brand d-flex align-items-center text-decoration-none">
+                    <img class="nav-img me-3" src="img/logo.jpeg" alt="The Midnight Brew Logo">
                     <h1 class="nav-para mb-0">The Midnight Brew</h1>
                 </a>
                 
                 <!-- Navbar Toggle for Mobile -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 
@@ -48,26 +44,26 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="/"><i class="fas fa-home me-2"></i>Home</a>
+                            <a class="nav-link" href="index.html"><i class="fas fa-home me-2"></i>Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="/menu"><i class="fas fa-utensils me-2"></i>Menu</a>
+                            <a class="nav-link active" href="menu.html" aria-current="page"><i class="fas fa-utensils me-2"></i>Menu</a>
                         </li>
                         <li class="nav-item" id="bookingNavItem">
-                            <a class="nav-link" href="/booking"><i class="fas fa-calendar-check me-2"></i>Book</a>
+                            <a class="nav-link" href="booking.html"><i class="fas fa-calendar-check me-2"></i>Book</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/contact"><i class="fas fa-envelope me-2"></i>Contact</a>
+                            <a class="nav-link" href="contact.html"><i class="fas fa-envelope me-2"></i>Contact</a>
                         </li>
                         <!-- Authentication Navigation -->
                         <li class="nav-item" id="dashboardNavItem" style="display: none;">
                             <a class="nav-link" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
                         </li>
                         <li class="nav-item" id="loginNavItem">
-                            <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
+                            <a class="nav-link" href="login.html"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
                         </li>
                         <li class="nav-item" id="registerNavItem">
-                            <a class="nav-link" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a>
+                            <a class="nav-link" href="register.html"><i class="fas fa-user-plus me-2"></i>Register</a>
                         </li>
                         <li class="nav-item" id="logoutNavItem" style="display: none;">
                             <button class="nav-link btn" id="logoutBtn" style="border: none; background: none;">
@@ -75,12 +71,12 @@
                             </button>
                         </li>
                     </ul>
+                    
+                    <!-- Theme Toggle Button -->
+                    <button id="theme-toggle" class="btn btn-outline-light ms-3" aria-label="Toggle dark/light theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
                 </div>
-                
-                <!-- Theme Toggle Button -->
-                <button id="theme-toggle" class="btn btn-outline-light ms-3" aria-label="Toggle theme">
-                  <i class="fas fa-moon"></i>
-                </button>
             </div>
         </nav>
     </header>
@@ -107,7 +103,7 @@
                 <!-- Brand Info -->
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-brand">
-                        <img src="public/logo.jpeg" alt="The Midnight Brew" class="footer-logo mb-3">
+                        <img src="img/logo.jpeg" alt="The Midnight Brew" class="footer-logo mb-3">
                         <h5 class="text-white">The Midnight Brew</h5>
                         <p class="text-white-50">Where coffee meets moonlight, creating magical moments for night owls and coffee lovers.</p>
                     </div>
@@ -119,22 +115,22 @@
                         <h5 class="text-white mb-3">Quick Links</h5>
                         <ul class="list-unstyled">
                             <li class="mb-2">
-                                <a href="/" class="footer-link">
+                                <a href="index.html" class="footer-link">
                                     <i class="fas fa-home me-2"></i>Home
                                 </a>
                             </li>
                             <li class="mb-2">
-                                <a href="/menu" class="footer-link">
+                                <a href="menu.html" class="footer-link">
                                     <i class="fas fa-utensils me-2"></i>Menu
                                 </a>
                             </li>
                             <li class="mb-2">
-                                <a href="/contact" class="footer-link">
+                                <a href="contact.html" class="footer-link">
                                     <i class="fas fa-envelope me-2"></i>Contact
                                 </a>
                             </li>
                             <li class="mb-2">
-                                <a href="/booking" class="footer-link">
+                                <a href="booking.html" class="footer-link">
                                     <i class="fas fa-calendar-check me-2"></i>Book a Table
                                 </a>
                             </li>
@@ -190,7 +186,11 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="theme.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="js/theme.js"></script>
+    <script src="js/auth-nav.js"></script>
+    <script src="chatbot.js"></script>
     <script>
         const container = document.getElementById("menu-container");
         fetch("/api/menu")
@@ -246,7 +246,5 @@
         });
     </script>
     
-    <!-- Universal Authentication Navigation -->
-    <script src="auth-nav.js"></script>
 </body>
 </html>
