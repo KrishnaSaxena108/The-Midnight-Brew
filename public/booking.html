@@ -892,22 +892,7 @@
     
     <!-- Authentication JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const logoutBtn = document.getElementById('logoutBtn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', async function() {
-                    try {
-                        await fetch('/api/auth/logout', { method: 'POST' });
-                        localStorage.clear();
-                        window.location.href = '/';
-                    } catch (error) {
-                        console.error('Logout error:', error);
-                        localStorage.clear();
-                        window.location.href = '/';
-                    }
-                });
-            }
-        });
+        // Logout functionality removed - users must go to dashboard to logout
     </script>
     
     <!-- Booking JavaScript -->
