@@ -53,12 +53,12 @@ function showAuthenticatedNav(user) {
     if (loginNavItem) loginNavItem.style.display = 'none';
     if (registerNavItem) registerNavItem.style.display = 'none';
     
-    // Show dashboard and logout
+    // Show dashboard but hide logout (logout only available in dashboard)
     const dashboardNavItem = document.getElementById('dashboardNavItem');
     const logoutNavItem = document.getElementById('logoutNavItem');
     
     if (dashboardNavItem) dashboardNavItem.style.display = 'block';
-    if (logoutNavItem) logoutNavItem.style.display = 'block';
+    if (logoutNavItem) logoutNavItem.style.display = 'none';
     
     // Update booking link to go directly to booking (no auth check needed)
     const bookingLink = document.querySelector('#bookingNavItem a');
@@ -98,25 +98,14 @@ function showUnauthenticatedNav() {
 }
 
 function setupLogout() {
+    // Logout functionality is now only available in the dashboard
+    // If users need to logout from other pages, they should go to dashboard
     const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', async function() {
-            try {
-                await fetch('/api/auth/logout', { method: 'POST' });
-                localStorage.clear();
-                
-                // Redirect based on current page
-                const currentPath = window.location.pathname;
-                if (currentPath === '/dashboard' || currentPath === '/booking') {
-                    window.location.href = '/';
-                } else {
-                    window.location.reload();
-                }
-            } catch (error) {
-                console.error('Logout error:', error);
-                localStorage.clear();
-                window.location.href = '/';
-            }
+    if (logoutBtn && window.location.pathname !== '/dashboard') {
+        // Replace logout button with "Go to Dashboard" message
+        logoutBtn.innerHTML = '<i class="fas fa-tachometer-alt me-2"></i>Dashboard';
+        logoutBtn.addEventListener('click', function() {
+            window.location.href = '/dashboard';
         });
     }
 }

@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dashboard — The Midnight Brew</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Dashboard theme variables */
+    /* Default dark theme */
+    :root {
+      --dash-bg: linear-gradient(135deg, #1e293b 0%, rgba(15, 23, 42, 0.95) 50%, #8b5a2b 100%);
+      --dash-text: #ffffff;
+      --dash-text-muted: rgba(255, 255, 255, 0.7);
+      --dash-glass-bg: rgba(255, 255, 255, 0.05);
+      --dash-glass-border: rgba(255, 255, 255, 0.1);
+      --dash-shadow: rgba(0, 0, 0, 0.3);
+      --dash-accent: #FFD700;
+    }
+
+    /* Light theme */
+    [data-theme="light"] {
+      --dash-bg: linear-gradient(135deg, #fefefe 0%, #f1f5f9 50%, #e2e8f0 100%);
+      --dash-text: #1a202c !important;
+      --dash-text-muted: rgba(26, 32, 44, 0.7) !important;
+      --dash-glass-bg: rgba(255, 255, 255, 0.95);
+      --dash-glass-border: rgba(139, 69, 19, 0.15);
+      --dash-shadow: rgba(139, 69, 19, 0.15);
+      --dash-accent: #8B4513 !important;
+      --dash-stats-bg: linear-gradient(135deg, #fdf4ff 0%, #f0f9ff 50%, #ecfdf5 100%);
+    }
+
+    /* Dashboard-specific CSS animations and styling */
+    .dashboard-container {
+      background: var(--dash-bg);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      color: var(--dash-text);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Force all text colors in light mode */
+    [data-theme="light"] .dashboard-container,
+    [data-theme="light"] .dashboard-container *,
+    [data-theme="light"] .glass-panel,
+    [data-theme="light"] .glass-panel *,
+    [data-theme="light"] h1,
+    [data-theme="light"] h2,
+    [data-theme="light"] h3,
+    [data-theme="light"] h4,
+    [data-theme="light"] h5,
+    [data-theme="light"] h6,
+    [data-theme="light"] p,
+    [data-theme="light"] div,
+    [data-theme="light"] span,
+    [data-theme="light"] small,
+    [data-theme="light"] button,
+    [data-theme="light"] .action-btn {
+      color: #1a202c !important;
+    }
+
+    /* Light mode muted text */
+    [data-theme="light"] [style*="color:var(--dash-text-muted)"],
+    [data-theme="light"] .text-muted,
+    [data-theme="light"] small {
+      color: rgba(26, 32, 44, 0.8) !important;
+    }
+
+    /* Light mode accent colors */
+    [data-theme="light"] [style*="color:var(--dash-accent)"],
+    [data-theme="light"] .accent-color,
+    [data-theme="light"] #welcomeTitle,
+    [data-theme="light"] #profileName,
+    [data-theme="light"] .stat-number,
+    [data-theme="light"] .fas,
+    [data-theme="light"] .far {
+      color: #8B4513 !important;
+    }
+
+    /* Light mode button styling */
+    [data-theme="light"] .action-btn {
+      background: rgba(139, 69, 19, 0.1) !important;
+      border-color: rgba(139, 69, 19, 0.3) !important;
+      color: #8B4513 !important;
+    }
+
+    [data-theme="light"] .action-btn:hover {
+      background: rgba(139, 69, 19, 0.2) !important;
+      color: #654321 !important;
+    }
+
+    /* Light mode dashboard title - force visibility */
+    [data-theme="light"] h2 {
+      background: linear-gradient(45deg, #8B4513, #D2691E) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+      color: #8B4513 !important;
+    }
+
+    /* Light mode stats cards enhancement */
+    [data-theme="light"] .stats-card {
+      background: var(--dash-stats-bg) !important;
+      border: 2px solid rgba(139, 69, 19, 0.2) !important;
+      box-shadow: 0 8px 25px rgba(139, 69, 19, 0.1) !important;
+    }
+
+    [data-theme="light"] .stat-number {
+      background: linear-gradient(45deg, #8B4513, #D2691E) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+      text-shadow: none !important;
+    }
+
+    /* Light mode glass panels */
+    [data-theme="light"] .glass-panel {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border: 1px solid rgba(139, 69, 19, 0.15) !important;
+      box-shadow: 0 8px 32px rgba(139, 69, 19, 0.1) !important;
+    }
+
+    [data-theme="light"] .glass-panel:hover {
+      box-shadow: 0 20px 40px rgba(139, 69, 19, 0.15) !important;
+      border-color: rgba(139, 69, 19, 0.25) !important;
+    }
+
+    /* Light mode welcome card */
+    [data-theme="light"] .welcome-card {
+      background: linear-gradient(135deg, rgba(139, 69, 19, 0.05), rgba(210, 105, 30, 0.08)) !important;
+      border: 2px solid rgba(139, 69, 19, 0.15) !important;
+    }
+
+    /* Text color utility classes for dark mode (default) */
+    .text-primary { color: #ffffff !important; }
+    .text-muted { color: rgba(255, 255, 255, 0.7) !important; }
+    .text-accent { color: #FFD700 !important; }
+    
+    /* Light mode overrides */
+    [data-theme="light"] .text-primary { color: #1a202c !important; }
+    [data-theme="light"] .text-muted { color: rgba(26, 32, 44, 0.8) !important; }
+    [data-theme="light"] .text-accent { color: #8B4513 !important; }
+    
+    /* Ensure theme transitions work */
+    * {
+      transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease !important;
+    }
+    
+    .dashboard-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .glass-panel {
+      background: var(--dash-glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--dash-glass-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 
+        0 8px 32px var(--dash-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      color: var(--dash-text);
+    }
+
+    /* Booking item styles */
+    .booking-item-title {
+      color: var(--dash-accent) !important;
+    }
+    
+    .booking-item-status {
+      color: var(--dash-accent) !important;
+    }
+    
+    .booking-item-icon {
+      color: var(--dash-accent) !important;
+    }
+    
+    .booking-item-details {
+      color: var(--dash-text-muted) !important;
+    }
+    
+    .booking-item-detail-icon {
+      color: var(--dash-accent) !important;
+      opacity: 0.6;
+    }
+
+    .glass-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.6s;
+    }
+
+    .glass-panel:hover::before {
+      left: 100%;
+    }
+
+    .glass-panel:hover {
+      transform: translateY(-4px);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .dashboard-header {
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .welcome-card {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(139, 69, 19, 0.1));
+      border: 1px solid rgba(255, 215, 0, 0.2);
+    }
+
+    .stats-card {
+      position: relative;
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    /* Default dark mode stat numbers */
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #FFD700 !important;
+      animation: pulse-glow 2s ease-in-out infinite alternate;
+    }
+
+    /* Light mode stat numbers */
+    [data-theme="light"] .stat-number {
+      color: #8B4513 !important;
+    }
+
+    @keyframes pulse-glow {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(1.2); }
+    }
+
+    .booking-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .booking-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--coffee), #FFD700);
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .booking-item:hover::before {
+      transform: scaleY(1);
+    }
+
+    .booking-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 215, 0, 0.3);
+      transform: translateX(8px);
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--coffee), #FFD700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--midnight);
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-avatar::before {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      background: var(--midnight);
+      z-index: -1;
+    }
+
+    .action-btn {
+      background: linear-gradient(45deg, rgba(139, 69, 19, 0.8), rgba(255, 215, 0, 0.1));
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      color: #FFD700;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(139, 69, 19, 0.2));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .action-btn:hover::before {
+      opacity: 1;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+      color: #FFF;
+    }
+
+    .loading-skeleton {
+      background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.1) 25%, 
+        rgba(255, 255, 255, 0.2) 50%, 
+        rgba(255, 255, 255, 0.1) 75%);
+      background-size: 200% 100%;
+      animation: loading-shimmer 1.5s infinite;
+      border-radius: 8px;
+      height: 1rem;
+    }
+
+    @keyframes loading-shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+
+    .floating-particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 215, 0, 0.3);
+      border-radius: 50%;
+      animation: float 6s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 0.5; }
+    }
+
+    .success-animation {
+      animation: successPulse 0.4s ease;
+    }
+
+    @keyframes successPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); background: rgba(34, 197, 94, 0.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body class="dashboard-container">
+  <header class="dashboard-header">
+    <div style="display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:1.5rem 1rem;">
+      <div style="display:flex;align-items:center;gap:1.5rem;">
+        <img src="/logo.jpeg" alt="logo" style="width:64px;height:64px;border-radius:12px;object-fit:cover;box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+        <div>
+          <h2 style="margin:0;background:linear-gradient(45deg,var(--coffee),#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:800;">Dashboard</h2>
+          <small style="color:var(--dash-text-muted);font-size:0.95rem;">Your midnight sanctuary</small>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <button id="themeToggle" class="action-btn" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--dash-accent);" title="Toggle theme">
+          <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+        <button id="backHome" class="action-btn" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--dash-accent);">
+          <i class="fas fa-home"></i>Home
+        </button>
+        <button id="logoutBtn" class="action-btn">
+          <i class="fas fa-sign-out-alt"></i>Logout
+        </button>
+      </div>
+    </div>
+    <div class="floating-particles">
+      <div class="particle" style="left:10%;animation-delay:0s;"></div>
+      <div class="particle" style="left:20%;animation-delay:1s;"></div>
+      <div class="particle" style="left:30%;animation-delay:2s;"></div>
+      <div class="particle" style="left:70%;animation-delay:3s;"></div>
+      <div class="particle" style="left:80%;animation-delay:4s;"></div>
+      <div class="particle" style="left:90%;animation-delay:5s;"></div>
+    </div>
+  </header>
+
+  <main style="max-width:1200px;margin:2rem auto;padding:0 1rem;position:relative;">
+    <section style="display:grid;grid-template-columns:1fr 360px;gap:2rem;align-items:start;">
+      <div>
+        <div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem;">
+          <div class="glass-panel welcome-card fade-in-up stagger-1" style="flex:1;min-width:280px;">
+            <div style="display:flex;align-items:center;gap:1rem;">
+              <i class="fas fa-coffee" style="font-size:2rem;color:var(--dash-accent);"></i>
+              <div>
+                <h3 id="welcomeTitle" style="margin:0;font-weight:700;color:var(--dash-accent);">Welcome Back</h3>
+                <p id="welcomeSub" style="color:var(--dash-text-muted);margin:0;font-size:0.95rem;">
+                  <div class="loading-skeleton" style="width:200px;"></div>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-panel stats-card fade-in-up stagger-2" style="width:280px;">
+            <h4 style="margin:0 0 1rem 0;color:var(--dash-accent);display:flex;align-items:center;gap:0.5rem;">
+              <i class="fas fa-chart-line"></i>Your Stats
+            </h4>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div style="text-align:center;">
+                <div class="stat-number" id="totalBookings">0</div>
+                <div class="text-muted" style="font-size:0.9rem;font-weight:500;">Total Visits</div>
+              </div>
+              <div style="text-align:center;">
+                <div class="stat-number" id="satisfaction">96%</div>
+                <div class="text-muted" style="font-size:0.9rem;font-weight:500;">Satisfaction</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-panel fade-in-up stagger-3">
+          <h4 style="margin:0 0 1.5rem 0;color:var(--dash-accent);display:flex;align-items:center;gap:0.75rem;">
+            <i class="fas fa-calendar-alt"></i>Your Reservations
+            <span id="bookingsCount" style="background:rgba(255,215,0,0.2);color:var(--dash-accent);padding:0.25rem 0.75rem;border-radius:20px;font-size:0.8rem;font-weight:600;"></span>
+          </h4>
+          <div id="bookingsList" style="max-height:400px;overflow-y:auto;">
+            <div class="loading-skeleton" style="height:60px;margin-bottom:1rem;"></div>
+            <div class="loading-skeleton" style="height:60px;margin-bottom:1rem;"></div>
+            <div class="loading-skeleton" style="height:60px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="glass-panel fade-in-up stagger-4">
+          <div style="text-align:center;margin-bottom:1.5rem;">
+            <div class="profile-avatar" id="profileAvatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div id="profileCard">
+              <h4 style="margin:0 0 0.5rem 0;color:var(--dash-accent);" id="profileName">
+                <div class="loading-skeleton" style="width:120px;height:1.5rem;margin:0 auto;"></div>
+              </h4>
+              <div style="color:var(--dash-text-muted);margin-bottom:0.5rem;" id="profileEmail">
+                <div class="loading-skeleton" style="width:160px;height:1rem;margin:0 auto;"></div>
+              </div>
+              <div style="color:rgba(255,255,255,0.6);font-size:0.9rem;" id="profilePhone">
+                <div class="loading-skeleton" style="width:140px;height:1rem;margin:0 auto;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-panel fade-in-up stagger-4" style="margin-top:1.5rem;">
+          <h4 style="margin:0 0 1rem 0;color:var(--dash-accent);display:flex;align-items:center;gap:0.5rem;">
+            <i class="fas fa-bolt"></i>Quick Actions
+          </h4>
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+            <a href="/booking" id="newBooking" class="action-btn" style="text-decoration:none;justify-content:center;">
+              <i class="fas fa-plus-circle"></i>New Reservation
+            </a>
+            <a href="/menu" class="action-btn" style="text-decoration:none;justify-content:center;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);">
+              <i class="fas fa-utensils"></i>Browse Menu
+            </a>
+            <button id="manageAccount" class="action-btn" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);">
+              <i class="fas fa-cog"></i>Account Settings
+            </button>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="/js/auth-nav.js"></script>
+  <script>
+    (function(){
+      const token = localStorage.getItem('token');
+      if (!token) {
+        // No token -> redirect to login
+        window.location.href = '/login';
+        return;
+      }
+
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+
+      // Elements
+      const welcomeTitle = document.getElementById('welcomeTitle');
+      const welcomeSub = document.getElementById('welcomeSub');
+      const profileName = document.getElementById('profileName');
+      const profileEmail = document.getElementById('profileEmail');
+      const profilePhone = document.getElementById('profilePhone');
+      const bookingsList = document.getElementById('bookingsList');
+      const totalBookings = document.getElementById('totalBookings');
+      const satisfaction = document.getElementById('satisfaction');
+
+      document.getElementById('logoutBtn').addEventListener('click', async function(){
+        try{
+          await fetch('/api/auth/logout', { method: 'POST', headers });
+        } catch(e) { /* ignore */ }
+        localStorage.clear();
+        window.location.href = '/';
+      });
+
+      document.getElementById('backHome').addEventListener('click', function(){ window.location.href = '/'; });
+      document.getElementById('newBooking').addEventListener('click', function(){ window.location.href = '/booking'; });
+      document.getElementById('manageAccount').addEventListener('click', function(){ window.location.href = '/profile'; });
+
+      // Theme toggle functionality
+      const themeToggle = document.getElementById('themeToggle');
+      const themeIcon = document.getElementById('themeIcon');
+      const currentTheme = localStorage.getItem('dashboard-theme') || 'dark';
+      
+      function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.body.setAttribute('data-theme', theme);
+        localStorage.setItem('dashboard-theme', theme);
+        themeIcon.className = theme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+        
+        // Apply theme-specific classes
+        applyThemeClasses(theme);
+        
+        // Force style recalculation
+        document.body.style.display = 'none';
+        document.body.offsetHeight; // trigger reflow
+        document.body.style.display = '';
+      }
+
+      function applyThemeClasses(theme) {
+        const textElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, div, span, small');
+        const accentElements = document.querySelectorAll('#welcomeTitle, #profileName, .stat-number, .fas, .far');
+        const mutedElements = document.querySelectorAll('small, [style*="color:var(--dash-text-muted)"], .text-muted');
+        const dashboardTitle = document.querySelector('h2');
+        
+        if (theme === 'light') {
+          textElements.forEach(el => {
+            if (!el.classList.contains('stat-number') && el.tagName !== 'H2') {
+              el.style.setProperty('color', '#1a202c', 'important');
+            }
+          });
+          
+          accentElements.forEach(el => {
+            el.style.setProperty('color', '#8B4513', 'important');
+          });
+          
+          mutedElements.forEach(el => {
+            el.style.setProperty('color', 'rgba(26, 32, 44, 0.8)', 'important');
+          });
+
+          // Special handling for dashboard title
+          if (dashboardTitle) {
+            dashboardTitle.style.setProperty('background', 'linear-gradient(45deg, #8B4513, #D2691E)', 'important');
+            dashboardTitle.style.setProperty('-webkit-background-clip', 'text', 'important');
+            dashboardTitle.style.setProperty('-webkit-text-fill-color', 'transparent', 'important');
+            dashboardTitle.style.setProperty('background-clip', 'text', 'important');
+          }
+
+          // Stat numbers in light mode
+          document.querySelectorAll('.stat-number').forEach(el => {
+            el.style.setProperty('color', '#8B4513', 'important');
+          });
+        } else {
+          // Dark theme: reset to defaults
+          textElements.forEach(el => {
+            el.style.removeProperty('color');
+          });
+          
+          accentElements.forEach(el => {
+            el.style.setProperty('color', '#FFD700', 'important');
+          });
+          
+          mutedElements.forEach(el => {
+            el.style.setProperty('color', 'rgba(255, 255, 255, 0.7)', 'important');
+          });
+
+          // Ensure stat numbers are visible in dark mode
+          document.querySelectorAll('.stat-number').forEach(el => {
+            el.style.setProperty('color', '#FFD700', 'important');
+          });
+          
+          // Reset dashboard title to gradient
+          if (dashboardTitle) {
+            dashboardTitle.style.setProperty('background', 'linear-gradient(45deg, #8b5a2b, #FFD700)', 'important');
+            dashboardTitle.style.setProperty('-webkit-background-clip', 'text', 'important');
+            dashboardTitle.style.setProperty('-webkit-text-fill-color', 'transparent', 'important');
+            dashboardTitle.style.setProperty('background-clip', 'text', 'important');
+          }
+          
+          mutedElements.forEach(el => {
+            el.style.removeProperty('color');
+          });
+        }
+      }
+      
+      setTheme(currentTheme);
+      
+      themeToggle.addEventListener('click', function() {
+        const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+      });
+
+      async function loadProfile(){
+        try{
+          const res = await fetch('/api/auth/me', { headers });
+          if (!res.ok) throw new Error('Not authenticated');
+          const json = await res.json();
+          const user = json.user;
+          const firstName = user.firstName || user.name || user.email.split('@')[0];
+          welcomeTitle.textContent = `Welcome, ${firstName}`;
+          welcomeSub.innerHTML = `<i class="fas fa-crown" style="color:var(--dash-accent);margin-right:0.5rem;"></i>Premium Member`;
+          
+          const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || firstName;
+          profileName.textContent = fullName;
+          profileEmail.textContent = user.email || '';
+          profilePhone.textContent = user.phone || 'Not provided';
+          
+          // Update avatar with user initials
+          const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+          document.getElementById('profileAvatar').innerHTML = `<span style="font-weight:700;font-size:1.5rem;">${initials}</span>`;
+          
+          // Reapply theme classes after content load
+          const currentTheme = document.documentElement.getAttribute('data-theme');
+          if (currentTheme) {
+            applyThemeClasses(currentTheme);
+          }
+        } catch(err){
+          // token invalid — redirect to login
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
+      }
+
+      async function loadBookings(){
+        bookingsList.innerHTML = '<p style="color:var(--muted)">Loading bookings…</p>';
+        try{
+          const res = await fetch('/api/bookings', { headers });
+          if (!res.ok) throw new Error('Failed');
+          const json = await res.json();
+          const items = json.bookings || json;
+          if (!items || items.length === 0) {
+            bookingsList.innerHTML = `
+              <div style="text-align:center;padding:3rem 1rem;color:var(--dash-text-muted);">
+                <div style="font-size:4rem;margin-bottom:1rem;opacity:0.3;">
+                  <i class="fas fa-calendar-plus"></i>
+                </div>
+                <h5 style="color:var(--dash-accent);margin-bottom:0.75rem;">No Reservations Yet</h5>
+                <p style="margin-bottom:1.5rem;line-height:1.6;">Start your midnight journey with us.<br>Book your first table and create memorable moments.</p>
+                <a href="/booking" class="action-btn">
+                  <i class="fas fa-plus-circle"></i>Make Your First Reservation
+                </a>
+              </div>`;
+            totalBookings.textContent = '0';
+            satisfaction.textContent = '96%';
+            document.getElementById('bookingsCount').textContent = 'none yet';
+            return;
+          }
+
+          totalBookings.textContent = items.length;
+          // Enhanced satisfaction calculation
+          const satisfaction_rate = items.length > 5 ? 98 : items.length > 2 ? 95 : items.length > 0 ? 92 : 100;
+          satisfaction.textContent = satisfaction_rate + '%';
+          
+          document.getElementById('bookingsCount').textContent = `${items.length} active`;
+
+          bookingsList.innerHTML = items.map((b, index) => {
+            const when = b.bookingDate + (b.bookingTime ? ` at ${b.bookingTime}` : '');
+            const statusColor = index === 0 ? 'rgba(34,197,94,0.2)' : 'rgba(59,130,246,0.2)';
+            const statusText = index === 0 ? 'Upcoming' : 'Confirmed';
+            const statusIcon = index === 0 ? 'clock' : 'check-circle';
+            
+            return `\
+              <div class="booking-item fade-in-up" style="animation-delay:${0.1 + index * 0.1}s">\
+                <div style="display:flex;justify-content:space-between;align-items:start;">\
+                  <div style="flex:1;">\
+                    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">\
+                      <i class="fas fa-${statusIcon} text-accent"></i>\
+                      <div class="text-accent" style="font-weight:700;font-size:1.1rem;">${when}</div>\
+                      <span class="text-accent" style="background:${statusColor};padding:0.2rem 0.6rem;border-radius:12px;font-size:0.75rem;font-weight:600;">${statusText}</span>\
+                    </div>\
+                    <div class="booking-item-details" style="font-size:0.9rem;margin-left:1.5rem;">\
+                      <i class="fas fa-users booking-item-detail-icon" style="margin-right:0.5rem;"></i>Party of ${b.partySize || '2'}\
+                      ${b.occasion ? `<span style="margin-left:1rem;"><i class="fas fa-tag booking-item-detail-icon" style="margin-right:0.5rem;"></i>${b.occasion}</span>` : ''}\
+                    </div>\
+                  </div>\
+                  <div style="display:flex;gap:0.5rem;align-items:center;">\
+                    <button class="action-btn" data-id="${b._id}" data-action="cancel" style="padding:0.5rem 1rem;font-size:0.85rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#ff6b6b;">\
+                      <i class="fas fa-times"></i>Cancel\
+                    </button>\
+                  </div>\
+                </div>\
+              </div>`;
+          }).join('');
+
+          // attach cancel handlers
+          bookingsList.querySelectorAll('button[data-action="cancel"]').forEach(btn => {
+            btn.addEventListener('click', async function(){
+              const id = this.getAttribute('data-id');
+              if (!confirm('Cancel this booking?')) return;
+              try{
+                const r = await fetch('/api/bookings/' + id, { method: 'DELETE', headers });
+                if (r.ok) {
+                  this.textContent = 'Cancelled';
+                  loadBookings();
+                } else {
+                  alert('Failed to cancel');
+                }
+              } catch(e){ alert('Failed to cancel'); }
+            });
+          });
+
+          // Reapply theme classes after content load
+          const currentTheme = document.documentElement.getAttribute('data-theme');
+          if (currentTheme) {
+            applyThemeClasses(currentTheme);
+          }
+
+        } catch(e){
+          bookingsList.innerHTML = `
+            <div style="text-align:center;padding:2rem;" class="text-muted">
+              <i class="fas fa-exclamation-triangle text-accent" style="font-size:2rem;margin-bottom:1rem;"></i>
+              <p>Unable to load your reservations</p>
+              <button onclick="loadBookings()" class="action-btn" style="margin-top:1rem;">
+                <i class="fas fa-redo"></i>Try Again
+              </button>
+            </div>`;
+        }
+      }
+
+      // Enhanced initialization with animations
+      function initializeDashboard() {
+        // Add stagger animation classes
+        document.querySelectorAll('.fade-in-up').forEach((el, index) => {
+          el.style.animationDelay = `${0.1 + index * 0.1}s`;
+        });
+
+        // Load data
+        loadProfile();
+        loadBookings();
+
+        // Add success animation to buttons on click
+        document.querySelectorAll('.action-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            this.classList.add('success-animation');
+            setTimeout(() => this.classList.remove('success-animation'), 400);
+          });
+        });
+      }
+
+      // Make functions global for retry buttons
+      window.loadBookings = loadBookings;
+      
+      // Init
+      initializeDashboard();
+    })();
+  </script>
+</body>
+</html>
