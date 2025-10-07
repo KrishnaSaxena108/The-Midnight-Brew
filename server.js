@@ -593,10 +593,10 @@ const startServer = async () => {
         await connectDB();
         
         // Invalidate all existing sessions on server restart
-        try { await Session.updateMany({}, { isActive: false }); } catch (e) { /* no DB */ }
+        await Session.updateMany({}, { isActive: false });
         
         // Clean up expired sessions
-        try { await cleanupExpiredSessions(); } catch (e) { /* no DB */ }
+        await cleanupExpiredSessions();
         
         const server = app.listen(PORT, () => {
             console.log(`🚀 The Midnight Brew Server running at http://localhost:${PORT}`);
