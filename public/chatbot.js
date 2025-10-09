@@ -3,16 +3,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Uses Bootstrap 5 classes (card, shadow-lg, position-fixed, bg-dark, etc.)
     const chatbotHTML = `
         <div id="chatbot" class="card shadow-lg border-0 position-fixed" 
-             style="width: 22rem; bottom: 6rem; right: 1.5rem; display: none; z-index:1050;">
+            style="width: 22rem; bottom: 6rem; right: 1.5rem; display: none; z-index:1050;">
             <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                 <span class="fw-bold">☕ Midnight Brew Bot</span>
                 <button id="chat-close" class="btn btn-sm btn-light p-0 px-2" aria-label="Close Chat">&times;</button>
             </div>
-            <div id="chat-body" class="card-body overflow-auto p-3" style="max-height: 300px; background:#f8f9fa;">
-                </div>
-            <div class="card-footer p-2 d-flex">
+            <div id="chat-body" class="card-body overflow-auto p-3" style="max-height: 300px; background:#f8f9fa;"></div>
+            <div class="card-footer p-2 d-flex align-items-center">
                 <input id="chat-input" type="text" class="form-control me-2" placeholder="Ask me something...">
-                <button id="chat-send" class="btn btn-primary">➤</button>
+                <button id="chat-send" class="btn btn-primary me-2">➤</button>
             </div>
         </div>
 
@@ -21,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
             💬
         </button>
     `;
+
     document.body.insertAdjacentHTML("beforeend", chatbotHTML);
 
     // DOM Elements
@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatBody = document.getElementById("chat-body");
     const chatInput = document.getElementById("chat-input");
     const chatSend = document.getElementById("chat-send");
+  
+    
 
     let chatbotData = {};
     let isFirstOpen = true; // Flag to show welcome message only once
@@ -64,6 +66,28 @@ document.addEventListener("DOMContentLoaded", () => {
         chatBody.appendChild(msg);
         chatBody.scrollTop = chatBody.scrollHeight; // Scroll to bottom
     }
+        const keywords = {
+        "menu": ["menu", "food", "drinks", "pastries"],
+        "time": ["time", "hours", "open", "close"],
+        "ambience": ["ambience", "atmosphere", "vibe"],
+        "location": ["location", "address", "place"],
+        "booking": ["booking", "reserve", "reservation"],
+        "wifi": ["wifi", "internet", "wireless"],
+        "loyalty": ["loyalty", "discount", "offer", "promo"],
+        "phone": ["phone", "contact", "call"],
+        "login": ["login", "sign in"],
+        "spotify": ["relaxing", "chill", "music", "songs"],  // added "songs"
+        "caffeine": ["caffeine", "espresso", "latte", "mocha", "cappuccino", "coffee"]
+    };
+    const coffeeData = {
+    "espresso": 64,
+    "latte": 63,
+    "cappuccino": 63,
+    "mocha": 70,
+    "coffee": 95
+    };
+
+    
 
     // Toggle open/close logic
     chatToggle.addEventListener("click", () => {
@@ -87,27 +111,60 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Send message logic
     function sendMessage() {
-        const text = chatInput.value.trim();
-        if (!text) return;
+    const text = chatInput.value.trim();
+    if (!text) return;
 
-        addMessage(text, "user");
-        chatInput.value = "";
+    addMessage(text, "user");
+    chatInput.value = "";
 
-        // Bot "thinking" time
-        setTimeout(() => {
-            let reply = chatbotData["default"] || "Sorry, I don't understand that yet. Can you try rephrasing?";
-            
-            const lowerText = text.toLowerCase();
-            for (let key in chatbotData) {
-                // Simple keyword matching: checks if user input includes the JSON key
-                if (lowerText.includes(key.toLowerCase())) {
-                    reply = chatbotData[key];
-                    break;
+    setTimeout(() => {
+        const lowerText = text.toLowerCase();
+
+        // 1️⃣ Coffee calculator logic
+        if (keywords["caffeine"].some(k => lowerText.includes(k))) {
+            let foundType = Object.keys(coffeeData).find(type => lowerText.includes(type));
+            let numberMatch = lowerText.match(/(\d+(\.\d+)?)/);
+            let number = numberMatch ? parseFloat(numberMatch[0]) : 1;
+
+            let reply = "";
+
+            if (foundType) {
+                if (lowerText.includes("cup")) {
+                    let totalCaffeine = coffeeData[foundType] * number;
+                    reply = `☕ ${number} cup(s) of ${foundType} contains approximately ${totalCaffeine} mg of caffeine.`;
+                } else if (lowerText.includes("mg") || lowerText.includes("milligrams")) {
+                    let cupsNeeded = Math.ceil(number / coffeeData[foundType]);
+                    reply = `☕ You would need about ${cupsNeeded} cup(s) of ${foundType} to get ${number} mg of caffeine.`;
+                } else {
+                    reply = `☕ 1 cup of ${foundType} contains approximately ${coffeeData[foundType]} mg of caffeine.`;
                 }
+            } else {
+                reply = "☕ Please mention a coffee type like espresso, latte, mocha, cappuccino, or coffee.";
             }
+
             addMessage(reply, "bot");
-        }, 500);
-    }
+            return; // Stop further processing
+        }
+
+        // 2️⃣ Regular keyword matching logic
+        let reply = chatbotData["default"] || "Sorry, I don't understand that yet.";
+        for (let key in keywords) {
+            if (keywords[key].some(k => lowerText.includes(k))) {
+                if (key === "spotify") {
+                    const playlists = chatbotData["spotify"];
+                    reply = playlists[Math.floor(Math.random() * playlists.length)];
+                } else {
+                    reply = chatbotData[key];
+                }
+                break;
+            }
+        }
+
+        addMessage(reply, "bot");
+    }, 500);
+}
+
+
 
     chatSend.addEventListener("click", sendMessage);
     
