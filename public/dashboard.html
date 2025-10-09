@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Dashboard — The Midnight Brew</title>
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/admin/css/admin-styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     /* Dashboard theme variables */
@@ -214,7 +215,6 @@
     }
 
     .glass-panel:hover {
-      transform: translateY(-4px);
       box-shadow: 
         0 20px 40px rgba(0, 0, 0, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
@@ -344,7 +344,6 @@
     }
 
     .action-btn:hover {
-      transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
       color: #FFF;
     }
@@ -398,6 +397,215 @@
       background: rgba(255, 215, 0, 0.3);
       border-radius: 50%;
       animation: float 6s infinite ease-in-out;
+    }
+
+    .admin-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-content {
+      background: var(--dash-glass-bg);
+      border: 1px solid var(--dash-glass-border);
+      border-radius: 16px;
+      backdrop-filter: blur(20px);
+      max-width: 800px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px var(--dash-shadow);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--dash-glass-border);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--dash-text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--dash-accent);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .admin-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--dash-glass-border);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .admin-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .admin-item-info {
+      flex: 1;
+    }
+
+    .admin-item-title {
+      font-weight: 600;
+      color: var(--dash-accent);
+      margin-bottom: 0.25rem;
+    }
+
+    .admin-item-details {
+      color: var(--dash-text-muted);
+      font-size: 0.9rem;
+    }
+
+    .admin-item-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .admin-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: var(--dash-accent);
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--dash-glass-border);
+      border-radius: 8px;
+      padding: 0.75rem;
+      color: var(--dash-text);
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--dash-accent);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Select dropdown options for dark mode - using higher specificity */
+    .modal-content .form-group select option,
+    .admin-form .form-group select option {
+      background-color: #2a2a2a;
+      color: #f5f5f5;
+      padding: 8px 12px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    [data-theme="light"] .form-group input,
+    [data-theme="light"] .form-group select,
+    [data-theme="light"] .form-group textarea {
+      background: rgba(139, 69, 19, 0.05);
+      color: #1a202c;
+    }
+
+    [data-theme="light"] .form-group input:focus,
+    [data-theme="light"] .form-group select:focus,
+    [data-theme="light"] .form-group textarea:focus {
+      background: rgba(139, 69, 19, 0.1);
+    }
+
+    [data-theme="light"] .modal-content .form-group select option,
+    [data-theme="light"] .admin-form .form-group select option {
+      background-color: #ffffff;
+      color: #1a202c;
+    }
+
+    [data-theme="light"] .admin-item {
+      background: rgba(139, 69, 19, 0.05);
+    }
+
+    [data-theme="light"] .admin-item:hover {
+      background: rgba(139, 69, 19, 0.1);
+    }
+
+    #adminPanel,
+    #adminPanel *,
+    #adminPanel:hover,
+    #adminPanel *:hover {
+      transform: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        width: 95%;
+        margin: 1rem;
+      }
+      
+      .admin-actions {
+        flex-direction: column;
+      }
     }
 
     @keyframes float {
@@ -530,11 +738,161 @@
             </button>
           </div>
         </div>
+
+        <div id="adminPanel" class="glass-panel fade-in-up stagger-4" style="margin-top:1.5rem;display:none;">
+          <h4 style="margin:0 0 1rem 0;color:var(--dash-accent);display:flex;align-items:center;gap:0.5rem;">
+            <i class="fas fa-shield-alt"></i>Admin Panel
+          </h4>
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+            <button id="showMenuManager" class="action-btn" style="width:100%;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);">
+              <i class="fas fa-utensils"></i>Manage Menu Items
+            </button>
+            <button id="showCategoryManager" class="action-btn" style="width:100%;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);">
+              <i class="fas fa-tags"></i>Manage Categories
+            </button>
+          </div>
+        </div>
       </aside>
     </section>
+
+    <div id="menuManagerModal" class="admin-modal" style="display:none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color:var(--dash-accent);margin:0;display:flex;align-items:center;gap:0.5rem;">
+            <i class="fas fa-utensils"></i>Menu Items Management
+          </h3>
+          <button id="closeMenuManager" class="modal-close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="admin-actions" style="margin-bottom:1.5rem;">
+            <button id="addMenuItem" class="action-btn">
+              <i class="fas fa-plus"></i>Add New Item
+            </button>
+            <button id="refreshMenuItems" class="action-btn" style="background:rgba(255,255,255,0.1);">
+              <i class="fas fa-sync"></i>Refresh
+            </button>
+          </div>
+          <div id="menuItemsList" class="admin-list">
+            <div class="loading-skeleton" style="height:60px;margin-bottom:1rem;"></div>
+            <div class="loading-skeleton" style="height:60px;margin-bottom:1rem;"></div>
+            <div class="loading-skeleton" style="height:60px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="categoryManagerModal" class="admin-modal" style="display:none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color:var(--dash-accent);margin:0;display:flex;align-items:center;gap:0.5rem;">
+            <i class="fas fa-tags"></i>Categories Management
+          </h3>
+          <button id="closeCategoryManager" class="modal-close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="admin-actions" style="margin-bottom:1.5rem;">
+            <button id="addCategory" class="action-btn">
+              <i class="fas fa-plus"></i>Add New Category
+            </button>
+            <button id="refreshCategories" class="action-btn" style="background:rgba(255,255,255,0.1);">
+              <i class="fas fa-sync"></i>Refresh
+            </button>
+          </div>
+          <div id="categoriesList" class="admin-list">
+            <div class="loading-skeleton" style="height:60px;margin-bottom:1rem;"></div>
+            <div class="loading-skeleton" style="height:60px;margin-bottom:1rem;"></div>
+            <div class="loading-skeleton" style="height:60px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="menuItemFormModal" class="admin-modal" style="display:none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="menuItemFormTitle" style="color:var(--dash-accent);margin:0;">Add Menu Item</h3>
+          <button id="closeMenuItemForm" class="modal-close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="menuItemForm" class="admin-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="itemName">Name</label>
+                <input type="text" id="itemName" name="name" required>
+              </div>
+              <div class="form-group">
+                <label for="itemCategory">Category</label>
+                <select id="itemCategory" name="category" required>
+                  <option value="">Select Category</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="itemPrice">Price ($)</label>
+                <input type="number" id="itemPrice" name="price" step="0.01" min="0" required>
+              </div>
+              <div class="form-group">
+                <label for="itemAvailable">Available</label>
+                <select id="itemAvailable" name="available">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="itemDescription">Description</label>
+              <textarea id="itemDescription" name="description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="itemImage">Image URL</label>
+              <input type="text" id="itemImage" name="image" placeholder="e.g., public/image.jpg">
+            </div>
+            <div class="form-actions">
+              <button type="button" id="cancelMenuItemForm" class="action-btn" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);">Cancel</button>
+              <button type="submit" class="action-btn">Save Item</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="categoryFormModal" class="admin-modal" style="display:none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="categoryFormTitle" style="color:var(--dash-accent);margin:0;">Add Category</h3>
+          <button id="closeCategoryForm" class="modal-close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="categoryForm" class="admin-form">
+            <div class="form-group">
+              <label for="categoryName">Category Name</label>
+              <input type="text" id="categoryName" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="categoryDescription">Description</label>
+              <textarea id="categoryDescription" name="description" rows="3"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="button" id="cancelCategoryForm" class="action-btn" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);">Cancel</button>
+              <button type="submit" class="action-btn">Save Category</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </main>
 
   <script src="/js/auth-nav.js"></script>
+  <script src="/admin/js/menu-management.js"></script>
   <script>
     (function(){
       const token = localStorage.getItem('token');
@@ -582,10 +940,22 @@
         // Apply theme-specific classes
         applyThemeClasses(theme);
         
-        // Force style recalculation
+        // Force style recalculation but preserve admin panel
+        const adminPanel = document.getElementById('adminPanel');
+        const adminPanelShouldShow = adminPanel && adminPanel.dataset.shouldShow === 'true';
+        
         document.body.style.display = 'none';
         document.body.offsetHeight; // trigger reflow
         document.body.style.display = '';
+        
+        // Restore admin panel if it should be visible
+        if (adminPanelShouldShow) {
+          setTimeout(() => {
+            adminPanel.style.setProperty('display', 'block', 'important');
+            adminPanel.style.setProperty('visibility', 'visible', 'important');
+            adminPanel.style.setProperty('opacity', '1', 'important');
+          }, 50);
+        }
       }
 
       function applyThemeClasses(theme) {
@@ -652,6 +1022,12 @@
             el.style.removeProperty('color');
           });
         }
+        
+        // Ensure admin panel stays visible if it should be shown
+        const adminPanel = document.getElementById('adminPanel');
+        if (adminPanel && adminPanel.dataset.shouldShow === 'true') {
+          adminPanel.style.setProperty('display', 'block', 'important');
+        }
       }
       
       setTheme(currentTheme);
@@ -667,6 +1043,11 @@
           if (!res.ok) throw new Error('Not authenticated');
           const json = await res.json();
           const user = json.user;
+          
+          // Debug logging
+          console.log('User data received:', user);
+          console.log('User role:', user.role);
+          
           const firstName = user.firstName || user.name || user.email.split('@')[0];
           welcomeTitle.textContent = `Welcome, ${firstName}`;
           welcomeSub.innerHTML = `<i class="fas fa-crown" style="color:var(--dash-accent);margin-right:0.5rem;"></i>Premium Member`;
@@ -680,12 +1061,35 @@
           const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
           document.getElementById('profileAvatar').innerHTML = `<span style="font-weight:700;font-size:1.5rem;">${initials}</span>`;
           
+          // Check if user is admin and show admin panel
+          console.log('Checking admin status:', user.role === 'admin');
+          const adminPanel = document.getElementById('adminPanel');
+          if (user.role === 'admin') {
+            console.log('Showing admin panel');
+            adminPanel.dataset.shouldShow = 'true';
+            adminPanel.style.setProperty('display', 'block', 'important');
+            welcomeSub.innerHTML = `<i class="fas fa-shield-alt" style="color:var(--dash-accent);margin-right:0.5rem;"></i>Administrator`;
+            
+            // Force visibility after a short delay to override any theme interference
+            setTimeout(() => {
+              adminPanel.style.setProperty('display', 'block', 'important');
+              adminPanel.style.setProperty('visibility', 'visible', 'important');
+              adminPanel.style.setProperty('opacity', '1', 'important');
+              console.log('Admin panel force-shown after delay');
+            }, 100);
+          } else {
+            console.log('User is not admin, role:', user.role);
+            adminPanel.dataset.shouldShow = 'false';
+            adminPanel.style.display = 'none';
+          }
+          
           // Reapply theme classes after content load
           const currentTheme = document.documentElement.getAttribute('data-theme');
           if (currentTheme) {
             applyThemeClasses(currentTheme);
           }
         } catch(err){
+          console.error('Profile load error:', err);
           // token invalid — redirect to login
           localStorage.removeItem('token');
           window.location.href = '/login';
@@ -806,7 +1210,391 @@
             setTimeout(() => this.classList.remove('success-animation'), 400);
           });
         });
+
+        // Admin panel protection - watch for any attempts to hide it
+        const adminPanel = document.getElementById('adminPanel');
+        if (adminPanel) {
+          const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+              if (mutation.type === 'attributes' && 
+                  mutation.attributeName === 'style' && 
+                  adminPanel.dataset.shouldShow === 'true') {
+                const currentDisplay = window.getComputedStyle(adminPanel).display;
+                if (currentDisplay === 'none') {
+                  console.log('Admin panel was hidden, restoring...');
+                  adminPanel.style.setProperty('display', 'block', 'important');
+                  adminPanel.style.setProperty('visibility', 'visible', 'important');
+                  adminPanel.style.setProperty('opacity', '1', 'important');
+                }
+              }
+            });
+          });
+          
+          observer.observe(adminPanel, {
+            attributes: true,
+            attributeFilter: ['style', 'class']
+          });
+        }
       }
+
+      // Admin functionality
+      let currentEditingItem = null;
+      let currentEditingCategory = null;
+
+      // Menu Items Management
+      async function loadMenuItems() {
+        const list = document.getElementById('menuItemsList');
+        list.innerHTML = '<div class="loading-skeleton" style="height:60px;margin-bottom:1rem;"></div>'.repeat(3);
+        
+        try {
+          const res = await fetch('/api/admin/menu-items', { headers });
+          if (!res.ok) throw new Error('Failed to load menu items');
+          const data = await res.json();
+          
+          if (!data.items || data.items.length === 0) {
+            list.innerHTML = `
+              <div style="text-align:center;padding:2rem;color:var(--dash-text-muted);">
+                <i class="fas fa-utensils" style="font-size:3rem;margin-bottom:1rem;opacity:0.3;"></i>
+                <p>No menu items found</p>
+                <button onclick="showAddMenuItem()" class="action-btn">Add First Item</button>
+              </div>`;
+            return;
+          }
+
+          list.innerHTML = data.items.map(item => `
+            <div class="admin-item">
+              <div class="admin-item-info">
+                <div class="admin-item-title">${item.name}</div>
+                <div class="admin-item-details">
+                  ${item.category} • $${item.price.toFixed(2)} • ${item.available ? 'Available' : 'Unavailable'}
+                  ${item.description ? `<br><small>${item.description}</small>` : ''}
+                </div>
+              </div>
+              <div class="admin-item-actions">
+                <button onclick="toggleItemAvailability('${item._id}', ${!item.available})" 
+                        class="action-btn" 
+                        style="padding:0.5rem;background:${item.available ? 'rgba(239,68,68,0.1)' : 'rgba(34,197,94,0.1)'};border:1px solid ${item.available ? 'rgba(239,68,68,0.3)' : 'rgba(34,197,94,0.3)'};color:${item.available ? '#ff6b6b' : '#10b981'};">
+                  <i class="fas fa-${item.available ? 'eye-slash' : 'eye'}"></i>
+                </button>
+                <button onclick="editMenuItem('${item._id}')" class="action-btn" style="padding:0.5rem;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button onclick="deleteMenuItem('${item._id}')" class="action-btn" style="padding:0.5rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#ff6b6b;">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          `).join('');
+        } catch (error) {
+          list.innerHTML = `
+            <div style="text-align:center;padding:2rem;color:var(--dash-text-muted);">
+              <i class="fas fa-exclamation-triangle" style="font-size:2rem;margin-bottom:1rem;color:#ff6b6b;"></i>
+              <p>Failed to load menu items</p>
+              <button onclick="loadMenuItems()" class="action-btn">Try Again</button>
+            </div>`;
+        }
+      }
+
+      // Categories Management
+      async function loadCategories() {
+        const list = document.getElementById('categoriesList');
+        list.innerHTML = '<div class="loading-skeleton" style="height:60px;margin-bottom:1rem;"></div>'.repeat(3);
+        
+        try {
+          const res = await fetch('/api/admin/categories', { headers });
+          if (!res.ok) throw new Error('Failed to load categories');
+          const data = await res.json();
+          
+          if (!data.categories || data.categories.length === 0) {
+            list.innerHTML = `
+              <div style="text-align:center;padding:2rem;color:var(--dash-text-muted);">
+                <i class="fas fa-tags" style="font-size:3rem;margin-bottom:1rem;opacity:0.3;"></i>
+                <p>No categories found</p>
+                <button onclick="showAddCategory()" class="action-btn">Add First Category</button>
+              </div>`;
+            return;
+          }
+
+          list.innerHTML = data.categories.map(category => `
+            <div class="admin-item">
+              <div class="admin-item-info">
+                <div class="admin-item-title">${category.name}</div>
+                <div class="admin-item-details">
+                  ${category.description || 'No description'}
+                </div>
+              </div>
+              <div class="admin-item-actions">
+                <button onclick="editCategory('${category._id}')" class="action-btn" style="padding:0.5rem;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button onclick="deleteCategory('${category._id}')" class="action-btn" style="padding:0.5rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#ff6b6b;">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          `).join('');
+        } catch (error) {
+          list.innerHTML = `
+            <div style="text-align:center;padding:2rem;color:var(--dash-text-muted);">
+              <i class="fas fa-exclamation-triangle" style="font-size:2rem;margin-bottom:1rem;color:#ff6b6b;"></i>
+              <p>Failed to load categories</p>
+              <button onclick="loadCategories()" class="action-btn">Try Again</button>
+            </div>`;
+        }
+      }
+
+      // Load categories for menu item form
+      async function loadCategoriesForForm() {
+        try {
+          const res = await fetch('/api/admin/categories', { headers });
+          if (!res.ok) throw new Error('Failed to load categories');
+          const data = await res.json();
+          
+          const select = document.getElementById('itemCategory');
+          select.innerHTML = '<option value="">Select Category</option>';
+          
+          if (data.categories) {
+            data.categories.forEach(category => {
+              select.innerHTML += `<option value="${category.name}">${category.name}</option>`;
+            });
+          }
+        } catch (error) {
+          console.error('Failed to load categories for form:', error);
+        }
+      }
+
+      // Show/Hide Modals
+      function showMenuManager() {
+        document.getElementById('menuManagerModal').style.display = 'flex';
+        loadMenuItems();
+      }
+
+      function showCategoryManager() {
+        document.getElementById('categoryManagerModal').style.display = 'flex';
+        loadCategories();
+      }
+
+      function showAddMenuItem() {
+        currentEditingItem = null;
+        document.getElementById('menuItemFormTitle').textContent = 'Add Menu Item';
+        document.getElementById('menuItemForm').reset();
+        document.getElementById('menuItemFormModal').style.display = 'flex';
+        loadCategoriesForForm();
+      }
+
+      function showAddCategory() {
+        currentEditingCategory = null;
+        document.getElementById('categoryFormTitle').textContent = 'Add Category';
+        document.getElementById('categoryForm').reset();
+        document.getElementById('categoryFormModal').style.display = 'flex';
+      }
+
+      // Edit functions
+      async function editMenuItem(id) {
+        try {
+          const res = await fetch(`/api/admin/menu-items/${id}`, { headers });
+          if (!res.ok) throw new Error('Failed to load menu item');
+          const data = await res.json();
+          const item = data.data;
+          
+          currentEditingItem = id;
+          document.getElementById('menuItemFormTitle').textContent = 'Edit Menu Item';
+          document.getElementById('itemName').value = item.name;
+          document.getElementById('itemPrice').value = item.price;
+          document.getElementById('itemDescription').value = item.description || '';
+          document.getElementById('itemImage').value = item.image || '';
+          document.getElementById('itemAvailable').value = item.available.toString();
+          
+          await loadCategoriesForForm();
+          document.getElementById('itemCategory').value = item.category;
+          
+          document.getElementById('menuItemFormModal').style.display = 'flex';
+        } catch (error) {
+          alert('Failed to load menu item for editing');
+        }
+      }
+
+      async function editCategory(id) {
+        try {
+          const res = await fetch('/api/admin/categories', { headers });
+          if (!res.ok) throw new Error('Failed to load categories');
+          const data = await res.json();
+          const category = data.categories.find(c => c._id === id);
+          
+          if (!category) throw new Error('Category not found');
+          
+          currentEditingCategory = id;
+          document.getElementById('categoryFormTitle').textContent = 'Edit Category';
+          document.getElementById('categoryName').value = category.name;
+          document.getElementById('categoryDescription').value = category.description || '';
+          
+          document.getElementById('categoryFormModal').style.display = 'flex';
+        } catch (error) {
+          alert('Failed to load category for editing');
+        }
+      }
+
+      // Toggle item availability
+      async function toggleItemAvailability(id, available) {
+        try {
+          const res = await fetch(`/api/admin/menu-items/${id}/availability`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ available })
+          });
+          
+          if (!res.ok) throw new Error('Failed to update availability');
+          loadMenuItems();
+        } catch (error) {
+          alert('Failed to update item availability');
+        }
+      }
+
+      // Delete functions
+      async function deleteMenuItem(id) {
+        if (!confirm('Are you sure you want to delete this menu item?')) return;
+        
+        try {
+          const res = await fetch(`/api/admin/menu-items/${id}`, {
+            method: 'DELETE',
+            headers
+          });
+          
+          if (!res.ok) throw new Error('Failed to delete menu item');
+          loadMenuItems();
+        } catch (error) {
+          alert('Failed to delete menu item');
+        }
+      }
+
+      async function deleteCategory(id) {
+        if (!confirm('Are you sure you want to delete this category?')) return;
+        
+        try {
+          const res = await fetch(`/api/admin/categories/${id}`, {
+            method: 'DELETE',
+            headers
+          });
+          
+          if (!res.ok) throw new Error('Failed to delete category');
+          loadCategories();
+        } catch (error) {
+          alert('Failed to delete category');
+        }
+      }
+
+      // Form submissions
+      document.getElementById('menuItemForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const data = {
+          name: formData.get('name'),
+          category: formData.get('category'),
+          price: parseFloat(formData.get('price')),
+          description: formData.get('description'),
+          image: formData.get('image'),
+          available: formData.get('available') === 'true'
+        };
+        
+        try {
+          const url = currentEditingItem 
+            ? `/api/admin/menu-items/${currentEditingItem}`
+            : '/api/admin/menu-items';
+          const method = currentEditingItem ? 'PUT' : 'POST';
+          
+          const res = await fetch(url, {
+            method,
+            headers,
+            body: JSON.stringify(data)
+          });
+          
+          if (!res.ok) throw new Error('Failed to save menu item');
+          
+          document.getElementById('menuItemFormModal').style.display = 'none';
+          loadMenuItems();
+        } catch (error) {
+          alert('Failed to save menu item');
+        }
+      });
+
+      document.getElementById('categoryForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const data = {
+          name: formData.get('name'),
+          description: formData.get('description')
+        };
+        
+        try {
+          const url = currentEditingCategory 
+            ? `/api/admin/categories/${currentEditingCategory}`
+            : '/api/admin/categories';
+          const method = currentEditingCategory ? 'PUT' : 'POST';
+          
+          const res = await fetch(url, {
+            method,
+            headers,
+            body: JSON.stringify(data)
+          });
+          
+          if (!res.ok) throw new Error('Failed to save category');
+          
+          document.getElementById('categoryFormModal').style.display = 'none';
+          loadCategories();
+        } catch (error) {
+          alert('Failed to save category');
+        }
+      });
+
+      // Modal event listeners
+      document.getElementById('showMenuManager').addEventListener('click', showMenuManager);
+      document.getElementById('showCategoryManager').addEventListener('click', showCategoryManager);
+      document.getElementById('addMenuItem').addEventListener('click', showAddMenuItem);
+      document.getElementById('addCategory').addEventListener('click', showAddCategory);
+      document.getElementById('refreshMenuItems').addEventListener('click', loadMenuItems);
+      document.getElementById('refreshCategories').addEventListener('click', loadCategories);
+
+      // Close modal listeners
+      document.getElementById('closeMenuManager').addEventListener('click', () => {
+        document.getElementById('menuManagerModal').style.display = 'none';
+      });
+      document.getElementById('closeCategoryManager').addEventListener('click', () => {
+        document.getElementById('categoryManagerModal').style.display = 'none';
+      });
+      document.getElementById('closeMenuItemForm').addEventListener('click', () => {
+        document.getElementById('menuItemFormModal').style.display = 'none';
+      });
+      document.getElementById('closeCategoryForm').addEventListener('click', () => {
+        document.getElementById('categoryFormModal').style.display = 'none';
+      });
+      document.getElementById('cancelMenuItemForm').addEventListener('click', () => {
+        document.getElementById('menuItemFormModal').style.display = 'none';
+      });
+      document.getElementById('cancelCategoryForm').addEventListener('click', () => {
+        document.getElementById('categoryFormModal').style.display = 'none';
+      });
+
+      // Close modals when clicking outside
+      document.querySelectorAll('.admin-modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            this.style.display = 'none';
+          }
+        });
+      });
+
+      // Make functions global for inline onclick handlers
+      window.loadMenuItems = loadMenuItems;
+      window.loadCategories = loadCategories;
+      window.showAddMenuItem = showAddMenuItem;
+      window.showAddCategory = showAddCategory;
+      window.editMenuItem = editMenuItem;
+      window.editCategory = editCategory;
+      window.toggleItemAvailability = toggleItemAvailability;
+      window.deleteMenuItem = deleteMenuItem;
+      window.deleteCategory = deleteCategory;
 
       // Make functions global for retry buttons
       window.loadBookings = loadBookings;

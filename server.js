@@ -20,6 +20,10 @@ const {
     cleanupExpiredSessions 
 } = require('./auth/middleware');
 
+const MenuItem = require('./models/MenuItem');
+const Category = require('./models/Category');
+const { requireAdmin } = require('./auth/admin-middleware');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -279,7 +283,8 @@ app.get('/api/auth/me', authenticateToken, async (req, res) => {
                 email: user.email,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                phone: user.phone
+                phone: user.phone,
+                role: user.role || 'user'
             }
         });
     } catch (error) {
@@ -563,6 +568,381 @@ app.get('/api/health', (req, res) => {
     res.json({ success: true, status: 'healthy', timestamp: new Date().toISOString() });
 });
 
+app.get('/api/admin/categories', requireAdmin, async (req, res) => {
+    try{
+        const categories = await Category.find().sort({createdAt: -1});
+        res.json({
+            success: true,
+            message: 'Categories retrieved successfully',
+            categories: categories
+        });
+    }
+    catch (error){
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching categories',
+            error: error.message
+        });
+    }
+});
+
+app.post('/api/admin/categories', requireAdmin, async (req, res) => {
+    try{
+        const {name, description} = req.body;
+
+        if(!name){
+             return res.status(400).json({
+                success: false,
+                message: 'Category name is required'
+            });
+        }
+
+        const category = new Category({
+            name: name.trim(),
+            description: description?.trim()
+        });
+
+        await category.save();
+
+          res.status(201).json({
+            success: true,
+            message: 'Category created successfully',
+            data: category
+        });
+    } catch (error){
+        if (error.code === 11000) {
+            return res.status(400).json({
+                success: false,
+                message: 'Category name already exists'
+            });
+        }
+        
+        res.status(500).json({
+            success: false,
+            message: 'Error creating category',
+            error: error.message
+        });
+    }
+});
+
+app.put('/api/admin/categories/:id', requireAdmin, async (req, res) => {
+    try {
+        const { name, description } = req.body;
+        const categoryId = req.params.id;
+
+        if (!name) {
+            return res.status(400).json({
+                success: false,
+                message: 'Category name is required'
+            });
+        }
+
+        const category = await Category.findByIdAndUpdate(
+            categoryId,
+            {
+                name: name.trim(),
+                description: description?.trim()
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                message: 'Category not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Category updated successfully',
+            data: category
+        });
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({
+                success: false,
+                message: 'Category name already exists'
+            });
+        }
+        
+        res.status(500).json({
+            success: false,
+            message: 'Error updating category',
+            error: error.message
+        });
+    }
+});
+
+app.delete('/api/admin/categories/:id', requireAdmin, async (req, res) => {
+    try {
+        const categoryId = req.params.id;
+
+        const menuItemsUsingCategory = await MenuItem.countDocuments({ category: categoryId });
+        if (menuItemsUsingCategory > 0) {
+            return res.status(400).json({
+                success: false,
+                message: `Cannot delete category. ${menuItemsUsingCategory} menu items are using this category.`
+            });
+        }
+
+        const category = await Category.findByIdAndDelete(categoryId);
+        
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                message: 'Category not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Category deleted successfully',
+            data: category
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error deleting category',
+            error: error.message
+        });
+    }
+});
+
+app.get('/api/admin/menu-items', requireAdmin, async (req, res) => {
+    try {
+        const menuItems = await MenuItem.find()
+            .sort({ createdAt: -1 });
+        
+        res.json({
+            success: true,
+            message: 'Menu items retrieved successfully',
+            items: menuItems
+        });
+    } catch (error) {
+        console.error('Error fetching menu items:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching menu items',
+            error: error.message
+        });
+    }
+});
+
+app.get('/api/admin/menu-items/:id', requireAdmin, async (req, res) => {
+    try {
+        const menuItem = await MenuItem.findById(req.params.id);
+        
+        if (!menuItem) {
+            return res.status(404).json({
+                success: false,
+                message: 'Menu item not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Menu item retrieved successfully',
+            data: menuItem
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching menu item',
+            error: error.message
+        });
+    }
+});
+
+app.post('/api/admin/menu-items', requireAdmin, async (req, res) => {
+    try {
+        const { name, description, price, category, image, available } = req.body;
+        
+        console.log('Creating menu item with data:', { name, description, price, category, image, available });
+        
+        if (!name || !price || !category) {
+            return res.status(400).json({
+                success: false,
+                message: 'Name, price, and category are required'
+            });
+        }
+
+        if (price <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Price must be greater than 0'
+            });
+        }
+
+        // Check if category exists by name (since we store category as string)
+        const categoryExists = await Category.findOne({ name: category });
+        if (!categoryExists) {
+            return res.status(400).json({
+                success: false,
+                message: `Category '${category}' does not exist`
+            });
+        }
+
+        const menuItem = new MenuItem({
+            name: name.trim(),
+            description: description?.trim() || '',
+            price: parseFloat(price),
+            category: category,
+            image: image || '',
+            available: available !== undefined ? available : true
+        });
+
+        await menuItem.save();
+
+        res.status(201).json({
+            success: true,
+            message: 'Menu item created successfully',
+            item: menuItem
+        });
+    } catch (error) {
+        console.error('Error creating menu item:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error creating menu item',
+            error: error.message
+        });
+    }
+});
+
+app.put('/api/admin/menu-items/:id', requireAdmin, async (req, res) => {
+    try {
+        const { name, description, price, category, image, available } = req.body;
+        const menuItemId = req.params.id;
+
+        console.log('Updating menu item:', menuItemId, 'with data:', { name, description, price, category, image, available });
+
+        if (name && !name.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Name cannot be empty'
+            });
+        }
+
+        if (price && price <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Price must be greater than 0'
+            });
+        }
+
+        if (category) {
+            // Check if category exists by name (since we store category as string)
+            const categoryExists = await Category.findOne({ name: category });
+            if (!categoryExists) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Category '${category}' does not exist`
+                });
+            }
+        }
+
+        const updateData = {};
+        if (name) updateData.name = name.trim();
+        if (description !== undefined) updateData.description = description?.trim() || '';
+        if (price) updateData.price = parseFloat(price);
+        if (category) updateData.category = category;
+        if (image !== undefined) updateData.image = image;
+        if (available !== undefined) updateData.available = available;
+
+        const menuItem = await MenuItem.findByIdAndUpdate(
+            menuItemId,
+            updateData,
+            { new: true, runValidators: true }
+        );
+
+        if (!menuItem) {
+            return res.status(404).json({
+                success: false,
+                message: 'Menu item not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Menu item updated successfully',
+            item: menuItem
+        });
+    } catch (error) {
+        console.error('Error updating menu item:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error updating menu item',
+            error: error.message
+        });
+    }
+});
+
+app.delete('/api/admin/menu-items/:id', requireAdmin, async (req, res) => {
+    try {
+        const menuItemId = req.params.id;
+
+        const menuItem = await MenuItem.findByIdAndDelete(menuItemId);
+        
+        if (!menuItem) {
+            return res.status(404).json({
+                success: false,
+                message: 'Menu item not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Menu item deleted successfully',
+            data: menuItem
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error deleting menu item',
+            error: error.message
+        });
+    }
+});
+
+app.patch('/api/admin/menu-items/:id/availability', requireAdmin, async (req, res) => {
+    try {
+        const menuItemId = req.params.id;
+        const { available } = req.body;
+
+        if (typeof available !== 'boolean') {
+            return res.status(400).json({
+                success: false,
+                message: 'Available must be a boolean value'
+            });
+        }
+
+        const menuItem = await MenuItem.findByIdAndUpdate(
+            menuItemId,
+            { available },
+            { new: true }
+        );
+
+        if (!menuItem) {
+            return res.status(404).json({
+                success: false,
+                message: 'Menu item not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: `Menu item ${available ? 'enabled' : 'disabled'} successfully`,
+            data: menuItem
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error updating menu item availability',
+            error: error.message
+        });
+    }
+});
+
 // Error handlers
 app.use((req, res, next) => {
     res.status(404).json({
@@ -590,7 +970,44 @@ app.use((err, req, res, next) => {
 // Initialize MongoDB connection and start server
 const startServer = async () => {
     try {
-        await connectDB();
+        await // Connect to database
+connectDB();
+
+// Simple seeding function
+async function seedData() {
+    try {
+        // Check if we have any categories
+        const categoriesExist = await Category.findOne();
+        if (!categoriesExist) {
+            console.log('Creating initial categories...');
+            await Category.create([
+                { name: 'Pastries', description: 'Fresh baked pastries and desserts' },
+                { name: 'Beverages', description: 'Hot and cold beverages' },
+                { name: 'Sandwiches', description: 'Freshly made sandwiches' },
+                { name: 'Soups', description: 'Warm and hearty soups' }
+            ]);
+            console.log('Categories created successfully');
+        }
+
+        // Check if we have any menu items
+        const itemsExist = await MenuItem.findOne();
+        if (!itemsExist) {
+            console.log('Creating initial menu items...');
+            await MenuItem.create([
+                { name: 'Blueberry Muffin', category: 'Pastries', price: 3.50, description: 'Fresh blueberries with golden crumb', available: true },
+                { name: 'Chocolate Croissant', category: 'Pastries', price: 4.25, description: 'Buttery pastry with dark chocolate', available: true },
+                { name: 'Espresso', category: 'Beverages', price: 2.50, description: 'Rich, bold coffee shot', available: true },
+                { name: 'Latte', category: 'Beverages', price: 4.50, description: 'Smooth espresso with steamed milk', available: true }
+            ]);
+            console.log('Menu items created successfully');
+        }
+    } catch (error) {
+        console.error('Seeding error:', error.message);
+    }
+}
+
+// Seed data after a delay
+setTimeout(seedData, 2000);
         
         // Invalidate all existing sessions on server restart
         await Session.updateMany({}, { isActive: false });
