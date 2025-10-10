@@ -1,0 +1,1929 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - The Midnight Brew</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <style>
+        /* Website-Matching Theme Variables */
+        :root {
+            /* Dark Mode - Matching Main Website */
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-surface: #3a3a3a;
+            --bg-elevated: #4a4a4a;
+            --accent-primary: #D2691E;
+            --accent-secondary: #8B4513;
+            --accent-hover: #B8860B;
+            --text-primary: #f5f5f5;
+            --text-secondary: #cccccc;
+            --text-muted: #999999;
+            --border-primary: #555555;
+            --border-secondary: #444444;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.4);
+            --shadow-strong: 0 16px 48px rgba(0, 0, 0, 0.5);
+            --glass-bg: rgba(58, 58, 58, 0.9);
+            --backdrop-blur: blur(20px);
+            
+            /* Table Variables */
+            --surface-bg: #3a3a3a;
+            --elevated-bg: #4a4a4a;
+            --border-color: #555555;
+            --hover-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="light"] {
+            /* Light Mode - Matching Main Website */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-surface: #ffffff;
+            --bg-elevated: #f1f3f4;
+            --accent-primary: #8B4513;
+            --accent-secondary: #D2691E;
+            --accent-hover: #A0522D;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #888888;
+            --border-primary: #dee2e6;
+            --border-secondary: #e9ecef;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.15);
+            --shadow-strong: 0 16px 48px rgba(0, 0, 0, 0.2);
+            --glass-bg: rgba(248, 249, 250, 0.9);
+            --backdrop-blur: blur(20px);
+            
+            /* Table Variables */
+            --surface-bg: #ffffff;
+            --elevated-bg: #f1f3f4;
+            --border-color: #dee2e6;
+            --hover-bg: rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+
+        /* Enhanced Theme Toggle - Matching Main Website */
+        .theme-toggle-container {
+            position: relative;
+        }
+
+        .theme-toggle {
+            background: var(--bg-surface);
+            border: 2px solid var(--border-primary);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px rgba(210, 105, 30, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle i {
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+
+
+        /* Header Styling */
+        .admin-header {
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            border-bottom: 1px solid var(--border-primary);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1050;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .header-brand img {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .brand-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent-primary);
+            margin: 0;
+        }
+
+        .brand-text small {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Navigation Styling */
+        .admin-nav {
+            background: var(--bg-surface);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid var(--border-primary);
+        }
+
+        .nav-pills .nav-link {
+            color: var(--text-secondary);
+            background: transparent;
+            border: 2px solid var(--border-primary);
+            border-radius: 12px;
+            margin: 0 0.25rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-pills .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(210, 105, 30, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-pills .nav-link:hover {
+            background: var(--bg-elevated);
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .nav-pills .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-color: var(--accent-primary);
+            color: white;
+            box-shadow: 0 8px 25px rgba(210, 105, 30, 0.4);
+        }
+
+        /* Card Styling */
+        .dashboard-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-primary);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-medium);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-strong);
+            border-color: var(--accent-primary);
+        }
+
+        /* Professional Action Buttons */
+        .action-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-primary);
+        }
+
+        .action-header h3 {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .btn-professional {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+        }
+
+        .btn-professional:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(210, 105, 30, 0.4);
+            color: white;
+        }
+
+        .btn-professional i {
+            font-size: 0.9rem;
+        }
+
+        /* Modal Improvements - Fix Transparency Issues */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.8) !important;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--bg-surface) !important;
+            border: 2px solid var(--border-primary) !important;
+            border-radius: 15px !important;
+            box-shadow: var(--shadow-strong) !important;
+        }
+
+        .modal-header {
+            background: var(--bg-elevated) !important;
+            border-bottom: 2px solid var(--border-primary) !important;
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        .modal-title {
+            color: var(--text-primary) !important;
+            font-weight: 600 !important;
+        }
+
+        .modal-body {
+            background: var(--bg-surface) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .modal-footer {
+            background: var(--bg-elevated) !important;
+            border-top: 2px solid var(--border-primary) !important;
+            border-radius: 0 0 15px 15px !important;
+        }
+
+        .form-label {
+            color: var(--text-primary) !important;
+            font-weight: 500;
+        }
+
+        .form-control {
+            background: var(--bg-primary) !important;
+            border: 2px solid var(--border-primary) !important;
+            color: var(--text-primary) !important;
+            border-radius: 8px !important;
+        }
+
+        .form-control:focus {
+            background: var(--bg-primary) !important;
+            border-color: var(--accent-primary) !important;
+            color: var(--text-primary) !important;
+            box-shadow: 0 0 0 0.25rem rgba(210, 105, 30, 0.25) !important;
+        }
+
+        .form-select {
+            background: var(--bg-primary) !important;
+            border: 2px solid var(--border-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .form-select:focus {
+            border-color: var(--accent-primary) !important;
+            box-shadow: 0 0 0 0.25rem rgba(210, 105, 30, 0.25) !important;
+        }
+
+        /* Close Button Styling */
+        .btn-close {
+            background: none !important;
+            opacity: 1 !important;
+        }
+
+        .btn-close::before {
+            content: '✕';
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .header-brand img {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-primary);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .brand-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Theme Toggle Button - Matching Main Website */
+        #theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        #theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        [data-theme="light"] #theme-toggle {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] #theme-toggle:hover {
+            background: rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        /* Navigation Tabs */
+        .admin-nav {
+            background: var(--surface-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-pills {
+            gap: 0.5rem;
+        }
+
+        .nav-pills .nav-link {
+            color: var(--text-secondary);
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-pills .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-pills .nav-link:hover {
+            background: var(--hover-bg);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-primary);
+        }
+
+        .nav-pills .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-color: var(--accent-primary);
+            color: white;
+            box-shadow: var(--glow);
+            transform: translateY(-2px);
+        }
+
+        /* Dashboard Cards */
+        .dashboard-card {
+            background: var(--surface-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-primary);
+            backdrop-filter: blur(20px) saturate(180%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-elevated);
+            border-color: var(--accent-primary);
+        }
+
+        .dashboard-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 0 16px 0 100%;
+            opacity: 0.1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Category Grid Improvements */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .category-card {
+            background: var(--bg-surface);
+            border: 2px solid var(--border-primary);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .category-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .category-card h5 {
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .category-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            min-height: 60px;
+        }
+
+        .category-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .btn-sm-professional {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-delete {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-sm-professional:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        /* Table Improvements */
+        .table-responsive {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid var(--border-primary);
+        }
+
+        .table {
+            background: var(--bg-surface) !important;
+            color: var(--text-primary) !important;
+            margin: 0;
+        }
+
+        .table th {
+            background: var(--bg-elevated) !important;
+            color: var(--text-primary) !important;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-primary) !important;
+            padding: 1rem;
+        }
+
+        .table td {
+            color: var(--text-primary) !important;
+            border-bottom: 1px solid var(--border-secondary) !important;
+            padding: 1rem;
+        }
+
+        .table tbody tr:hover {
+            background: var(--bg-elevated) !important;
+        }
+
+        /* Empty State Styling */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Dropdown Improvements */
+        .dropdown-menu {
+            background: var(--bg-surface) !important;
+            border: 2px solid var(--border-primary) !important;
+            border-radius: 10px !important;
+            box-shadow: var(--shadow-medium) !important;
+        }
+
+        .dropdown-item {
+            color: var(--text-primary) !important;
+            padding: 0.75rem 1rem !important;
+        }
+
+        .dropdown-item:hover {
+            background: var(--bg-elevated) !important;
+            color: var(--accent-primary) !important;
+        }
+
+        /* Badge Styling */
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .badge.bg-success {
+            background: var(--success) !important;
+        }
+
+        .badge.bg-danger {
+            background: var(--error) !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .admin-nav .nav-pills {
+                flex-direction: column;
+            }
+
+            .nav-pills .nav-link {
+                margin: 0.25rem 0;
+            }
+
+            .action-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Buttons & Forms */
+        .btn-primary-admin {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary-admin::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .btn-primary-admin:hover::before {
+            left: 100%;
+        }
+
+        .btn-outline-admin {
+            background: transparent;
+            border: 2px solid var(--accent-primary);
+            color: var(--accent-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-admin:hover {
+            background: var(--accent-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Tables */
+        .admin-table {
+            background: var(--surface-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-primary);
+        }
+
+        .admin-table thead {
+            background: var(--elevated-bg);
+        }
+
+        .admin-table th {
+            border: none;
+            padding: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-table td {
+            border: none;
+            padding: 1rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .admin-table tbody tr:hover {
+            background: var(--hover-bg);
+        }
+
+        /* Bootstrap Table Theme Override - Force Dark Theme Consistency */
+        .admin-table .table {
+            color: var(--text-secondary) !important;
+            background: transparent !important;
+            margin-bottom: 0;
+        }
+
+        .admin-table .table th {
+            background: var(--elevated-bg) !important;
+            border: none !important;
+            padding: 1rem;
+            font-weight: 600;
+            color: var(--text-primary) !important;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-color) !important;
+        }
+
+        .admin-table .table td {
+            border: none !important;
+            padding: 1rem;
+            color: var(--text-secondary) !important;
+            background: transparent !important;
+            border-bottom: 1px solid var(--border-color) !important;
+        }
+
+        .admin-table .table tbody tr:hover td {
+            background: var(--hover-bg) !important;
+        }
+
+        .admin-table .table thead th {
+            border-top: none !important;
+        }
+
+        /* Additional Bootstrap overrides for complete theme consistency */
+        .admin-table .table-hover tbody tr:hover {
+            background: var(--hover-bg) !important;
+        }
+
+        .admin-table .table-hover tbody tr:hover td {
+            color: var(--text-secondary) !important;
+        }
+
+        .admin-table .table td {
+            border: none;
+            padding: 1rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .admin-table .table tbody tr:hover {
+            background: var(--hover-bg);
+        }
+
+        .admin-table .table tbody tr:hover td {
+            color: var(--text-primary);
+        }
+
+        /* Enhanced Professional Modals */
+        .modal-content {
+            background: var(--surface-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: var(--shadow-elevated);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-header {
+            background: var(--elevated-bg);
+            border-bottom: 2px solid var(--border-color);
+            padding: 2rem;
+            border-top-left-radius: 18px;
+            border-top-right-radius: 18px;
+        }
+
+        .modal-title {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-title i {
+            font-size: 1.25rem;
+            margin-right: 0.75rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            background: var(--surface-bg);
+        }
+
+        .modal-footer {
+            background: var(--elevated-bg);
+            border-top: 2px solid var(--border-color);
+            padding: 2rem;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        /* Modal Button Enhancements */
+        .modal-footer .btn-primary-admin,
+        .modal-footer .btn-outline-admin {
+            padding: 1rem 1.75rem;
+            font-size: 1rem;
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-footer .btn-primary-admin i,
+        .modal-footer .btn-outline-admin i {
+            margin-right: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Enhanced Professional Form Controls */
+        .form-control-admin {
+            background: var(--elevated-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-control-admin:focus {
+            background: var(--elevated-bg);
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+            box-shadow: 0 0 0 4px rgba(210, 105, 30, 0.15);
+            outline: none;
+        }
+
+        .form-control-admin::placeholder {
+            color: var(--text-muted);
+            opacity: 0.8;
+        }
+
+        .form-label-admin {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            line-height: 1.4;
+        }
+
+        .form-label-admin i {
+            color: var(--accent-primary);
+            margin-right: 0.5rem;
+            font-size: 0.95rem;
+            min-width: 1.2rem;
+        }
+
+        /* Form Group Spacing */
+        .mb-3 {
+            margin-bottom: 1.75rem !important;
+        }
+
+        .modal-body .row .mb-3:last-child {
+            margin-bottom: 1.75rem !important;
+        }
+
+        /* Textarea Specific */
+        .form-control-admin[rows] {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Select Dropdown */
+        .form-control-admin option {
+            background: var(--elevated-bg);
+            color: var(--text-primary);
+            padding: 0.5rem;
+        }
+
+        /* Modal Form Layout */
+        .modal-body form {
+            margin: 0;
+        }
+
+        .modal-body .row {
+            margin-left: -0.5rem;
+            margin-right: -0.5rem;
+        }
+
+        .modal-body .row [class*="col-"] {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        /* Bootstrap text-muted Override for Theme Visibility */
+        .text-muted {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Ensure descriptions are visible in both themes */
+        .category-card p.text-muted,
+        .item-card p.text-muted {
+            color: var(--text-secondary) !important;
+            opacity: 0.95 !important;
+            font-size: 0.925rem;
+            line-height: 1.4;
+        }
+
+        /* Additional visibility fixes for dark mode */
+        [data-theme="dark"] .text-muted {
+            color: #cccccc !important;
+        }
+
+        [data-theme="light"] .text-muted {
+            color: #666666 !important;
+        }
+
+        /* Close Button Enhancement */
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+            color: var(--accent-primary);
+            transform: scale(1.1);
+        }
+
+        /* Responsive Modal Adjustments */
+        @media (max-width: 768px) {
+            .modal-header,
+            .modal-body,
+            .modal-footer {
+                padding: 1.5rem;
+            }
+
+            .modal-footer {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .modal-footer .btn-primary-admin,
+            .modal-footer .btn-outline-admin {
+                width: 100%;
+                min-width: unset;
+            }
+
+            .modal-title {
+                font-size: 1.25rem;
+            }
+
+            .form-label-admin {
+                font-size: 0.95rem;
+            }
+
+            .form-control-admin {
+                padding: 0.875rem 1rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Modal Animation Enhancement */
+        .modal.fade .modal-dialog {
+            transition: transform 0.4s ease-out;
+            transform: translateY(-50px);
+        }
+
+        .modal.show .modal-dialog {
+            transform: translateY(0);
+        }
+
+        /* Alert & Badge Styles */
+        .alert-success-admin {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            border-radius: 12px;
+        }
+
+        .alert-danger-admin {
+            background: rgba(255, 82, 82, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+            border-radius: 12px;
+        }
+
+        .badge-success-admin {
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-danger-admin {
+            background: var(--error);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Loading States */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 11, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-nav {
+                padding: 1rem;
+            }
+            
+            .nav-pills {
+                flex-wrap: wrap;
+            }
+            
+            .dashboard-card {
+                padding: 1.5rem;
+            }
+            
+            .brand-name {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Custom Scrollbars for Tables */
+        .table-responsive::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background: var(--elevated-bg);
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--dash-accent), #CD853F);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-admin-pro {
+            background: linear-gradient(135deg, var(--dash-accent), #CD853F);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-admin-pro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(210, 105, 30, 0.4);
+            color: white;
+        }
+
+        .btn-admin-pro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-admin-pro:hover::before {
+            left: 100%;
+        }
+
+        .theme-toggle-admin {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: var(--dash-glass);
+            border: 1px solid var(--dash-border);
+            color: var(--dash-text);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-admin:hover {
+            transform: scale(1.1);
+            background: var(--dash-hover);
+        }
+
+        .table-admin {
+            background: var(--dash-surface);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--dash-border);
+        }
+
+        .table-admin th {
+            background: var(--dash-accent);
+            color: white;
+            border: none;
+            padding: 1rem;
+        }
+
+        .table-admin td {
+            background: var(--dash-surface);
+            color: var(--dash-text);
+            border-color: var(--dash-border);
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: var(--dash-surface);
+            border: 1px solid var(--dash-border);
+            border-radius: 15px;
+            color: var(--dash-text);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--dash-border);
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--dash-border);
+        }
+
+        .form-control, .form-select {
+            background: var(--dash-bg);
+            border: 1px solid var(--dash-border);
+            color: var(--dash-text);
+            border-radius: 8px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: var(--dash-bg);
+            border-color: var(--dash-accent);
+            color: var(--dash-text);
+            box-shadow: 0 0 0 0.2rem rgba(210, 105, 30, 0.25);
+        }
+
+        .empty-state-enhanced {
+            text-align: center;
+            padding: 3rem;
+            color: var(--dash-text);
+            opacity: 0.8;
+        }
+
+        .empty-state-enhanced i {
+            font-size: 4rem;
+            color: var(--dash-accent);
+            margin-bottom: 1rem;
+        }
+
+        .category-card, .item-card {
+            background: var(--dash-surface);
+            border: 1px solid var(--dash-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover, .item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-color: var(--dash-accent);
+        }
+
+        .dropdown-menu {
+            background: var(--dash-surface);
+            border: 1px solid var(--dash-border);
+            border-radius: 10px;
+            box-shadow: var(--dash-shadow);
+            backdrop-filter: blur(20px);
+        }
+
+        .dropdown-item {
+            color: var(--dash-text);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--dash-hover);
+            color: var(--dash-text);
+        }
+
+        @media (max-width: 768px) {
+            .admin-nav {
+                padding: 1rem;
+            }
+            
+            .dashboard-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay d-none">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Professional Admin Header -->
+    <header class="admin-header">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Brand Section -->
+                <a href="#" class="header-brand">
+                    <img src="../logo.jpeg" alt="The Midnight Brew Logo">
+                    <div class="brand-text">
+                        <div class="brand-name">The Midnight Brew</div>
+                        <div class="brand-subtitle">Admin Dashboard</div>
+                    </div>
+                </a>
+
+                <!-- Header Controls -->
+                <div class="d-flex align-items-center gap-3">
+                    <!-- User Info -->
+                    <div class="d-none d-md-flex align-items-center gap-2">
+                        <div class="stat-icon" style="width: 35px; height: 35px; font-size: 0.875rem;">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.875rem; font-weight: 600; color: var(--text-primary);" id="adminWelcome">Welcome, Admin</div>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Administrator</div>
+                        </div>
+                    </div>
+
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="btn btn-outline-light" aria-label="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+
+                    <!-- Logout Button -->
+                    <button class="btn-outline-admin" onclick="logout()">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        <span class="d-none d-sm-inline">Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Content -->
+    <main class="container-fluid py-4">
+        <!-- Statistics Overview -->
+        <div class="stats-grid fade-in-up">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="stat-value" id="totalCategories">0</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-coffee"></i>
+                </div>
+                <div class="stat-value" id="totalItems">0</div>
+                <div class="stat-label">Menu Items</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-value" id="totalBookings">0</div>
+                <div class="stat-label">Bookings</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-value" id="totalUsers">0</div>
+                <div class="stat-label">Users</div>
+            </div>
+        </div>
+
+        <!-- Professional Navigation -->
+        <div class="admin-nav fade-in-up">
+            <ul class="nav nav-pills d-flex justify-content-center" id="adminTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="categories-tab" data-bs-toggle="pill" data-bs-target="#categories" type="button" role="tab">
+                        <i class="fas fa-layer-group me-2"></i>
+                        <span>Categories</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="menu-items-tab" data-bs-toggle="pill" data-bs-target="#menu-items" type="button" role="tab">
+                        <i class="fas fa-utensils me-2"></i>
+                        <span>Menu Items</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="bookings-tab" data-bs-toggle="pill" data-bs-target="#bookings" type="button" role="tab">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        <span>Bookings</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="users-tab" data-bs-toggle="pill" data-bs-target="#users" type="button" role="tab">
+                        <i class="fas fa-user-friends me-2"></i>
+                        <span>Users</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Tab Content Container -->
+        <div class="tab-content fade-in-up" id="adminTabContent">
+            
+            <!-- Categories Management Tab -->
+            <div class="tab-pane fade show active" id="categories" role="tabpanel">
+                <div class="dashboard-card">
+                    <!-- Professional Header with Action Button -->
+                    <div class="action-header">
+                        <div>
+                            <h3>
+                                <i class="fas fa-layer-group me-2" style="color: var(--accent-primary);"></i>
+                                Categories Management
+                            </h3>
+                            <p style="color: var(--text-secondary); margin: 0.5rem 0 0 0; font-size: 0.95rem;">
+                                Organize your menu items into categories for better navigation and user experience
+                            </p>
+                        </div>
+                        <button class="btn-professional" onclick="showAddCategoryModal()">
+                            <i class="fas fa-plus"></i>
+                            Add New Category
+                        </button>
+                    </div>
+                    
+                    <!-- Categories Grid Container -->
+                    <div id="categoriesContainer" class="category-grid">
+                        <!-- Empty State -->
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <i class="fas fa-layer-group"></i>
+                            <h4>No Categories Created Yet</h4>
+                            <p>Start by creating your first category to organize your menu items effectively</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Items Management Tab -->
+            <div class="tab-pane fade" id="menu-items" role="tabpanel">
+                <div class="dashboard-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h5 class="mb-1" style="color: var(--text-primary); font-weight: 700;">
+                                <i class="fas fa-utensils me-2" style="color: var(--accent-primary);"></i>
+                                Menu Items Management
+                            </h5>
+                            <p class="mb-0" style="color: var(--text-secondary); font-size: 0.875rem;">
+                                Add delicious items to your existing categories
+                            </p>
+                        </div>
+                        <button class="btn-professional" onclick="showAddItemModal()">
+                            <i class="fas fa-plus"></i>
+                            Add Menu Item
+                        </button>
+                    </div>
+                    
+                    <div id="menuItemsContainer">
+                        <div class="empty-state">
+                            <i class="fas fa-utensils"></i>
+                            <h4>No Menu Items Found</h4>
+                            <p>Ready to create something amazing? Add your first delicious item using the button above!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bookings Management Tab -->
+            <div class="tab-pane fade" id="bookings" role="tabpanel">
+                <div class="dashboard-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h5 class="mb-1" style="color: var(--text-primary); font-weight: 700;">
+                                <i class="fas fa-calendar-alt me-2" style="color: var(--accent-primary);"></i>
+                                Bookings Management
+                            </h5>
+                            <p class="mb-0" style="color: var(--text-secondary); font-size: 0.875rem;">
+                                View and manage customer reservations
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div id="bookingsContainer">
+                        <div class="admin-table">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Customer</th>
+                                        <th>Date & Time</th>
+                                        <th>Party Size</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bookingsTableBody">
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5">
+                                            <div class="stat-icon mx-auto mb-3" style="width: 50px; height: 50px; font-size: 1.25rem;">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </div>
+                                            <h6 style="color: var(--text-primary);">No Bookings Found</h6>
+                                            <p style="color: var(--text-secondary); margin: 0;">Bookings will appear here once customers make reservations</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Management Tab -->
+            <div class="tab-pane fade" id="users" role="tabpanel">
+                <div class="dashboard-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h5 class="mb-1" style="color: var(--text-primary); font-weight: 700;">
+                                <i class="fas fa-user-friends me-2" style="color: var(--accent-primary);"></i>
+                                Users Management
+                            </h5>
+                            <p class="mb-0" style="color: var(--text-secondary); font-size: 0.875rem;">
+                                View and manage registered users
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div id="usersContainer">
+                        <div class="admin-table">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Joined</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5">
+                                            <div class="stat-icon mx-auto mb-3" style="width: 50px; height: 50px; font-size: 1.25rem;">
+                                                <i class="fas fa-user-friends"></i>
+                                            </div>
+                                            <h6 style="color: var(--text-primary);">No Users Found</h6>
+                                            <p style="color: var(--text-secondary); margin: 0;">Registered users will appear here</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Professional Category Modal -->
+    <div class="modal fade" id="categoryModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalTitle">
+                        <i class="fas fa-layer-group me-2" style="color: var(--accent-primary);"></i>
+                        Add Category
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="categoryForm">
+                        <div class="mb-3">
+                            <label for="categoryName" class="form-label-admin">
+                                <i class="fas fa-tag me-2"></i>Category Name
+                            </label>
+                            <input type="text" class="form-control-admin" id="categoryName" placeholder="Enter category name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoryDescription" class="form-label-admin">
+                                <i class="fas fa-align-left me-2"></i>Description
+                            </label>
+                            <textarea class="form-control-admin" id="categoryDescription" rows="3" placeholder="Enter category description"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-outline-admin" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="button" class="btn-primary-admin" onclick="saveCategory()">
+                        <i class="fas fa-save me-2"></i>Save Category
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Professional Menu Item Modal -->
+    <div class="modal fade" id="itemModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemModalTitle">
+                        <i class="fas fa-utensils me-2" style="color: var(--accent-primary);"></i>
+                        Add Menu Item
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="itemForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="itemCategory" class="form-label-admin">
+                                    <i class="fas fa-layer-group me-2"></i>Category
+                                </label>
+                                <select class="form-control-admin" id="itemCategory" required>
+                                    <option value="">Select a category</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="itemName" class="form-label-admin">
+                                    <i class="fas fa-coffee me-2"></i>Item Name
+                                </label>
+                                <input type="text" class="form-control-admin" id="itemName" placeholder="Enter item name" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="itemDescription" class="form-label-admin">
+                                <i class="fas fa-align-left me-2"></i>Description
+                            </label>
+                            <textarea class="form-control-admin" id="itemDescription" rows="3" placeholder="Enter item description"></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="itemPrice" class="form-label-admin">
+                                    <i class="fas fa-dollar-sign me-2"></i>Price ($)
+                                </label>
+                                <input type="number" class="form-control-admin" id="itemPrice" step="0.01" placeholder="0.00" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="itemImage" class="form-label-admin">
+                                    <i class="fas fa-image me-2"></i>Image URL
+                                </label>
+                                <input type="url" class="form-control-admin" id="itemImage" placeholder="https://example.com/image.jpg">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-outline-admin" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="button" class="btn-primary-admin" onclick="saveMenuItem()">
+                        <i class="fas fa-save me-2"></i>Save Item
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+    
+    <script>
+        // Admin Dashboard Theme Toggle - Standalone
+        document.addEventListener('DOMContentLoaded', function() {
+            // Clear any existing theme managers
+            if (window.themeManager) {
+                window.themeManager = null;
+            }
+            
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            
+            if (!themeToggle) {
+                console.error('Theme toggle button not found');
+                return;
+            }
+            
+            // Remove any existing event listeners
+            const newThemeToggle = themeToggle.cloneNode(true);
+            themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
+            
+            // Initialize theme from localStorage or default to dark
+            const savedTheme = localStorage.getItem('admin-theme') || localStorage.getItem('theme') || 'dark';
+            console.log('Admin Dashboard - Initializing theme:', savedTheme);
+            html.setAttribute('data-theme', savedTheme);
+            document.body.setAttribute('data-theme', savedTheme);
+            updateThemeToggle(savedTheme);
+            
+            // Theme toggle functionality - Single event listener
+            newThemeToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const currentTheme = html.getAttribute('data-theme') || 'dark';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                console.log('Admin Dashboard - Switching theme from', currentTheme, 'to', newTheme);
+                
+                // Apply theme to both html and body
+                html.setAttribute('data-theme', newTheme);
+                document.body.setAttribute('data-theme', newTheme);
+                
+                // Save theme preference
+                localStorage.setItem('admin-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // Update toggle button
+                updateThemeToggle(newTheme);
+                
+                // Add click animation
+                newThemeToggle.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    newThemeToggle.style.transform = '';
+                }, 150);
+            });
+            
+            function updateThemeToggle(theme) {
+                const icon = newThemeToggle.querySelector('i');
+                
+                if (!icon) {
+                    console.error('Theme toggle icon not found');
+                    return;
+                }
+                
+                if (theme === 'dark') {
+                    icon.className = 'fas fa-sun';
+                } else {
+                    icon.className = 'fas fa-moon';
+                }
+                
+                console.log('Admin Dashboard - Updated theme toggle icon for theme:', theme);
+            }
+            
+            // Add fade-in animation to elements
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = Math.random() * 0.3 + 's';
+                        entry.target.classList.add('fade-in-up');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            // Observe dashboard cards for animation
+            document.querySelectorAll('.dashboard-card, .stat-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+
+        // Professional loading states
+        function showLoading(show = true) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (show) {
+                overlay.classList.remove('d-none');
+            } else {
+                overlay.classList.add('d-none');
+            }
+        }
+
+        // Enhanced logout with confirmation
+        async function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                showLoading(true);
+                try {
+                    await fetch('/api/auth/logout', { method: 'POST' });
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('admin-theme');
+                    window.location.href = '/';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    localStorage.clear();
+                    window.location.href = '/';
+                } finally {
+                    showLoading(false);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

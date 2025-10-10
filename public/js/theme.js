@@ -1,40 +1,169 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const themeToggle = document.getElementById('theme-toggle');
-    if (!themeToggle) return;
-    
-    const body = document.body;
-    const icon = themeToggle.querySelector('i');
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    if (currentTheme === 'light') {
-        body.classList.add('light-theme');
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-    } else {
-        body.classList.remove('light-theme');
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
+class ThemeManager {
+    constructor() {
+        this.currentTheme = this.getStoredTheme() || 'dark';
+        this.init();
     }
 
-    themeToggle.addEventListener('click', function() {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    init() {
+        this.applyTheme(this.currentTheme);
+        this.setupToggleButton();
+        this.setupAuthNavigation();
+        this.watchForSystemChanges();
+    }
+
+    getStoredTheme() {
+        // Check for admin theme first, then regular theme
+        return localStorage.getItem('admin-theme') || 
+               localStorage.getItem('theme') || 
+               (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    }
+
+    applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.body.setAttribute('data-theme', theme);
         
-        document.documentElement.setAttribute('data-theme', newTheme);
+        // Update meta theme color
+        let metaThemeColor = document.querySelector("meta[name=theme-color]");
+        if (!metaThemeColor) {
+            metaThemeColor = document.createElement("meta");
+            metaThemeColor.setAttribute("name", "theme-color");
+            document.head.appendChild(metaThemeColor);
+        }
+        metaThemeColor.setAttribute("content", theme === 'dark' ? '#1e293b' : '#ffffff');
         
-        if (newTheme === 'light') {
-            body.classList.add('light-theme');
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        } else {
-            body.classList.remove('light-theme');
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
+        // Store theme preference
+        localStorage.setItem('theme', theme);
+        if (window.location.pathname.includes('admin')) {
+            localStorage.setItem('admin-theme', theme);
         }
         
-        localStorage.setItem('theme', newTheme);
-    });
+        this.updateToggleButton(theme);
+        this.currentTheme = theme;
+    }
+
+    updateToggleButton(theme) {
+        const toggleBtn = document.getElementById('theme-toggle');
+        if (toggleBtn) {
+            const icon = toggleBtn.querySelector('i');
+            if (icon) {
+                icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        }
+    }
+
+    setupToggleButton() {
+        const toggleBtn = document.getElementById('theme-toggle');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+                this.applyTheme(newTheme);
+                
+                // Add click animation
+                toggleBtn.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    toggleBtn.style.transform = '';
+                }, 150);
+            });
+        }
+    }
+
+    async setupAuthNavigation() {
+        try {
+            const response = await fetch('/api/auth/me');
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success && result.user) {
+                    this.updateNavForAuthenticatedUser(result.user);
+                }
+            }
+        } catch (error) {
+            console.log('User not authenticated');
+        }
+    }
+
+    updateNavForAuthenticatedUser(user) {
+        // Update dashboard link based on user role
+        const dashboardLink = document.querySelector('a[href="/dashboard"]');
+        if (dashboardLink && user.role === 'admin') {
+            dashboardLink.href = '/admin/dashboard';
+            dashboardLink.innerHTML = '<i class="fas fa-crown me-2"></i>Admin Dashboard';
+        }
+        
+        // Update navbar for authenticated users
+        this.showAuthenticatedNav(user);
+    }
+
+    showAuthenticatedNav(user) {
+        const authLinks = document.querySelector('.auth-links');
+        if (authLinks) {
+            const dashboardUrl = user.role === 'admin' ? '/admin/dashboard' : '/dashboard';
+            const dashboardText = user.role === 'admin' ? '👑 Admin Dashboard' : '📊 Dashboard';
+            
+            authLinks.innerHTML = `
+                <li class="nav-item">
+                    <a class="nav-link" href="${dashboardUrl}">
+                        ${dashboardText}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="logout()">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </a>
+                </li>
+            `;
+        }
+    }
+
+    watchForSystemChanges() {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                this.applyTheme(e.matches ? 'dark' : 'light');
+            }
+        });
+    }
+}
+
+// Logout function
+async function logout() {
+    try {
+        const response = await fetch('/api/auth/logout', { method: 'POST' });
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('admin-theme');
+        window.location.href = '/';
+    } catch (error) {
+        console.error('Logout error:', error);
+        // Force logout locally
+        localStorage.clear();
+        window.location.href = '/';
+    }
+}
+
+// Auto-hide navbar on scroll
+function setupNavbarAutoHide() {
+    let lastScrollTop = 0;
+    const navbar = document.querySelector('.navbar');
+    
+    if (navbar && !navbar.classList.contains('navbar-static')) {
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                // Scrolling down
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                // Scrolling up
+                navbar.style.transform = 'translateY(0)';
+            }
+            
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    window.themeManager = new ThemeManager();
+    setupNavbarAutoHide();
 });
 
 document.addEventListener("DOMContentLoaded", () => {

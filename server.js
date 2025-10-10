@@ -11,6 +11,8 @@ const connectDB = require('./config/database');
 const User = require('./models/User');
 const Booking = require('./models/Booking');
 const Session = require('./models/Session');
+const Category = require('./models/Category');
+const MenuItem = require('./models/MenuItem');
 const { 
     generateToken, 
     authenticateToken, 
@@ -20,8 +22,6 @@ const {
     cleanupExpiredSessions 
 } = require('./auth/middleware');
 
-const MenuItem = require('./models/MenuItem');
-const Category = require('./models/Category');
 const { requireAdmin } = require('./auth/admin-middleware');
 
 const app = express();
@@ -201,6 +201,9 @@ app.post('/api/auth/login', async (req, res) => {
             maxAge: cookieMaxAge
         });
 
+        // Determine redirect URL based on user role
+        const redirectUrl = user.role === 'admin' ? '/admin/dashboard' : '/dashboard';
+
         res.json({
             success: true,
             message: 'Login successful',
@@ -209,9 +212,11 @@ app.post('/api/auth/login', async (req, res) => {
                 email: user.email,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                phone: user.phone
+                phone: user.phone,
+                role: user.role || 'user'
             },
-            token
+            token,
+            redirectUrl
         });
 
     } catch (error) {
@@ -393,6 +398,352 @@ app.delete('/api/bookings/:id', authenticateToken, async (req, res) => {
     }
 });
 
+// ============ CATEGORY API ENDPOINTS ============
+
+// Get all categories
+app.get('/api/categories', async (req, res) => {
+    try {
+        const categories = await Category.find().sort({ name: 1 });
+        res.json({
+            success: true,
+            categories: categories
+        });
+    } catch (error) {
+        console.error('Get categories error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to load categories'
+        });
+    }
+});
+
+// Create new category
+app.post('/api/categories', requireAdmin, async (req, res) => {
+    try {
+        const { name, description } = req.body;
+
+        if (!name || !name.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Category name is required'
+            });
+        }
+
+        // Check if category already exists
+        const existingCategory = await Category.findOne({ name: name.trim() });
+        if (existingCategory) {
+            return res.status(400).json({
+                success: false,
+                message: 'Category with this name already exists'
+            });
+        }
+
+        const category = new Category({
+            name: name.trim(),
+            description: description ? description.trim() : ''
+        });
+
+        await category.save();
+        
+        res.status(201).json({
+            success: true,
+            message: 'Category created successfully',
+            category: category
+        });
+    } catch (error) {
+        console.error('Create category error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to create category'
+        });
+    }
+});
+
+// Update category
+app.put('/api/categories/:id', requireAdmin, async (req, res) => {
+    try {
+        const { name, description } = req.body;
+        const categoryId = req.params.id;
+
+        if (!name || !name.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Category name is required'
+            });
+        }
+
+        // Check if another category with the same name exists
+        const existingCategory = await Category.findOne({ 
+            name: name.trim(),
+            _id: { $ne: categoryId }
+        });
+        
+        if (existingCategory) {
+            return res.status(400).json({
+                success: false,
+                message: 'Category with this name already exists'
+            });
+        }
+
+        const category = await Category.findByIdAndUpdate(
+            categoryId,
+            {
+                name: name.trim(),
+                description: description ? description.trim() : ''
+            },
+            { new: true }
+        );
+
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                message: 'Category not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Category updated successfully',
+            category: category
+        });
+    } catch (error) {
+        console.error('Update category error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update category'
+        });
+    }
+});
+
+// Delete category
+app.delete('/api/categories/:id', requireAdmin, async (req, res) => {
+    try {
+        const categoryId = req.params.id;
+
+        // Check if category has menu items
+        const menuItemsCount = await MenuItem.countDocuments({ category: categoryId });
+        if (menuItemsCount > 0) {
+            return res.status(400).json({
+                success: false,
+                message: `Cannot delete category. It has ${menuItemsCount} menu items. Please delete or move the menu items first.`
+            });
+        }
+
+        const category = await Category.findByIdAndDelete(categoryId);
+        
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                message: 'Category not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Category deleted successfully'
+        });
+    } catch (error) {
+        console.error('Delete category error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to delete category'
+        });
+    }
+});
+
+// ============ MENU ITEMS API ENDPOINTS ============
+
+// Get all menu items
+app.get('/api/menu-items', async (req, res) => {
+    try {
+        const menuItems = await MenuItem.find().sort({ name: 1 });
+        res.json({
+            success: true,
+            items: menuItems
+        });
+    } catch (error) {
+        console.error('Get menu items error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to load menu items'
+        });
+    }
+});
+
+// Create new menu item
+app.post('/api/menu-items', requireAdmin, async (req, res) => {
+    try {
+        const { name, description, price, imageUrl, categoryId } = req.body;
+
+        if (!name || !name.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Menu item name is required'
+            });
+        }
+
+        if (!price || price <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Valid price is required'
+            });
+        }
+
+        if (!categoryId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Category is required'
+            });
+        }
+
+        // Verify category exists
+        const category = await Category.findById(categoryId);
+        if (!category) {
+            return res.status(400).json({
+                success: false,
+                message: 'Selected category does not exist'
+            });
+        }
+
+        const menuItem = new MenuItem({
+            name: name.trim(),
+            description: description ? description.trim() : '',
+            price: parseFloat(price),
+            category: categoryId,
+            image: imageUrl ? imageUrl.trim() : ''
+        });
+
+        await menuItem.save();
+        
+        res.status(201).json({
+            success: true,
+            message: 'Menu item created successfully',
+            item: menuItem
+        });
+    } catch (error) {
+        console.error('Create menu item error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to create menu item'
+        });
+    }
+});
+
+// Update menu item
+app.put('/api/menu-items/:id', requireAdmin, async (req, res) => {
+    try {
+        const { name, description, price, imageUrl, categoryId } = req.body;
+        const itemId = req.params.id;
+
+        if (!name || !name.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Menu item name is required'
+            });
+        }
+
+        if (!price || price <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Valid price is required'
+            });
+        }
+
+        if (!categoryId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Category is required'
+            });
+        }
+
+        // Verify category exists
+        const category = await Category.findById(categoryId);
+        if (!category) {
+            return res.status(400).json({
+                success: false,
+                message: 'Selected category does not exist'
+            });
+        }
+
+        const menuItem = await MenuItem.findByIdAndUpdate(
+            itemId,
+            {
+                name: name.trim(),
+                description: description ? description.trim() : '',
+                price: parseFloat(price),
+                category: categoryId,
+                image: imageUrl ? imageUrl.trim() : ''
+            },
+            { new: true }
+        );
+
+        if (!menuItem) {
+            return res.status(404).json({
+                success: false,
+                message: 'Menu item not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Menu item updated successfully',
+            item: menuItem
+        });
+    } catch (error) {
+        console.error('Update menu item error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update menu item'
+        });
+    }
+});
+
+// Delete menu item
+app.delete('/api/menu-items/:id', requireAdmin, async (req, res) => {
+    try {
+        const itemId = req.params.id;
+
+        const menuItem = await MenuItem.findByIdAndDelete(itemId);
+        
+        if (!menuItem) {
+            return res.status(404).json({
+                success: false,
+                message: 'Menu item not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Menu item deleted successfully'
+        });
+    } catch (error) {
+        console.error('Delete menu item error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to delete menu item'
+        });
+    }
+});
+
+// ============ USERS API ENDPOINTS ============
+
+// Get all users (admin only)
+app.get('/api/users', requireAdmin, async (req, res) => {
+    try {
+        const users = await User.find({}, '-password').sort({ createdAt: -1 });
+        res.json({
+            success: true,
+            users: users
+        });
+    } catch (error) {
+        console.error('Get users error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to load users'
+        });
+    }
+});
+
 // Frontend routes - now serving from public folder
 app.get('/', optionalAuth, (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 app.get('/home', optionalAuth, (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
@@ -410,6 +761,9 @@ app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'public/reg
 
 // Dashboard page - requires authentication
 app.get('/dashboard', authenticateToken, (req, res) => res.sendFile(path.join(__dirname, 'public/dashboard.html')));
+
+// Admin dashboard - requires admin authentication
+app.get('/admin/dashboard', requireAdmin, (req, res) => res.sendFile(path.join(__dirname, 'public/admin/dashboard.html')));
 
 app.get('/about', (req, res) => {
     const aboutHTML = `<!DOCTYPE html>
@@ -973,41 +1327,40 @@ const startServer = async () => {
         await // Connect to database
 connectDB();
 
-// Simple seeding function
-async function seedData() {
+// Optional one-time seeding function (commented out for production)
+// Uncomment this if you need to seed initial data on first run
+/*
+async function seedInitialData() {
     try {
-        // Check if we have any categories
-        const categoriesExist = await Category.findOne();
-        if (!categoriesExist) {
-            console.log('Creating initial categories...');
-            await Category.create([
-                { name: 'Pastries', description: 'Fresh baked pastries and desserts' },
+        // Only seed if completely empty database
+        const categoriesCount = await Category.countDocuments();
+        const menuItemsCount = await MenuItem.countDocuments();
+        
+        if (categoriesCount === 0 && menuItemsCount === 0) {
+            console.log('Seeding initial data for first run...');
+            
+            // Create categories first
+            const categories = await Category.create([
                 { name: 'Beverages', description: 'Hot and cold beverages' },
-                { name: 'Sandwiches', description: 'Freshly made sandwiches' },
-                { name: 'Soups', description: 'Warm and hearty soups' }
+                { name: 'Pastries', description: 'Fresh baked pastries and desserts' }
             ]);
-            console.log('Categories created successfully');
-        }
-
-        // Check if we have any menu items
-        const itemsExist = await MenuItem.findOne();
-        if (!itemsExist) {
-            console.log('Creating initial menu items...');
+            
+            // Create menu items with proper category references
             await MenuItem.create([
-                { name: 'Blueberry Muffin', category: 'Pastries', price: 3.50, description: 'Fresh blueberries with golden crumb', available: true },
-                { name: 'Chocolate Croissant', category: 'Pastries', price: 4.25, description: 'Buttery pastry with dark chocolate', available: true },
-                { name: 'Espresso', category: 'Beverages', price: 2.50, description: 'Rich, bold coffee shot', available: true },
-                { name: 'Latte', category: 'Beverages', price: 4.50, description: 'Smooth espresso with steamed milk', available: true }
+                { name: 'Espresso', category: categories[0]._id, price: 2.50, description: 'Rich, bold coffee shot', available: true },
+                { name: 'Blueberry Muffin', category: categories[1]._id, price: 3.50, description: 'Fresh blueberries with golden crumb', available: true }
             ]);
-            console.log('Menu items created successfully');
+            
+            console.log('Initial data seeded successfully');
         }
     } catch (error) {
         console.error('Seeding error:', error.message);
     }
 }
 
-// Seed data after a delay
-setTimeout(seedData, 2000);
+// Run once on server start only if needed
+// seedInitialData();
+*/
         
         // Invalidate all existing sessions on server restart
         await Session.updateMany({}, { isActive: false });

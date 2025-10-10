@@ -293,10 +293,18 @@
                         localStorage.setItem('token', result.token);
                         localStorage.setItem('user', JSON.stringify(result.user));
                         
-                        // Redirect to dashboard after a short delay
-                        setTimeout(() => {
-                            window.location.href = '/dashboard';
-                        }, 1000);
+                        // Check if user is admin and redirect accordingly
+                        if (result.redirectUrl) {
+                            setTimeout(() => {
+                                window.location.href = result.redirectUrl;
+                            }, 1000);
+                        } else {
+                            // Fallback: check user role and redirect
+                            const redirectUrl = result.user.role === 'admin' ? '/admin/dashboard' : '/dashboard';
+                            setTimeout(() => {
+                                window.location.href = redirectUrl;
+                            }, 1000);
+                        }
                     } else {
                         showAlert('danger', result.message);
                     }

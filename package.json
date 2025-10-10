@@ -6,20 +6,21 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
+    "setup-admin": "node scripts/setup-admin.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iAwaisK/The-Midnight-Brew.git"
+    "url": "git+https://github.com/KrishnaSaxena108/The-Midnight-Brew.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["cafe", "restaurant", "coffee", "nodejs", "express"],
+  "author": "Krishna Saxena",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/iAwaisK/The-Midnight-Brew/issues"
+    "url": "https://github.com/KrishnaSaxena108/The-Midnight-Brew/issues"
   },
-  "homepage": "https://github.com/iAwaisK/The-Midnight-Brew#readme",
+  "homepage": "https://github.com/KrishnaSaxena108/The-Midnight-Brew",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^5.1.0",

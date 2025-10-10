@@ -33,6 +33,24 @@
             align-items: center;
             justify-content: center;
             padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-100px); }
         }
         
         .auth-card {
@@ -42,7 +60,10 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             max-width: 600px;
             width: 100%;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
         }
         
         .auth-header {
@@ -55,6 +76,7 @@
             height: 80px;
             border-radius: 50%;
             margin-bottom: 1rem;
+            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.3);
         }
         
         .auth-title {
@@ -62,6 +84,7 @@
             color: #8B4513;
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
         
         .auth-subtitle {
@@ -90,6 +113,7 @@
         .form-control:focus {
             border-color: #8B4513;
             box-shadow: 0 0 0 0.25rem rgba(139, 69, 19, 0.15);
+            transform: translateY(-2px);
         }
         
         .btn-auth {
@@ -102,6 +126,23 @@
             width: 100%;
             margin-bottom: 1rem;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-auth::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-auth:hover::before {
+            left: 100%;
         }
         
         .btn-auth:hover {
@@ -143,7 +184,8 @@
         
         .auth-link:hover {
             color: #6B3410;
-            text-decoration: underline;
+            text-decoration: none;
+            transform: translateX(5px);
         }
         
         .alert {
@@ -207,6 +249,28 @@
 
         [data-theme="dark"] .password-requirements {
             color: #cccccc;
+        }
+
+        [data-theme="dark"] .auth-divider::before {
+            background: #555;
+        }
+
+        [data-theme="dark"] .auth-divider span {
+            background: rgba(42, 42, 42, 0.95);
+            color: #ccc;
+        }
+
+        @media (max-width: 768px) {
+            .auth-card {
+                padding: 2rem;
+            }
+        }
+
+        .alert {
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -315,7 +379,7 @@
     </div>
 
     <!-- Theme Toggle (floating) -->
-    <button id="theme-toggle" class="btn btn-outline-light position-fixed top-0 end-0 m-3" aria-label="Toggle theme" style="z-index: 1000;">
+    <button id="theme-toggle" class="btn btn-outline-light position-fixed top-0 end-0 m-3" aria-label="Toggle theme" style="z-index: 1000; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
         <i class="fas fa-moon"></i>
     </button>
 
