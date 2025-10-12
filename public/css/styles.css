@@ -2,6 +2,9 @@
 /* All styles combined into one file for better organization */
 
 /* ===== CSS CUSTOM PROPERTIES ===== */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+
+
 :root {
     /* Color Palette */
     --primary-color: #8B4513;
@@ -1859,4 +1862,77 @@ html {
 
 .btn:hover::before {
     left: 100%;
+}
+
+/* ===== Loader Styling ===== */
+#loader {
+  position: fixed;
+  inset: 0;
+  background-color: #0d0d0d;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  letter-spacing: 2px;
+  animation: fadeOut 1s ease forwards;
+  animation-delay: 3s; /* stays for 3 seconds before fading */
+  color: #f2e5d7;
+}
+
+/* Loader text shimmer */
+.loader-text {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  background: linear-gradient(90deg, #f2e5d7, #b08968, #f2e5d7);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s infinite;
+  text-align: center;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Fade-out effect */
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* ===== Steam Animation ===== */
+.steam {
+  position: relative;
+  width: 20px;
+  height: 60px;
+  margin-bottom: 20px;
+}
+
+.steam::before,
+.steam::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 20px;
+  background: #f2e5d7;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: rise 3s cubic-bezier(0.4,0,0.2,1) infinite;
+}
+
+.steam::after {
+  left: 10px;
+  animation-delay: 1s;
+}
+
+@keyframes rise {
+  0% { transform: translateY(0) scaleX(1); opacity: 0.6; }
+  50% { transform: translateY(-25px) scaleX(1.2); opacity: 0.4; }
+  100% { transform: translateY(-50px) scaleX(0.8); opacity: 0; }
 }
