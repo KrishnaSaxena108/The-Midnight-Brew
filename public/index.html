@@ -36,6 +36,12 @@
 <script src="/chatbot.js"></script>
 
 <body>
+  <div id="loader">
+      <div class="steam"></div>
+
+  <h1 class="loader-text">The Midnight Brew</h1>
+  </div>
+</div>
   <!-- Enhanced Navigation Header -->
   <header class="headbar">
     <nav class="navbar navbar-expand-lg">
@@ -622,156 +628,152 @@
   <script src="theme.js"></script>
 
   <!-- Reviews Marquee JavaScript -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const carousel = document.getElementById('reviewsCarousel');
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const carousel = document.getElementById('reviewsCarousel');
+  const reviewForm = document.getElementById('reviewForm');
+  const reviewModal = new bootstrap.Modal(document.getElementById('reviewModal'));
 
-      // Review Form Submission
-      const reviewForm = document.getElementById('reviewForm');
-      const reviewModal = new bootstrap.Modal(document.getElementById('reviewModal'));
+  // --- Form Submission Handler ---
+  reviewForm.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-      reviewForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+    const formData = new FormData(reviewForm);
+    const reviewData = {
+      name: formData.get('reviewerName') || 'Anonymous',
+      rating: parseInt(formData.get('rating')),
+      menuItem: formData.get('menuItem'),
+      text: formData.get('reviewText'),
+      date: 'Just now'
+    };
 
-        const formData = new FormData(reviewForm);
-        const reviewData = {
-          name: formData.get('reviewerName') || 'Anonymous',
-          rating: parseInt(formData.get('rating')),
-          menuItem: formData.get('menuItem'),
-          text: formData.get('reviewText'),
-          date: 'Just now'
-        };
+    if (reviewData.rating && reviewData.text && reviewData.menuItem) {
+      addNewReview(reviewData);
+      updateStats();
+      reviewModal.hide();
+      reviewForm.reset();
 
-        if (reviewData.rating && reviewData.text && reviewData.menuItem) {
-          addNewReview(reviewData);
-          updateStats();
-          reviewModal.hide();
-          reviewForm.reset();
+      showNotification('Thank you for your review! It will appear in the carousel soon.', 'success');
+    }
+  });
 
-          // Show success message
-          showNotification('Thank you for your review! It will appear in the scroll soon.', 'success');
-        }
-      });
+  // --- Add a New Review to Carousel ---
+  function addNewReview({ name, rating, menuItem, text, date }) {
+    const colors = ['primary', 'success', 'info', 'warning', 'danger'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const starsHtml = generateStars(rating);
 
-      function addNewReview(reviewData) {
-        const colors = ['primary', 'success', 'info', 'warning', 'danger'];
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
-
-        const starsHtml = generateStars(reviewData.rating);
-
-        const newReviewHtml = `
-          <div class="review-slide">
-            <div class="review-card">
-              <div class="review-header d-flex align-items-center mb-3">
-                <div class="reviewer-avatar me-3">
-                  <i class="fas fa-user-circle fa-2x text-${randomColor}"></i>
-                </div>
-                <div>
-                  <h6 class="reviewer-name mb-1">${reviewData.name}</h6>
-                  <div class="review-rating">
-                    ${starsHtml}
-                  </div>
-                </div>
-              </div>
-              <div class="review-content">
-                <p class="review-text">"${reviewData.text}"</p>
-                <div class="review-item mt-2">
-                  <small class="text-muted">Reviewed: ${reviewData.menuItem}</small>
-                </div>
-                <div class="review-date">
-                  <small class="text-muted">${reviewData.date}</small>
-                </div>
-              </div>
+    const newReviewHtml = `
+      <div class="review-slide">
+        <div class="review-card">
+          <div class="review-header d-flex align-items-center mb-3">
+            <div class="reviewer-avatar me-3">
+              <i class="fas fa-user-circle fa-2x text-${randomColor}"></i>
+            </div>
+            <div>
+              <h6 class="reviewer-name mb-1">${name}</h6>
+              <div class="review-rating">${starsHtml}</div>
             </div>
           </div>
-        `;
+          <div class="review-content">
+            <p class="review-text">"${text}"</p>
+            <div class="review-item mt-2">
+              <small class="text-muted">Reviewed: ${menuItem}</small>
+            </div>
+            <div class="review-date">
+              <small class="text-muted">${date}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
 
-        // Add new review to a random position in the first half
-        const existingSlides = carousel.querySelectorAll('.review-slide');
-        const insertPosition = Math.floor(Math.random() * Math.min(3, existingSlides.length));
+    // Insert at random position in first half of carousel
+    const existingSlides = carousel.querySelectorAll('.review-slide');
+    const insertPosition = Math.floor(Math.random() * Math.min(3, existingSlides.length));
 
-        if (insertPosition === 0) {
-          carousel.insertAdjacentHTML('afterbegin', newReviewHtml);
-        } else {
-          existingSlides[insertPosition].insertAdjacentHTML('beforebegin', newReviewHtml);
-        }
+    if (insertPosition === 0) {
+      carousel.insertAdjacentHTML('afterbegin', newReviewHtml);
+    } else {
+      existingSlides[insertPosition].insertAdjacentHTML('beforebegin', newReviewHtml);
+    }
 
-        // Also add a duplicate for the infinite effect
-        carousel.insertAdjacentHTML('beforeend', newReviewHtml);
-      }
+    // Duplicate at the end for infinite scroll effect
+    carousel.insertAdjacentHTML('beforeend', newReviewHtml);
+  }
 
-      function generateStars(rating) {
-        let starsHtml = '';
-        for (let i = 1; i <= 5; i++) {
-          if (i <= rating) {
-            starsHtml += '<i class="fas fa-star text-warning"></i>';
-          } else {
-            starsHtml += '<i class="far fa-star text-warning"></i>';
-          }
-        }
-        return starsHtml;
-      }
+  // --- Generate Star Rating HTML ---
+  function generateStars(rating) {
+    let starsHtml = '';
+    for (let i = 1; i <= 5; i++) {
+      starsHtml += i <= rating
+        ? '<i class="fas fa-star text-warning"></i>'
+        : '<i class="far fa-star text-warning"></i>';
+    }
+    return starsHtml;
+  }
 
-      function updateStats() {
-        // Get all unique ratings (avoid counting duplicates)
-        const allRatings = [];
-        const uniqueReviews = new Set();
+  // --- Update Statistics ---
+  function updateStats() {
+    const allRatings = [];
+    const uniqueReviews = new Set();
 
-        document.querySelectorAll('.review-slide').forEach(slide => {
-          const reviewText = slide.querySelector('.review-text').textContent;
-          if (!uniqueReviews.has(reviewText)) {
-            uniqueReviews.add(reviewText);
-            const filledStars = slide.querySelectorAll('.review-rating .fas.fa-star').length;
-            allRatings.push(filledStars);
-          }
-        });
-
-        // Calculate new average
-        const avgRating = (allRatings.reduce((a, b) => a + b, 0) / allRatings.length).toFixed(1);
-        const totalReviews = allRatings.length;
-        const satisfactionRate = Math.round((allRatings.filter(r => r >= 4).length / totalReviews) * 100);
-
-        // Update display
-        document.getElementById('averageRating').textContent = avgRating;
-        document.getElementById('totalReviews').textContent = totalReviews.toLocaleString();
-        document.getElementById('satisfactionRate').textContent = satisfactionRate + '%';
-
-        // Animate the updated stats
-        document.querySelectorAll('.stat-card').forEach(card => {
-          card.style.transform = 'scale(1.05)';
-          setTimeout(() => {
-            card.style.transform = 'scale(1)';
-          }, 200);
-        });
-      }
-
-      function showNotification(message, type) {
-        const notification = document.createElement('div');
-        notification.className = `alert alert-${type === 'success' ? 'success' : 'info'} position-fixed`;
-        notification.style.cssText = `
-          top: 20px;
-          right: 20px;
-          z-index: 9999;
-          min-width: 300px;
-          animation: slideInRight 0.5s ease;
-        `;
-        notification.innerHTML = `
-          <i class="fas fa-check-circle me-2"></i>${message}
-          <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
-        `;
-
-        document.body.appendChild(notification);
-
-        // Auto remove after 4 seconds
-        setTimeout(() => {
-          if (notification.parentElement) {
-            notification.style.animation = 'slideOutRight 0.5s ease';
-            setTimeout(() => notification.remove(), 500);
-          }
-        }, 4000);
+    document.querySelectorAll('.review-slide').forEach(slide => {
+      const text = slide.querySelector('.review-text').textContent;
+      if (!uniqueReviews.has(text)) {
+        uniqueReviews.add(text);
+        const filledStars = slide.querySelectorAll('.review-rating .fas.fa-star').length;
+        allRatings.push(filledStars);
       }
     });
-  </script>
+
+    const totalReviews = allRatings.length;
+    const avgRating = totalReviews > 0
+      ? (allRatings.reduce((a, b) => a + b, 0) / totalReviews).toFixed(1)
+      : 0;
+    const satisfactionRate = totalReviews > 0
+      ? Math.round((allRatings.filter(r => r >= 4).length / totalReviews) * 100)
+      : 0;
+
+    document.getElementById('averageRating').textContent = avgRating;
+    document.getElementById('totalReviews').textContent = totalReviews.toLocaleString();
+    document.getElementById('satisfactionRate').textContent = satisfactionRate + '%';
+
+    // Animate stat cards
+    document.querySelectorAll('.stat-card').forEach(card => {
+      card.style.transform = 'scale(1.05)';
+      setTimeout(() => card.style.transform = 'scale(1)', 200);
+    });
+  }
+
+  // --- Show Notification ---
+  function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'success' ? 'success' : 'info'} position-fixed`;
+    notification.style.cssText = `
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      min-width: 300px;
+      animation: slideInRight 0.5s ease;
+    `;
+    notification.innerHTML = `
+      <i class="fas fa-check-circle me-2"></i>${message}
+      <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      if (notification.parentElement) {
+        notification.style.animation = 'slideOutRight 0.5s ease';
+        setTimeout(() => notification.remove(), 500);
+      }
+    }, 4000);
+  }
+});
+</script>
+
 
   <!-- Enhanced Footer -->
   <footer class="footer-section fade-in">
@@ -859,6 +861,31 @@
 
   <!-- Universal Authentication Navigation -->
   <script src="auth-nav.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const loader = document.getElementById("loader");
+  const content = document.getElementById("content");
+
+  // Check if the loader has already been shown
+  const hasLoadedBefore = sessionStorage.getItem("hasLoadedBefore");
+
+  if (hasLoadedBefore) {
+    // Skip loader
+    loader.style.display = "none";
+    content.style.display = "block";
+  } else {
+    // Show loader only once
+    sessionStorage.setItem("hasLoadedBefore", "true");
+
+    // Display loader, then hide after animation
+    setTimeout(() => {
+      loader.style.display = "none";
+      content.style.display = "block";
+    }, 3500); // matches the CSS delay (3s + a little buffer)
+  }
+});
+</script>
+
 
 </body>
 
