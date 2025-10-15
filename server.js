@@ -24,6 +24,47 @@ const {
 
 const { requireAdmin } = require('./auth/admin-middleware');
 
+// Image upload configuration
+const multer = require('multer');
+const Image = require('./models/Image');
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadDir = path.join(__dirname, 'public/uploads');
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        // Generate unique filename
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname);
+        const name = file.originalname.replace(ext, '').toLowerCase().replace(/[^a-z0-9]/g, '-');
+        cb(null, name + '-' + uniqueSuffix + ext);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    // Get allowed file types from environment or use defaults
+    const allowedTypes = (process.env.UPLOAD_ALLOWED_TYPES || 'image/jpeg,image/png,image/jpg,image/gif,image/webp').split(',');
+    
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error(`Only these file types are allowed: ${allowedTypes.join(', ')}`), false);
+    }
+};
+
+const upload = multer({ 
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: parseInt(process.env.UPLOAD_MAX_FILE_SIZE) || (5 * 1024 * 1024), // 5MB default
+    }
+});
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -112,7 +153,7 @@ app.post('/api/auth/register', async (req, res) => {
         }
 
         // Hash password
-        const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10;
+        const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS) || 12;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         // Create new user
@@ -573,7 +614,7 @@ app.get('/api/menu-items', async (req, res) => {
 // Create new menu item
 app.post('/api/menu-items', requireAdmin, async (req, res) => {
     try {
-        const { name, description, price, imageUrl, categoryId } = req.body;
+        const { name, description, price, imageUrl, imageId, categoryId } = req.body;
 
         if (!name || !name.trim()) {
             return res.status(400).json({
@@ -610,7 +651,8 @@ app.post('/api/menu-items', requireAdmin, async (req, res) => {
             description: description ? description.trim() : '',
             price: parseFloat(price),
             category: categoryId,
-            image: imageUrl ? imageUrl.trim() : ''
+            image: imageId || null,
+            imageUrl: imageUrl ? imageUrl.trim() : ''
         });
 
         await menuItem.save();
@@ -632,7 +674,7 @@ app.post('/api/menu-items', requireAdmin, async (req, res) => {
 // Update menu item
 app.put('/api/menu-items/:id', requireAdmin, async (req, res) => {
     try {
-        const { name, description, price, imageUrl, categoryId } = req.body;
+        const { name, description, price, imageUrl, imageId, categoryId } = req.body;
         const itemId = req.params.id;
 
         if (!name || !name.trim()) {
@@ -672,7 +714,8 @@ app.put('/api/menu-items/:id', requireAdmin, async (req, res) => {
                 description: description ? description.trim() : '',
                 price: parseFloat(price),
                 category: categoryId,
-                image: imageUrl ? imageUrl.trim() : ''
+                image: imageId || null,
+                imageUrl: imageUrl ? imageUrl.trim() : ''
             },
             { new: true }
         );
@@ -722,6 +765,323 @@ app.delete('/api/menu-items/:id', requireAdmin, async (req, res) => {
             success: false,
             message: 'Failed to delete menu item'
         });
+    }
+});
+
+// ============ IMAGES API ENDPOINTS ============
+
+// Upload image
+app.post('/api/images/upload', requireAdmin, upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: 'No image file provided'
+            });
+        }
+
+        const { category = 'general', alt = '', description = '' } = req.body;
+
+        // Create image record in database
+        const imageRecord = new Image({
+            filename: req.file.filename,
+            originalName: req.file.originalname,
+            mimetype: req.file.mimetype,
+            size: req.file.size,
+            path: req.file.path,
+            url: `/uploads/${req.file.filename}`,
+            category,
+            alt,
+            description
+        });
+
+        await imageRecord.save();
+
+        res.json({
+            success: true,
+            message: 'Image uploaded successfully',
+            image: {
+                id: imageRecord._id,
+                filename: imageRecord.filename,
+                originalName: imageRecord.originalName,
+                url: imageRecord.url,
+                category: imageRecord.category,
+                alt: imageRecord.alt,
+                description: imageRecord.description
+            }
+        });
+    } catch (error) {
+        console.error('Image upload error:', error);
+        // Clean up uploaded file if database save fails
+        if (req.file && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
+        res.status(500).json({
+            success: false,
+            message: 'Failed to upload image'
+        });
+    }
+});
+
+// Get all images
+app.get('/api/images', async (req, res) => {
+    try {
+        const { category, limit = 50, page = 1 } = req.query;
+        
+        let filter = { isActive: true };
+        if (category) {
+            filter.category = category;
+        }
+
+        const images = await Image.find(filter)
+            .sort({ createdAt: -1 })
+            .limit(parseInt(limit))
+            .skip((parseInt(page) - 1) * parseInt(limit))
+            .select('-path'); // Don't expose file system paths
+
+        const totalImages = await Image.countDocuments(filter);
+
+        res.json({
+            success: true,
+            images: images,
+            pagination: {
+                currentPage: parseInt(page),
+                totalPages: Math.ceil(totalImages / parseInt(limit)),
+                totalImages: totalImages,
+                hasMore: (parseInt(page) * parseInt(limit)) < totalImages
+            }
+        });
+    } catch (error) {
+        console.error('Get images error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to retrieve images'
+        });
+    }
+});
+
+// Get image by ID
+app.get('/api/images/:id', async (req, res) => {
+    try {
+        const image = await Image.findById(req.params.id);
+        
+        if (!image) {
+            return res.status(404).json({
+                success: false,
+                message: 'Image not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            image: {
+                id: image._id,
+                filename: image.filename,
+                originalName: image.originalName,
+                url: image.url,
+                category: image.category,
+                alt: image.alt,
+                description: image.description,
+                mimetype: image.mimetype,
+                size: image.size,
+                createdAt: image.createdAt
+            }
+        });
+    } catch (error) {
+        console.error('Get image error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to retrieve image'
+        });
+    }
+});
+
+// Update image metadata
+app.put('/api/images/:id', requireAdmin, async (req, res) => {
+    try {
+        const { category, alt, description } = req.body;
+        
+        const image = await Image.findByIdAndUpdate(
+            req.params.id,
+            { 
+                ...(category && { category }),
+                ...(alt !== undefined && { alt }),
+                ...(description !== undefined && { description })
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (!image) {
+            return res.status(404).json({
+                success: false,
+                message: 'Image not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Image updated successfully',
+            image: {
+                id: image._id,
+                filename: image.filename,
+                originalName: image.originalName,
+                url: image.url,
+                category: image.category,
+                alt: image.alt,
+                description: image.description
+            }
+        });
+    } catch (error) {
+        console.error('Update image error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update image'
+        });
+    }
+});
+
+// Delete image
+app.delete('/api/images/:id', requireAdmin, async (req, res) => {
+    try {
+        const image = await Image.findById(req.params.id);
+        
+        if (!image) {
+            return res.status(404).json({
+                success: false,
+                message: 'Image not found'
+            });
+        }
+
+        // Check if image is being used by menu items or categories
+        const menuItemsUsingImage = await MenuItem.countDocuments({ image: image._id });
+        const categoriesUsingImage = await Category.countDocuments({ image: image._id });
+        
+        if (menuItemsUsingImage > 0 || categoriesUsingImage > 0) {
+            return res.status(400).json({
+                success: false,
+                message: `Cannot delete image. It is being used by ${menuItemsUsingImage} menu item(s) and ${categoriesUsingImage} categor(ies).`
+            });
+        }
+
+        // Delete file from filesystem
+        if (fs.existsSync(image.path)) {
+            fs.unlinkSync(image.path);
+        }
+
+        // Delete from database
+        await Image.findByIdAndDelete(req.params.id);
+
+        res.json({
+            success: true,
+            message: 'Image deleted successfully'
+        });
+    } catch (error) {
+        console.error('Delete image error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to delete image'
+        });
+    }
+});
+
+// Bulk upload images
+app.post('/api/images/bulk-upload', requireAdmin, upload.array('images', 10), async (req, res) => {
+    try {
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'No image files provided'
+            });
+        }
+
+        const { category = 'general' } = req.body;
+        const uploadedImages = [];
+        const errors = [];
+
+        for (let i = 0; i < req.files.length; i++) {
+            const file = req.files[i];
+            
+            try {
+                const imageRecord = new Image({
+                    filename: file.filename,
+                    originalName: file.originalname,
+                    mimetype: file.mimetype,
+                    size: file.size,
+                    path: file.path,
+                    url: `/uploads/${file.filename}`,
+                    category,
+                    alt: file.originalname.replace(/\.[^/.]+$/, ""), // Remove extension for alt text
+                    description: `Uploaded image: ${file.originalname}`
+                });
+
+                await imageRecord.save();
+                uploadedImages.push({
+                    id: imageRecord._id,
+                    filename: imageRecord.filename,
+                    originalName: imageRecord.originalName,
+                    url: imageRecord.url,
+                    category: imageRecord.category
+                });
+            } catch (error) {
+                errors.push({
+                    filename: file.originalname,
+                    error: error.message
+                });
+                // Clean up failed upload
+                if (fs.existsSync(file.path)) {
+                    fs.unlinkSync(file.path);
+                }
+            }
+        }
+
+        res.json({
+            success: true,
+            message: `Successfully uploaded ${uploadedImages.length} image(s)`,
+            uploaded: uploadedImages,
+            errors: errors
+        });
+    } catch (error) {
+        console.error('Bulk upload error:', error);
+        // Clean up any uploaded files on error
+        if (req.files) {
+            req.files.forEach(file => {
+                if (fs.existsSync(file.path)) {
+                    fs.unlinkSync(file.path);
+                }
+            });
+        }
+        res.status(500).json({
+            success: false,
+            message: 'Failed to upload images'
+        });
+    }
+});
+
+// ============ DEBUG API ENDPOINTS ============
+
+// Debug endpoint to check menu data
+app.get('/api/debug/menu', async (req, res) => {
+    try {
+        const categories = await Category.find({});
+        const menuItems = await MenuItem.find({}).populate('image');
+        const images = await Image.find({});
+        
+        res.json({
+            success: true,
+            debug: {
+                categories: categories.map(cat => ({ id: cat._id, name: cat.name })),
+                menuItems: menuItems.map(item => ({
+                    id: item._id,
+                    name: item.name,
+                    category: item.category,
+                    image: item.image,
+                    imageUrl: item.imageUrl
+                })),
+                images: images.map(img => ({ id: img._id, filename: img.filename, url: img.url }))
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
@@ -809,48 +1169,93 @@ app.get('/api/info', (req, res) => {
     res.json(cafeInfo);
 });
 
-app.get('/api/menu', (req, res) => {
-    const menuData = {
-        success: true,
-        timestamp: new Date().toISOString(),
-        data: {
-            categories: ['Pastries', 'Beverages', 'Sandwiches', 'Soups'],
-            items: [
-                { id: 1, name: 'Blueberry Muffin', category: 'Pastries', price: 3.50, description: 'Fresh blueberries with golden crumb', image: 'public/bluberry muffin.jpg', available: true },
-                { id: 2, name: 'Chocolate Croissant', category: 'Pastries', price: 4.25, description: 'Buttery pastry with dark chocolate', image: 'public/chocolate crossiant.jpg', available: true },
-                { id: 3, name: 'Apple Turnover', category: 'Pastries', price: 3.75, description: 'Warm spiced apples in puff pastry', image: 'public/apple turnover.jpg', available: true },
-                { id: 4, name: 'Espresso', category: 'Beverages', price: 2.50, description: 'Rich, bold coffee shot', image: 'public/hot1.jpg', available: true },
-                { id: 5, name: 'Latte', category: 'Beverages', price: 4.50, description: 'Smooth espresso with steamed milk', image: 'public/hot2.webp', available: true },
-                { id: 6, name: 'Cappuccino', category: 'Beverages', price: 4.00, description: 'Espresso with thick foam', image: 'public/hot3.jpg', available: true },
-                { id: 7, name: 'BLT Sandwich', category: 'Sandwiches', price: 8.99, description: 'Classic bacon, lettuce, tomato', image: 'public/Blt.jpg', available: true },
-                { id: 8, name: 'Club Sandwich', category: 'Sandwiches', price: 9.50, description: 'Triple-decker delight', image: 'public/club sandwitch.avif', available: true },
-                { id: 9, name: 'Grilled Cheese', category: 'Sandwiches', price: 7.50, description: 'Three cheese blend', image: 'public/grilled.webp', available: true },
-                { id: 10, name: 'Tomato Basil Soup', category: 'Soups', price: 6.50, description: 'Creamy with fresh basil', image: 'public/tomato.jpg', available: true },
-                { id: 11, name: 'Broccoli Cheddar Soup', category: 'Soups', price: 6.75, description: 'Rich and cheesy', image: 'public/brocalli cheddar soup.jpg', available: true },
-                { id: 12, name: 'Chinese Noodle Soup', category: 'Soups', price: 7.25, description: 'Savory broth with noodles', image: 'public/chinese noodle soup.jpg', available: true }
-            ]
-        }
-    };
-    res.json(menuData);
+app.get('/api/menu', async (req, res) => {
+    try {
+        // Fetch categories from database
+        const categories = await Category.find({ }).sort({ name: 1 });
+        
+        // Fetch menu items from database with populated image and category data
+        const menuItems = await MenuItem.find({ available: true })
+            .populate('image', 'url alt originalName')
+            .populate('category', 'name')
+            .sort({ name: 1 });
+
+        // Transform data for frontend
+        const categoryNames = categories.map(cat => cat.name);
+        const items = menuItems.map(item => ({
+            id: item._id,
+            name: item.name,
+            category: item.category ? item.category.name : 'Uncategorized',
+            price: item.price,
+            description: item.description || '',
+            image: item.image ? item.image.url : (item.imageUrl || '/uploads/placeholder.jpg'),
+            alt: item.image ? item.image.alt : item.name,
+            available: item.available
+        }));
+
+        const menuData = {
+            success: true,
+            timestamp: new Date().toISOString(),
+            data: {
+                categories: categoryNames,
+                items: items
+            }
+        };
+        
+        res.json(menuData);
+        
+    } catch (error) {
+        console.error('Menu fetch error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch menu data'
+        });
+    }
 });
 
-app.get('/api/menu/:category', (req, res) => {
-    const category = req.params.category;
-    const allItems = [
-        { id: 1, name: 'Blueberry Muffin', category: 'pastries', price: 3.50 },
-        { id: 2, name: 'Chocolate Croissant', category: 'pastries', price: 4.25 },
-        { id: 4, name: 'Espresso', category: 'beverages', price: 2.50 },
-        { id: 5, name: 'Latte', category: 'beverages', price: 4.50 },
-        { id: 7, name: 'BLT Sandwich', category: 'sandwiches', price: 8.99 },
-        { id: 8, name: 'Club Sandwich', category: 'sandwiches', price: 9.50 },
-        { id: 10, name: 'Tomato Basil Soup', category: 'soups', price: 6.50 }
-    ];
-    const filteredItems = allItems.filter(item => item.category.toLowerCase() === category.toLowerCase());
-    
-    if (filteredItems.length > 0) {
-        res.json({ success: true, category: category, count: filteredItems.length, items: filteredItems });
-    } else {
-        res.status(404).json({ success: false, message: `No items found in category: ${category}` });
+app.get('/api/menu/:category', async (req, res) => {
+    try {
+        const category = req.params.category;
+        
+        // Find menu items in the specified category
+        const menuItems = await MenuItem.find({ 
+            category: { $regex: new RegExp(category, 'i') }, 
+            available: true 
+        })
+        .populate('image', 'url alt originalName')
+        .sort({ name: 1 });
+        
+        if (menuItems.length > 0) {
+            const items = menuItems.map(item => ({
+                id: item._id,
+                name: item.name,
+                category: item.category,
+                price: item.price,
+                description: item.description || '',
+                image: item.image ? item.image.url : (item.imageUrl || '/uploads/placeholder.jpg'),
+                alt: item.image ? item.image.alt : item.name,
+                available: item.available
+            }));
+            
+            res.json({ 
+                success: true, 
+                category: category, 
+                count: items.length, 
+                items: items 
+            });
+        } else {
+            res.status(404).json({ 
+                success: false, 
+                message: `No items found in category: ${category}` 
+            });
+        }
+        
+    } catch (error) {
+        console.error('Menu category fetch error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch menu items for category'
+        });
     }
 });
 

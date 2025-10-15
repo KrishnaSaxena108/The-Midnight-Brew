@@ -1530,6 +1530,12 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="images-tab" data-bs-toggle="pill" data-bs-target="#images" type="button" role="tab">
+                        <i class="fas fa-images me-2"></i>
+                        <span>Images</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
                     <button class="nav-link" id="bookings-tab" data-bs-toggle="pill" data-bs-target="#bookings" type="button" role="tab">
                         <i class="fas fa-calendar-alt me-2"></i>
                         <span>Bookings</span>
@@ -1603,6 +1609,56 @@
                             <i class="fas fa-utensils"></i>
                             <h4>No Menu Items Found</h4>
                             <p>Ready to create something amazing? Add your first delicious item using the button above!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Images Management Tab -->
+            <div class="tab-pane fade" id="images" role="tabpanel">
+                <div class="dashboard-card">
+                    <div class="action-header">
+                        <div>
+                            <h3 class="mb-1" style="color: var(--text-primary); font-weight: 700;">
+                                <i class="fas fa-images me-2" style="color: var(--accent-primary);"></i>
+                                Image Library
+                            </h3>
+                            <p class="mb-0" style="color: var(--text-secondary);">
+                                Upload and manage images for menu items, categories, and general use
+                            </p>
+                        </div>
+                        <button type="button" class="btn-primary-admin" data-bs-toggle="modal" data-bs-target="#imageUploadModal">
+                            <i class="fas fa-plus me-2"></i>Upload Images
+                        </button>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <select class="form-control-admin" id="imagesCategoryFilter" onchange="filterImages()">
+                                <option value="">All Categories</option>
+                                <option value="menu-item">Menu Items</option>
+                                <option value="cafe">Café Images</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control-admin" id="imagesSearchFilter" placeholder="Search images..." onkeyup="filterImages()">
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control-admin" id="imagesSortFilter" onchange="filterImages()">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="name">Name A-Z</option>
+                                <option value="size">File Size</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="imagesContainer">
+                        <div class="text-center py-5">
+                            <i class="fas fa-images fa-3x text-muted mb-3"></i>
+                            <h4>No Images Found</h4>
+                            <p>Start building your image library by uploading your first image!</p>
                         </div>
                     </div>
                 </div>
@@ -1783,9 +1839,16 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="itemImage" class="form-label-admin">
-                                    <i class="fas fa-image me-2"></i>Image URL
+                                    <i class="fas fa-image me-2"></i>Image Upload
                                 </label>
-                                <input type="url" class="form-control-admin" id="itemImage" placeholder="https://example.com/image.jpg">
+                                <input type="file" class="form-control-admin" id="itemImage" accept="image/*" onchange="previewItemImage(this)">
+                                <small class="text-muted">Supported formats: JPG, PNG, GIF, WebP, AVIF (max 5MB)</small>
+                                <div id="imagePreview" class="mt-2" style="display: none;">
+                                    <img id="imagePreviewImg" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid var(--border-primary);">
+                                    <button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="clearImagePreview()">
+                                        <i class="fas fa-times"></i> Remove
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -1796,6 +1859,142 @@
                     </button>
                     <button type="button" class="btn-primary-admin" onclick="saveMenuItem()">
                         <i class="fas fa-save me-2"></i>Save Item
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Upload Modal -->
+    <div class="modal fade" id="imageUploadModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-upload me-2"></i>Upload Images
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="imageUploadForm" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label for="uploadImages" class="form-label-admin">
+                                    <i class="fas fa-images me-2"></i>Select Images
+                                </label>
+                                <input type="file" class="form-control-admin" id="uploadImages" multiple accept="image/*" onchange="previewUploadImages(this)">
+                                <small class="text-muted">Select multiple images (max 10 files, 5MB each). Supported formats: JPG, PNG, GIF, WebP, AVIF</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="uploadCategory" class="form-label-admin">
+                                    <i class="fas fa-tag me-2"></i>Category
+                                </label>
+                                <select class="form-control-admin" id="uploadCategory">
+                                    <option value="general">General</option>
+                                    <option value="menu-item">Menu Items</option>
+                                    <option value="cafe">Café Images</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                                    <label class="form-label-admin">Upload Progress</label>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="uploadPreviewContainer" class="row mt-3" style="display: none;">
+                            <div class="col-12">
+                                <h6><i class="fas fa-eye me-2"></i>Preview</h6>
+                                <div id="uploadPreviewList" class="d-flex flex-wrap gap-2"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-outline-admin" data-bs-dismiss="modal" onclick="clearUploadForm()">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="button" class="btn-primary-admin" id="uploadImagesBtn" onclick="uploadImages()" disabled>
+                        <i class="fas fa-cloud-upload-alt me-2"></i>Upload Images
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Detail Modal -->
+    <div class="modal fade" id="imageDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-image me-2"></i>Image Details
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-center">
+                                <img id="detailImagePreview" src="" alt="" class="img-fluid rounded" style="max-height: 300px;">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <form id="imageDetailForm">
+                                <input type="hidden" id="detailImageId">
+                                <div class="mb-3">
+                                    <label for="detailImageAlt" class="form-label-admin">
+                                        <i class="fas fa-tag me-2"></i>Alt Text
+                                    </label>
+                                    <input type="text" class="form-control-admin" id="detailImageAlt" placeholder="Descriptive text for accessibility">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="detailImageDescription" class="form-label-admin">
+                                        <i class="fas fa-align-left me-2"></i>Description
+                                    </label>
+                                    <textarea class="form-control-admin" id="detailImageDescription" rows="3" placeholder="Optional description"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="detailImageCategory" class="form-label-admin">
+                                        <i class="fas fa-folder me-2"></i>Category
+                                    </label>
+                                    <select class="form-control-admin" id="detailImageCategory">
+                                        <option value="general">General</option>
+                                        <option value="menu-item">Menu Items</option>
+                                        <option value="cafe">Café Images</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <small class="text-muted">
+                                            <strong>File Size:</strong> <span id="detailImageSize"></span><br>
+                                            <strong>Dimensions:</strong> <span id="detailImageDimensions"></span><br>
+                                            <strong>Type:</strong> <span id="detailImageType"></span>
+                                        </small>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">
+                                            <strong>URL:</strong><br>
+                                            <input type="text" class="form-control form-control-sm" id="detailImageUrl" readonly onclick="this.select()">
+                                        </small>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-outline-danger" onclick="deleteImage()">
+                        <i class="fas fa-trash me-2"></i>Delete
+                    </button>
+                    <button type="button" class="btn-outline-admin" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Close
+                    </button>
+                    <button type="button" class="btn-primary-admin" onclick="updateImageDetails()">
+                        <i class="fas fa-save me-2"></i>Update
                     </button>
                 </div>
             </div>

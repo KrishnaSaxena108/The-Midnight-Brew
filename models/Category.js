@@ -14,6 +14,15 @@ const CategorySchema = new mongoose.Schema({
         type: String,
         maxlength: 500,
         trim: true
+    },
+    
+    image: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image'
+    },
+    imageUrl: {
+        type: String,
+        default: ''
     }
 },{
     timestamps: true

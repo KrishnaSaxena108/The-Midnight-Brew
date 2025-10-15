@@ -7,13 +7,21 @@
     "start": "node server.js",
     "dev": "node server.js",
     "setup-admin": "node scripts/setup-admin.js",
+    "migrate-images": "node scripts/migrate-images.js",
+    "seed-menu": "node scripts/seed-menu.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KrishnaSaxena108/The-Midnight-Brew.git"
   },
-  "keywords": ["cafe", "restaurant", "coffee", "nodejs", "express"],
+  "keywords": [
+    "cafe",
+    "restaurant",
+    "coffee",
+    "nodejs",
+    "express"
+  ],
   "author": "Krishna Saxena",
   "license": "ISC",
   "type": "commonjs",
@@ -30,6 +38,7 @@
     "express-session": "^1.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.0",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2"
   }
 }
