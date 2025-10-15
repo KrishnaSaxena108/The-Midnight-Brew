@@ -25,7 +25,12 @@ const menuItemSchema = new mongoose.Schema({
         required: true
     },
     image: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image'
+    },
+    imageUrl: {
+        type: String,
+        default: ''
     },
     available: {
         type: Boolean,

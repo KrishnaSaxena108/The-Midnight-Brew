@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +22,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Favicon -->
-    <link rel="icon" href="public/favicon.png">
+    <link rel="icon" href="/uploads/migrated-favicon-1760106874729.png">
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
@@ -35,7 +36,7 @@
             <div class="container-fluid">
                 <!-- Brand Logo and Name -->
                 <a href="/" class="navbar-brand d-flex align-items-center">
-                    <img class="nav-img me-3" src="public/logo.jpeg" alt="The Midnight Brew Logo">
+                    <img class="nav-img me-3" src="/uploads/migrated-logo-1760106874760.jpeg" alt="The Midnight Brew Logo">
                     <h1 class="nav-para mb-0">The Midnight Brew</h1>
                 </a>
                 
@@ -107,7 +108,7 @@
                 <!-- Brand Info -->
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-brand">
-                        <img src="public/logo.jpeg" alt="The Midnight Brew" class="footer-logo mb-3">
+                        <img src="/uploads/migrated-logo-1760106874760.jpeg" alt="The Midnight Brew" class="footer-logo mb-3">
                         <h5 class="text-white">The Midnight Brew</h5>
                         <p class="text-white-50">Where coffee meets moonlight, creating magical moments for night owls and coffee lovers.</p>
                     </div>
@@ -196,9 +197,12 @@
         fetch("/api/menu")
         .then(res => res.json())
         .then(data => {
+            console.log('Menu data received:', data);
             if (!data.success) throw new Error("Failed to fetch menu");
             
             const {categories,items} = data.data;
+            console.log('Categories:', categories);
+            console.log('Items:', items);
 
             categories.forEach(category =>{
                 const categoryDiv = document.createElement("div");
@@ -213,18 +217,24 @@
 
                 const row = categoryDiv.querySelector(".row");
                 items.filter(i => i.category === category).forEach(item => {
+                    // Use the image URL from database or fallback to a placeholder
+                    const imageUrl = item.image || item.imageUrl || '/uploads/placeholder.jpg';
+                    const imageAlt = item.alt || item.name || 'Menu item';
+                    
                     row.innerHTML += `
                     <div class="col-lg-4 col-md-6">
                         <div class="menu-item-card">
                             <div class="menu-item-image">
-                                <img src="${item.image}" alt="${item.name}" class="img-fluid">
+                                <img src="${imageUrl}" alt="${imageAlt}" class="img-fluid" 
+                                     onerror="this.onerror=null; this.src='/uploads/placeholder.jpg';"
+                                     onload="console.log('Image loaded:', '${imageUrl}');">
                                 <div class="menu-item-overlay">
                                     <span class="price">$${item.price.toFixed(2)}</span>
                                 </div>
                             </div>
                             <div class="menu-item-content">
                                 <h4>${item.name}</h4>
-                                <p>${item.description}</p>
+                                <p>${item.description || ''}</p>
                             </div>
                         </div>
                     </div>
