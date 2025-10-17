@@ -726,25 +726,8 @@ npm start
 
 ---
 
-## 🎯 Project Status
-
+<h2> 🔧 Project Maintainer </h2>
 <div align="center">
-
-The Midnight Brew website is currently in **active development**.  
-We're constantly improving the design, adding new features, and optimizing the user experience.
-
-</div>
-
----
-
-## 👥 Contributing Team
-
-<br>
-
-### 🔧 Project Maintainer
-
-<div align="center">
-
 <table>
   <tr>
     <td align="center">
@@ -758,40 +741,35 @@ We're constantly improving the design, adding new features, and optimizing the u
     </td>
   </tr>
 </table>
-
 </div>
-
 <br>
-
-### ✨ Contributors
-
+<h2>✨ Contributors </h2>
+<br>
 <div align="center">
-
-*A huge thank you to all the amazing contributors who have helped make The Midnight Brew better!* 🙏
-
+A huge thank you to all the amazing contributors who have helped make The Midnight Brew better! 🙏
 <br>
-
+<br>
 <table>
   <tr>
-    <td align="center">
-      <a href="https://github.com/shrvtiprasad">
-        <img src="https://github.com/shrvtiprasad.png" width="80px;" alt="shrvtiprasad"/>
-        <br />
-        <sub><b>shrvtiprasad</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/Kautuk-Adarsh">
-        <img src="https://github.com/Kautuk-Adarsh.png" width="80px;" alt="Kautuk-Adarsh"/>
-        <br />
-        <sub><b>Kautuk Adarsh</b></sub>
-      </a>
-    </td>
     <td align="center">
       <a href="https://github.com/Haze10-stack">
         <img src="https://github.com/Haze10-stack.png" width="80px;" alt="Haze10-stack"/>
         <br />
         <sub><b>Haze10-stack</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/iAwaisKhan">
+        <img src="https://github.com/iAwaisKhan.png" width="80px;" alt="iAwaisKhan"/>
+        <br />
+        <sub><b>iAwaisKhan</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/shrvtiprasad">
+        <img src="https://github.com/shrvtiprasad.png" width="80px;" alt="shrvtiprasad"/>
+        <br />
+        <sub><b>shrvtiprasad</b></sub>
       </a>
     </td>
     <td align="center">
@@ -802,19 +780,33 @@ We're constantly improving the design, adding new features, and optimizing the u
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/ARYPROGRAMMER">
-        <img src="https://github.com/ARYPROGRAMMER.png" width="80px;" alt="ARYPROGRAMMER"/>
+      <a href="https://github.com/Kautuk-Adarsh">
+        <img src="https://github.com/Kautuk-Adarsh.png" width="80px;" alt="Kautuk-Adarsh"/>
         <br />
-        <sub><b>ARYPROGRAMMER</b></sub>
+        <sub><b>Kautuk Adarsh</b></sub>
       </a>
     </td>
   </tr>
   <tr>
     <td align="center">
+      <a href="https://github.com/Simonmatharesh">
+        <img src="https://github.com/Simonmatharesh.png" width="80px;" alt="Simonmatharesh"/>
+        <br />
+        <sub><b>Simonmatharesh</b></sub>
+      </a>
+    </td>
+    <td align="center">
       <a href="https://github.com/akadeepesh">
         <img src="https://github.com/akadeepesh.png" width="80px;" alt="akadeepesh"/>
         <br />
         <sub><b>akadeepesh</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/ARYPROGRAMMER">
+        <img src="https://github.com/ARYPROGRAMMER.png" width="80px;" alt="ARYPROGRAMMER"/>
+        <br />
+        <sub><b>ARYPROGRAMMER</b></sub>
       </a>
     </td>
     <td align="center">
@@ -825,25 +817,40 @@ We're constantly improving the design, adding new features, and optimizing the u
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/Simonmatharesh">
-        <img src="https://github.com/Simonmatharesh.png" width="80px;" alt="Simonmatharesh"/>
+      <a href="https://github.com/mohi-devhub">
+        <img src="https://github.com/mohi-devhub.png" width="80px;" alt="mohi-devhub"/>
         <br />
-        <sub><b>Simonmatharesh</b></sub>
+        <sub><b>mohi-devhub</b></sub>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/rishabhrawat05">
+        <img src="https://github.com/rishabhrawat05.png" width="80px;" alt="rishabhrawat05"/>
+        <br />
+        <sub><b>rishabhrawat05</b></sub>
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/AzabadaudiyaZWS">
-        <img src="https://github.com/AzabadaudiyaZWS.png" width="80px;" alt="AzabadaudiyaZWS"/>
+      <a href="https://github.com/Nayaab-Jindani05">
+        <img src="https://github.com/Nayaab-Jindani05.png" width="80px;" alt="Nayaab-Jindani05"/>
         <br />
-        <sub><b>AzabadaudiyaZWS</b></sub>
+        <sub><b>Nayaab Jindani</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/TechnoBlogger14o3">
+        <img src="https://github.com/TechnoBlogger14o3.png" width="80px;" alt="TechnoBlogger14o3"/>
+        <br />
+        <sub><b>TechnoBlogger14o3</b></sub>
       </a>
     </td>
   </tr>
 </table>
-
 <br>
 
-> **Want to see your name here?** Check out our [Contributing Guide](CONTRIBUTING.md) and start contributing today!
+Want to see your name here? Check out our Contributing Guide and start contributing today!
 
 </div>
 
