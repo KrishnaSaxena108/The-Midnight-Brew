@@ -35,13 +35,10 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "express-rate-limit": "^7.1.5",
     "express-session": "^1.18.2",
-    "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.0",
     "morgan": "^1.10.1",
-    "multer": "^2.0.2",
-    "validator": "^13.11.0"
+    "multer": "^2.0.2"
   }
 }

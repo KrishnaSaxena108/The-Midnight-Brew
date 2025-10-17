@@ -7,8 +7,6 @@ const morgan = require('morgan');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
 const connectDB = require('./config/database');
 const User = require('./models/User');
 const Booking = require('./models/Booking');
@@ -25,13 +23,6 @@ const {
 } = require('./auth/middleware');
 
 const { requireAdmin } = require('./auth/admin-middleware');
-const { 
-    validateEmail, 
-    validatePassword, 
-    validateName, 
-    validatePhone, 
-    createValidationMiddleware 
-} = require('./utils/validation');
 
 // Image upload configuration
 const multer = require('multer');
@@ -76,56 +67,6 @@ const upload = multer({
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Environment validation
-const requiredEnvVars = ['MONGODB_URI', 'JWT_SECRET'];
-const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
-if (missingEnvVars.length > 0) {
-    console.error('❌ Missing required environment variables:', missingEnvVars.join(', '));
-    console.error('Please check your .env file and ensure all required variables are set.');
-    process.exit(1);
-}
-
-// Security middleware
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-            fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            imgSrc: ["'self'", "data:", "https:"],
-            scriptSrc: ["'self'"],
-            connectSrc: ["'self'"]
-        }
-    },
-    crossOriginEmbedderPolicy: false
-}));
-
-// Rate limiting
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
-    message: {
-        success: false,
-        message: 'Too many requests from this IP, please try again later.'
-    },
-    standardHeaders: true,
-    legacyHeaders: false
-});
-
-// Stricter rate limiting for auth endpoints
-const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // limit each IP to 5 requests per windowMs for auth
-    message: {
-        success: false,
-        message: 'Too many authentication attempts, please try again later.'
-    },
-    standardHeaders: true,
-    legacyHeaders: false
-});
-
-app.use(limiter);
 
 // Logging setup
 const logsDir = path.join(__dirname, 'logs');
@@ -190,13 +131,7 @@ app.get('/auth-nav.js', (req, res) => res.redirect('/js/auth-nav.js'));
 
 // Authentication Routes
 // Register endpoint
-app.post('/api/auth/register', authLimiter, createValidationMiddleware({
-    email: [validateEmail],
-    password: [validatePassword],
-    firstName: [(value) => validateName(value, 'First name')],
-    lastName: [(value) => validateName(value, 'Last name')],
-    phone: [validatePhone]
-}), async (req, res) => {
+app.post('/api/auth/register', async (req, res) => {
     try {
         const { email, password, firstName, lastName, phone } = req.body;
 
@@ -266,15 +201,7 @@ app.post('/api/auth/register', authLimiter, createValidationMiddleware({
 });
 
 // Login endpoint
-app.post('/api/auth/login', authLimiter, createValidationMiddleware({
-    email: [validateEmail],
-    password: [(value) => {
-        if (!value || typeof value !== 'string') {
-            return { isValid: false, message: 'Password is required' };
-        }
-        return { isValid: true };
-    }]
-}), async (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -1802,8 +1729,8 @@ app.use((err, req, res, next) => {
 // Initialize MongoDB connection and start server
 const startServer = async () => {
     try {
-        // Connect to database
-        await connectDB();
+        await // Connect to database
+connectDB();
 
 // Optional one-time seeding function (commented out for production)
 // Uncomment this if you need to seed initial data on first run
